@@ -1,65 +1,57 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import {
-  gsap,
-  motionQuery,
-  ScrollTrigger,
-  useIsoLayoutEffect,
-} from "@/lib/gsap";
+import { prefersReducedMotion } from "@/lib/gsap";
 
 /**
- * Global, declarative scroll reveal. Any element with `data-reveal="up" | "fade"`
- * fades in when it enters the viewport. `data-reveal-delay` (seconds) offsets it.
- * Respects prefers-reduced-motion. Re-initialises on route change.
+ * Global scroll reveal. Any element with `data-reveal` fades + rises into place
+ * as it enters the viewport. Driven by IntersectionObserver + a CSS transition
+ * (no animation-loop dependency), with a failsafe so nothing is ever stuck
+ * hidden. `data-reveal="wipe"` skips the rise. Re-runs on route change.
  */
 export function ScrollReveal() {
   const pathname = usePathname();
 
-  useIsoLayoutEffect(() => {
-    const mm = gsap.matchMedia();
+  useEffect(() => {
+    const items = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)"),
+    );
+    if (!items.length) return;
 
-    const motion = motionQuery();
+    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
 
-    mm.add(
-      {
-        motion: motion === "all" ? "all" : "(prefers-reduced-motion: no-preference)",
-        reduced:
-          motion === "all"
-            ? "(prefers-reduced-motion: reduce) and (max-width: 1px)"
-            : "(prefers-reduced-motion: reduce)",
-      },
-      (ctx) => {
-        const items = gsap.utils.toArray<HTMLElement>("[data-reveal]");
-
-        if (ctx.conditions?.reduced) {
-          gsap.set(items, { opacity: 1, y: 0 });
-          return;
-        }
-
-        items.forEach((item) => {
-          const y = item.dataset.reveal === "up" ? 34 : 0;
-          gsap.set(item, { opacity: 0, y });
-          ScrollTrigger.create({
-            trigger: item,
-            start: "top 88%",
-            once: true,
-            onEnter: () =>
-              gsap.to(item, {
-                opacity: 1,
-                y: 0,
-                duration: 0.95,
-                ease: "expo.out",
-                delay: parseFloat(item.dataset.revealDelay || "0"),
-              }),
-          });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            io.unobserve(entry.target);
+          }
         });
-
-        ScrollTrigger.refresh();
       },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
 
-    return () => mm.revert();
+    items.forEach((el) => io.observe(el));
+
+    // Failsafe: reveal anything at/near the viewport that the observer somehow
+    // hasn't caught. The observer keeps running for the rest.
+    const failsafe = window.setTimeout(() => {
+      items.forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 1.15) {
+          el.classList.add("is-in");
+        }
+      });
+    }, 2400);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(failsafe);
+    };
   }, [pathname]);
 
   return null;

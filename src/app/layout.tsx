@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Inter } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -7,12 +7,6 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 
 const archivo = Archivo({
   variable: "--font-archivo",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -36,11 +30,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${archivo.variable} ${inter.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-paper text-ink">
+    <html lang="pt-BR" className={`${archivo.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-paper text-ink">
         <noscript>
           <style>{`[data-reveal],[data-anim]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

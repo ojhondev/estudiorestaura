@@ -8,6 +8,13 @@ export const metadata: Metadata = {
     "Fale com o Estúdio Restaura sobre projetos de arquitetura, conservação e restauro de patrimônio.",
 };
 
+const INFO = [
+  ["E-mail", "contato@estudiorestaura.com.br", "mailto:contato@estudiorestaura.com.br"],
+  ["Telefone", "+55 11 4000-0000", "tel:+551140000000"],
+  ["Estúdio", "Rua do Patrimônio, 100 — Vila Buarque, São Paulo · SP", null],
+  ["Atendimento", "Segunda a sexta, 9h às 18h", null],
+] as const;
+
 export default function ContatoPage() {
   return (
     <>
@@ -19,45 +26,21 @@ export default function ContatoPage() {
       <div className="shell mt-16 grid gap-14 md:mt-24 md:grid-cols-[1.2fr_0.8fr]">
         <ContactForm />
 
-        <aside className="space-y-8" data-reveal="up" data-reveal-delay="0.1">
-          <div>
-            <h2 className="font-display text-xs uppercase tracking-[0.3em] text-muted">
-              E-mail
-            </h2>
-            <a
-              href="mailto:contato@estudiorestaura.com.br"
-              className="mt-2 block text-lg hover:text-terracotta"
-            >
-              contato@estudiorestaura.com.br
-            </a>
-          </div>
-          <div>
-            <h2 className="font-display text-xs uppercase tracking-[0.3em] text-muted">
-              Telefone
-            </h2>
-            <a
-              href="tel:+551140000000"
-              className="mt-2 block text-lg hover:text-terracotta"
-            >
-              +55 11 4000-0000
-            </a>
-          </div>
-          <div>
-            <h2 className="font-display text-xs uppercase tracking-[0.3em] text-muted">
-              Estúdio
-            </h2>
-            <p className="mt-2 text-lg text-ink-soft">
-              Rua do Patrimônio, 100
-              <br />
-              Vila Buarque · São Paulo · SP
-            </p>
-          </div>
-          <div>
-            <h2 className="font-display text-xs uppercase tracking-[0.3em] text-muted">
-              Atendimento
-            </h2>
-            <p className="mt-2 text-lg text-ink-soft">Seg a Sex · 9h às 18h</p>
-          </div>
+        <aside className="flex flex-col gap-8" data-reveal>
+          {INFO.map(([label, value, href]) => (
+            <div key={label}>
+              <h2 className="text-[12px] uppercase tracking-[0.3em] text-muted">
+                {label}
+              </h2>
+              {href ? (
+                <a href={href} className="ulink mt-2 text-[16px]">
+                  {value}
+                </a>
+              ) : (
+                <p className="mt-2 text-[16px] text-ink-soft">{value}</p>
+              )}
+            </div>
+          ))}
         </aside>
       </div>
     </>

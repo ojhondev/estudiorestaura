@@ -20,48 +20,43 @@ export default function ServicosPage() {
       </PageIntro>
 
       <div className="shell mt-20 md:mt-28">
-        {services.map((s) => (
+        {services.map((s, i) => (
           <article
             key={s.number}
-            data-reveal="up"
-            className="grid gap-8 border-t border-line py-12 md:grid-cols-[auto_1fr_1fr] md:gap-12 md:py-16"
+            data-reveal
+            className="grid gap-8 border-t border-line py-12 md:grid-cols-[3rem_1fr_1fr] md:gap-12 md:py-16"
           >
-            <span className="font-display text-sm text-terracotta">
-              {s.number}
-            </span>
+            <span className="text-[13px] text-terracotta">{s.number}</span>
 
-            <div>
-              <h2 className="font-display text-[clamp(1.5rem,3vw,2.25rem)] tracking-[-0.02em]">
+            <div className="md:pr-8">
+              <h2 className="section-title text-[clamp(1.4rem,2.8vw,2.1rem)]">
                 {s.title}
               </h2>
-              <p className="mt-4 max-w-md text-ink-soft">{s.description}</p>
-              <ul className="mt-5 space-y-2">
+              <p className="mt-4 max-w-md text-[15px] text-ink-soft">
+                {s.description}
+              </p>
+              <ul className="mt-5 space-y-2 text-[14px] text-ink-soft">
                 {s.bullets.map((b) => (
-                  <li
-                    key={b}
-                    className="flex gap-3 text-sm text-ink-soft before:mt-2 before:h-px before:w-4 before:shrink-0 before:bg-terracotta before:content-['']"
-                  >
+                  <li key={b} className="flex gap-3">
+                    <span className="mt-2.5 h-px w-4 shrink-0 bg-terracotta" />
                     {b}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div>
+            <div className={i % 2 === 1 ? "md:pt-8" : ""}>
               <ImagePlaceholder ratio="4 / 3" />
             </div>
           </article>
         ))}
       </div>
 
-      <section className="shell mt-24 border-t border-line pt-12" data-reveal="up">
-        <h2 className="display text-[clamp(2rem,6vw,4rem)]">
+      <section className="shell mt-24 border-t border-line pt-14" data-reveal>
+        <h2 className="display text-[clamp(2rem,7vw,4.5rem)]">
           Tem um edifício com história?
         </h2>
-        <Link
-          href="/contato"
-          className="mt-6 inline-block rounded-full bg-terracotta px-8 py-3.5 text-sm text-paper transition-opacity hover:opacity-90"
-        >
+        <Link href="/contato" className="ulink mt-8 text-[15px]">
           Fale com o estúdio
         </Link>
       </section>

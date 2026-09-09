@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 @theme {
+  /* Brand + editorial palette. Mono ink on paper; brand hues used only as
+     large fields (the "restauro" spread) and small accents. */
   --color-paper: #ffffff;
-  --color-ink: #1b1a18;
-  --color-ink-soft: #4a4741;
-  --color-muted: #918c84;
-  --color-line: #e7e3dc;
-  --color-terracotta: #c0432b;
-  --color-terracotta-soft: #d98a74;
-  --color-blush: #f6cdc3;
-  --color-blush-deep: #edb2a2;
-  --color-peach: #fce4d2;
+  --color-ink: #141210;
+  --color-ink-soft: #4b453d;
+  --color-muted: #8f8983;
+  --color-line: rgba(20, 18, 16, 0.16);
+  --color-line-strong: #141210;
 
-  --font-display: var(--font-archivo), "Archivo", system-ui, sans-serif;
-  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --color-terracotta: #bf4526;
+  --color-blush: #f2d4ca;
+  --color-blush-deep: #e7bcae;
+  --color-peach: #f8e6d7;
+
+  --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
+    sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -24,87 +27,124 @@
 
 * {
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-weight: 400;
   font-synthesis-weight: none;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
   /* `clip` (not `hidden`) — `hidden` makes body a scroll container and breaks
-     GSAP ScrollTrigger pinning (position: fixed). */
+     GSAP ScrollTrigger pinning. */
   overflow-x: clip;
 }
 
 ::selection {
-  background: var(--color-terracotta);
-  color: #fff;
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-/* Fluid full-width shell: content fills the screen with breathing room. */
+/* Fluid full-width shell: content fills the screen with editorial margins. */
 .shell {
   width: 100%;
-  padding-inline: clamp(1.25rem, 5vw, 4.5rem);
+  padding-inline: clamp(1.25rem, 4.5vw, 5rem);
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Editorial hairline rule */
+.rule {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+/* Ghost / underline link — the only interactive style on the site */
+.ulink {
+  display: inline-block;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  transition: color 0.25s var(--ease-out-expo);
+}
+.ulink:hover {
+  color: var(--color-terracotta);
+}
+
+/* Display type — the monumental brand words. Heavy, tight, like the logo. */
 .display {
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.92;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
   text-wrap: balance;
 }
 
-/* Hide-before-animate. Elements start hidden; GSAP reveals them on scroll / load.
-   The <noscript> block in the layout re-shows everything when JS is unavailable,
-   and prefers-reduced-motion re-shows it below. */
-[data-reveal],
-[data-anim] {
-  opacity: 0;
-}
-[data-reveal="up"] {
-  transform: translateY(2rem);
+/* Section titles — moderate weight, tight tracking, scaled to the column edge */
+.section-title {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
 }
 
-.letter-mask {
+/* Per-letter / per-word reveal masks */
+.mask {
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  /* breathing room so tight display line-heights don't clip ascenders */
-  padding: 0.12em 0.04em 0.02em;
-  margin: -0.12em -0.04em -0.02em;
+  padding: 0.14em 0.05em 0.04em;
+  margin: -0.14em -0.05em -0.04em;
 }
-.letter-mask > span {
+.mask > span {
   display: inline-block;
   will-change: transform;
 }
 
+/* Scroll reveal — CSS transition driven by an IntersectionObserver (no JS
+   animation-loop dependency). A failsafe timeout and <noscript> guarantee the
+   content is never left hidden. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+}
+[data-reveal="wipe"] {
+  transform: none;
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* GSAP-orchestrated intros (hero, "restauro" spread). */
+[data-anim] {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  /* No pinned horizontal scroll without motion — fall back to a normal
-     horizontal strip the viewer can scroll manually. */
-  .showcase-pin {
-    height: auto !important;
-  }
-  .showcase-track {
-    scroll-snap-type: x mandatory;
-  }
-  .showcase-panel {
-    height: 70vh !important;
-  }
   [data-reveal],
   [data-anim] {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
   }
-  .letter-mask > span {
+  .mask > span {
     transform: none !important;
+  }
+  .showcase-pin {
+    height: auto !important;
+  }
+  .showcase-panel {
+    height: 72vh !important;
   }
 }

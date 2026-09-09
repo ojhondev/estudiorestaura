@@ -13,12 +13,12 @@ const SUBJECTS = [
 ];
 
 const field =
-  "mt-2 w-full border-b border-ink bg-transparent pb-2 text-ink outline-none transition-colors focus:border-terracotta placeholder:text-muted";
-const label = "font-display text-xs uppercase tracking-[0.28em] text-muted";
+  "mt-2 w-full border-b border-line-strong bg-transparent pb-2 text-[16px] text-ink outline-none transition-colors focus:border-terracotta placeholder:text-muted";
+const label = "text-[12px] uppercase tracking-[0.26em] text-muted";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,17 +44,17 @@ export function ContactForm() {
 
   if (status === "ok") {
     return (
-      <div className="flex flex-col justify-center border border-line p-10">
-        <p className="font-display text-2xl tracking-[-0.02em]">
+      <div className="border-t border-line-strong pt-8">
+        <p className="section-title text-[clamp(1.5rem,3vw,2.25rem)]">
           Mensagem recebida.
         </p>
-        <p className="mt-3 max-w-sm text-ink-soft">
+        <p className="mt-3 max-w-sm text-[15px] text-ink-soft">
           Obrigado pelo contato. O estúdio responde em até dois dias úteis.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 w-fit text-sm text-terracotta hover:underline"
+          className="ulink mt-6 text-[14px]"
         >
           Enviar outra mensagem
         </button>
@@ -84,11 +84,7 @@ export function ContactForm() {
       <div className="grid gap-8 sm:grid-cols-2">
         <label>
           <span className={label}>Telefone</span>
-          <input
-            name="telefone"
-            className={field}
-            placeholder="(11) 90000-0000"
-          />
+          <input name="telefone" className={field} placeholder="(11) 90000-0000" />
         </label>
         <label>
           <span className={label}>Assunto</span>
@@ -112,13 +108,13 @@ export function ContactForm() {
       </label>
 
       {status === "error" && (
-        <p className="text-sm text-terracotta">{error}</p>
+        <p className="text-[14px] text-terracotta">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-fit rounded-full bg-ink px-8 py-3.5 text-sm text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="ulink w-fit text-[15px] disabled:opacity-50"
       >
         {status === "sending" ? "Enviando…" : "Enviar mensagem"}
       </button>

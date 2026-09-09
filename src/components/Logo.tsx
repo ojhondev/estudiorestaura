@@ -13,7 +13,7 @@ export function Logo({ className = "", priority = false }: Props) {
       src={logo}
       alt="Estúdio Restaura"
       priority={priority}
-      sizes="(min-width: 768px) 640px, 90vw"
+      sizes="(min-width: 1024px) 1100px, 92vw"
       className={className}
     />
   );

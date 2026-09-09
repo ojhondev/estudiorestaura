@@ -2,10 +2,8 @@ import { useEffect, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-let registered = false;
-if (typeof window !== "undefined" && !registered) {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
-  registered = true;
   if (process.env.NODE_ENV !== "production") {
     (window as unknown as Record<string, unknown>).gsap = gsap;
     (window as unknown as Record<string, unknown>).ScrollTrigger = ScrollTrigger;
@@ -17,21 +15,18 @@ export const useIsoLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
- * matchMedia query that gates motion. Normally the OS setting, but a
- * `localStorage["er:force-motion"] = "1"` override forces animations on
- * (used to preview motion where the browser reports reduce). */
-export function motionQuery(): string {
+ * Whether motion should be suppressed. Normally follows the OS setting; a
+ * `localStorage["er:force-motion"] = "1"` override forces animations on so the
+ * effects can be previewed where the browser reports `reduce`.
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return true;
   try {
-    if (
-      typeof window !== "undefined" &&
-      window.localStorage.getItem("er:force-motion") === "1"
-    ) {
-      return "all";
-    }
+    if (window.localStorage.getItem("er:force-motion") === "1") return false;
   } catch {
     /* ignore */
   }
-  return "(prefers-reduced-motion: no-preference)";
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 export { gsap, ScrollTrigger };

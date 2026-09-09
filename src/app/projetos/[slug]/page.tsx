@@ -14,10 +14,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  return {
-    title: project.title,
-    description: project.summary,
-  };
+  return { title: project.title, description: project.summary };
 }
 
 export default async function ProjetoPage({
@@ -39,23 +36,22 @@ export default async function ProjetoPage({
 
   return (
     <article>
-      <header className="shell pt-32 md:pt-44">
+      <header className="shell pt-28 md:pt-40">
         <Link
           href="/projetos"
-          className="font-display text-xs uppercase tracking-[0.3em] text-muted hover:text-terracotta"
+          className="text-[12px] uppercase tracking-[0.3em] text-muted transition-colors hover:text-terracotta"
         >
           ← Projetos
         </Link>
         <h1
-          data-reveal="up"
+          data-reveal
           className="display mt-5 max-w-5xl text-[clamp(2.5rem,7vw,6rem)]"
         >
           {project.title}
         </h1>
         <p
-          data-reveal="up"
-          data-reveal-delay="0.1"
-          className="mt-6 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-[1.55] text-ink-soft"
+          data-reveal
+          className="mt-6 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-[1.5] text-ink-soft"
         >
           {project.summary}
         </p>
@@ -63,26 +59,26 @@ export default async function ProjetoPage({
         <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-line pt-8 sm:grid-cols-4">
           {meta.map(([k, v]) => (
             <div key={k}>
-              <dt className="font-display text-xs uppercase tracking-[0.2em] text-muted">
+              <dt className="text-[12px] uppercase tracking-[0.2em] text-muted">
                 {k}
               </dt>
-              <dd className="mt-1 text-sm">{v}</dd>
+              <dd className="mt-1 text-[14px]">{v}</dd>
             </div>
           ))}
         </dl>
       </header>
 
-      <div className="shell mt-12 md:mt-16" data-reveal="fade">
+      <div className="shell mt-12 md:mt-16" data-reveal="wipe">
         <ImagePlaceholder ratio="16 / 9" />
       </div>
 
       <div className="shell mt-14 grid gap-10 md:mt-20 md:grid-cols-[0.9fr_1.1fr]">
-        <h2 className="font-display text-xl tracking-[-0.01em]">
+        <h2 className="section-title text-[clamp(1.4rem,2.6vw,2rem)]">
           Sobre a intervenção
         </h2>
         <div className="space-y-5 text-[1.05rem] leading-[1.65] text-ink-soft">
           {project.description.map((p, i) => (
-            <p key={i} data-reveal="up" data-reveal-delay={i * 0.05}>
+            <p key={i} data-reveal>
               {p}
             </p>
           ))}
@@ -95,13 +91,13 @@ export default async function ProjetoPage({
             key={i}
             ratio={i % 3 === 0 ? "16 / 10" : "4 / 3"}
             className={i % 3 === 0 ? "sm:col-span-2" : ""}
-            data-reveal="up"
+            data-reveal="wipe"
           />
         ))}
       </div>
 
       <div className="shell mt-24 border-t border-line pt-10">
-        <p className="font-display text-xs uppercase tracking-[0.3em] text-muted">
+        <p className="text-[12px] uppercase tracking-[0.3em] text-muted">
           Próximo projeto
         </p>
         <Link

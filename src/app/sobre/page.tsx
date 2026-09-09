@@ -53,46 +53,43 @@ export default function SobrePage() {
         antigas e obras de arte.
       </PageIntro>
 
-      <section className="shell mt-16 md:mt-24" data-reveal="fade">
-        <ImagePlaceholder ratio="16 / 8" />
+      <section className="shell mt-16 md:mt-24" data-reveal="wipe">
+        <ImagePlaceholder ratio="16 / 7" />
       </section>
 
       <section className="shell mt-20 grid gap-8 border-y border-line py-12 sm:grid-cols-2 lg:grid-cols-4">
         {NUMBERS.map(([n, label]) => (
-          <div key={label} data-reveal="up">
+          <div key={label} data-reveal>
             <p className="display text-[clamp(2.5rem,6vw,4.5rem)]">{n}</p>
-            <p className="mt-1 text-sm text-muted">{label}</p>
+            <p className="mt-1 text-[13px] text-muted">{label}</p>
           </div>
         ))}
       </section>
 
       <section className="shell mt-20 grid gap-10 md:mt-28 md:grid-cols-[0.8fr_1.2fr]">
-        <h2 className="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] tracking-[-0.02em]">
+        <h2 className="section-title text-[clamp(1.6rem,3.4vw,2.6rem)]">
           Como trabalhamos
         </h2>
         <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
           {VALUES.map((v) => (
-            <div key={v.title} data-reveal="up">
-              <h3 className="font-display text-lg font-bold">{v.title}</h3>
-              <p className="mt-2 text-ink-soft">{v.body}</p>
+            <div key={v.title} data-reveal>
+              <h3 className="text-[15px] font-medium">{v.title}</h3>
+              <p className="mt-2 text-[15px] text-ink-soft">{v.body}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="shell mt-20 md:mt-28">
-        <h2
-          data-reveal="up"
-          className="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] tracking-[-0.02em]"
-        >
+        <h2 data-reveal className="section-title text-[clamp(1.6rem,3.4vw,2.6rem)]">
           Equipe
         </h2>
         <div className="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {TEAM.map(([name, role]) => (
-            <div key={name} data-reveal="up">
+            <div key={name} data-reveal>
               <ImagePlaceholder ratio="3 / 4" />
-              <p className="mt-4 font-display text-base">{name}</p>
-              <p className="text-sm text-muted">{role}</p>
+              <p className="mt-4 text-[15px]">{name}</p>
+              <p className="text-[13px] text-muted">{role}</p>
             </div>
           ))}
         </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, motionQuery, useIsoLayoutEffect } from "@/lib/gsap";
+import { gsap, prefersReducedMotion, useIsoLayoutEffect } from "@/lib/gsap";
 import { Logo } from "@/components/Logo";
+import { SplitWords } from "@/components/Split";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 
 const LEAD =
@@ -14,63 +15,69 @@ export function Hero() {
   const root = useRef<HTMLDivElement>(null);
 
   useIsoLayoutEffect(() => {
-    const mm = gsap.matchMedia(root.current ?? undefined);
+    const el = root.current;
+    if (!el) return;
 
-    mm.add(motionQuery(), () => {
-      const tl = gsap.timeline({
-        defaults: { ease: "expo.out", duration: 1 },
-      });
+    if (prefersReducedMotion()) {
+      gsap.set(el.querySelectorAll("[data-anim]"), { autoAlpha: 1, y: 0 });
+      return;
+    }
 
-      tl.to("[data-anim]", {
-        opacity: 1,
-        duration: 0.9,
-        stagger: 0.16,
-        ease: "power2.out",
-      })
-        .from(".hero-logo", { yPercent: 8, scale: 0.97, duration: 1.2 }, 0)
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+      tl.set("[data-anim]", { autoAlpha: 1 })
+        .from(".hero-logo", { yPercent: 6, autoAlpha: 0, duration: 1.2 })
         .from(
-          ".hero-word",
-          { yPercent: 45, autoAlpha: 0, duration: 0.6, stagger: 0.014 },
-          0.35,
+          ".hero-rule",
+          { scaleX: 0, transformOrigin: "left", duration: 1 },
+          "-=0.8",
         )
-        .from(".hero-image", { yPercent: 6, duration: 1.1 }, 0.6);
-    });
+        .from(
+          ".hero-p .sw",
+          { yPercent: 110, duration: 0.9, stagger: 0.012 },
+          "-=0.7",
+        )
+        .from(".hero-img", { autoAlpha: 0, yPercent: 4, duration: 1.2 }, "-=0.5");
+    }, el);
 
-    // reduced motion: styles fall back to the CSS media query (visible).
-    return () => mm.revert();
+    // Failsafe: if the animation stalls, force the content visible.
+    const failsafe = window.setTimeout(() => {
+      el.querySelectorAll<HTMLElement>("[data-anim]").forEach((n) => {
+        n.style.opacity = "1";
+        n.style.visibility = "visible";
+      });
+      el.querySelectorAll<HTMLElement>(".mask > span").forEach((n) => {
+        n.style.transform = "none";
+      });
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(failsafe);
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <section ref={root} className="shell pt-28 md:pt-36">
-      <span data-anim className="hero-logo block w-full max-w-[76rem]">
-        <Logo priority className="h-auto w-full" />
-      </span>
-
-      <p
-        data-anim
-        className="mt-10 max-w-[74rem] text-[clamp(1.05rem,1.9vw,1.6rem)] leading-[1.5] md:mt-14"
-      >
-        <span className="font-medium text-ink">
-          {LEAD.split(" ").map((w, i) => (
-            <span
-              key={i}
-              className="hero-word inline-block whitespace-pre"
-            >{`${w} `}</span>
-          ))}
+    <div ref={root}>
+      <section className="shell pt-24 md:pt-32">
+        <span data-anim className="hero-logo block w-full max-w-[68rem]">
+          <Logo priority className="h-auto w-full" />
         </span>
-        <span className="text-muted">
-          {REST.split(" ").map((w, i) => (
-            <span
-              key={i}
-              className="hero-word inline-block whitespace-pre"
-            >{`${w} `}</span>
-          ))}
-        </span>
-      </p>
 
-      <div data-anim className="hero-image mt-12 md:mt-16">
-        <ImagePlaceholder ratio="16 / 7" label="Espaço para imagem" />
-      </div>
-    </section>
+        <hr className="hero-rule rule mt-10 md:mt-14" />
+
+        <p
+          data-anim
+          className="hero-p mt-8 max-w-[62rem] text-[clamp(1.15rem,2.2vw,1.9rem)] leading-[1.45] md:mt-10"
+        >
+          <SplitWords text={LEAD} className="text-ink" />
+          <SplitWords text={REST} className="text-muted" />
+        </p>
+        <div data-anim className="hero-img mt-14 md:mt-20">
+          <ImagePlaceholder ratio="16 / 7" />
+        </div>
+      </section>
+    </div>
   );
 }
