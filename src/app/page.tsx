@@ -6,11 +6,27 @@ import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { TextArrow } from "@/components/ui";
+import { getProjects, getSetting } from "@/lib/cms";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [hero, statement, mediaBand, projects] = await Promise.all([
+    getSetting("home.hero"),
+    getSetting("home.statement"),
+    getSetting("home.mediaBand"),
+    getProjects(),
+  ]);
+
+  const feed = projects.slice(0, 4).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    category: p.category,
+    summary: p.summary,
+    coverUrl: p.coverUrl,
+  }));
+
   return (
     <>
-      <Hero />
+      <Hero intro={hero.intro} imageUrl={hero.imageUrl || undefined} feed={feed} />
 
       <div className="page-flow">
         {/* Brand statement */}
@@ -22,17 +38,14 @@ export default function HomePage() {
             data-reveal
             className="lora measure text-[clamp(1.3rem,2.4vw,2rem)] leading-[1.5] text-ink"
           >
-            Somos um time de arquitetos, conservadores e restauradores com um
-            interesse em comum: devolver vida a edifícios e acervos sem apagar as
-            camadas do tempo. Cada projeto começa por uma leitura atenta do que já
-            existe.
+            {statement.text}
           </p>
         </section>
 
         <WhatWeDo />
         <BrazilMap />
         <Criteria />
-        <WorkCards />
+        <WorkCards media={mediaBand} />
         <Numbers />
 
         {/* Feature cards — square */}

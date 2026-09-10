@@ -5,11 +5,11 @@ import { nav } from "@/lib/content";
 
 export function SiteFooter() {
   return (
-    <footer className="bleed bg-midnight text-paper">
+    <footer className="bleed bg-ember text-paper">
       {/* Partnership CTA */}
-      <div className="shell grid gap-8 border-b border-white/10 py-16 md:grid-cols-2 md:items-end md:py-24">
+      <div className="shell grid gap-8 border-b border-white/15 py-16 md:grid-cols-2 md:items-end md:py-24">
         <div>
-          <p className="label text-mist/60">Parcerias</p>
+          <p className="label text-paper/60">Parcerias</p>
           <h2 className="h-lg mt-4 text-[clamp(2rem,5vw,3.5rem)]">
             Aberto a colaborar.
           </h2>
@@ -22,7 +22,7 @@ export function SiteFooter() {
       <div className="shell grid gap-14 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Logo variant="light" className="h-7 w-auto" />
-          <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-mist/70">
+          <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-paper/75">
             Arquitetura, conservação e restauro de patrimônio histórico e
             cultural. Preservamos a memória e a autenticidade de edificações
             antigas e obras de arte.
@@ -30,7 +30,7 @@ export function SiteFooter() {
         </div>
 
         <nav className="flex flex-col gap-3">
-          <span className="label text-smoke">Navegação</span>
+          <span className="label text-paper/60">Navegação</span>
           <Link href="/" className="text-arrow text-[14px]">
             Início <Arrow />
           </Link>
@@ -42,14 +42,14 @@ export function SiteFooter() {
         </nav>
 
         <div className="flex flex-col gap-3 text-[14px]">
-          <span className="label text-smoke">Contato</span>
-          <a href="mailto:contato@estudiorestaura.com.br" className="hover:text-ember">
+          <span className="label text-paper/60">Contato</span>
+          <a href="mailto:contato@estudiorestaura.com.br" className="hover:text-midnight">
             contato@estudiorestaura.com.br
           </a>
-          <a href="tel:+551140000000" className="hover:text-ember">
+          <a href="tel:+551140000000" className="hover:text-midnight">
             +55 11 4000-0000
           </a>
-          <p className="text-mist/60">
+          <p className="text-paper/65">
             Rua do Patrimônio, 100
             <br />
             São Paulo · SP
@@ -58,7 +58,7 @@ export function SiteFooter() {
       </div>
 
       {/* Giant scrolling wordmark */}
-      <div className="marquee border-t border-white/10 py-8">
+      <div className="marquee border-t border-white/15 py-8">
         <div className="marquee-track">
           {Array.from({ length: 4 }).map((_, i) => (
             <span
@@ -72,7 +72,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="shell flex flex-col gap-2 border-t border-white/10 py-6 text-[12px] text-smoke sm:flex-row sm:justify-between">
+      <div className="shell flex flex-col gap-2 border-t border-white/15 py-6 text-[12px] text-paper/60 sm:flex-row sm:justify-between">
         <p>
           © {new Date().getFullYear()} Estúdio Restaura. Todos os direitos
           reservados.

@@ -2,8 +2,16 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
-import type { Project } from "@/lib/content";
+import { ImageBox } from "@/components/ImageBox";
+
+type Project = {
+  slug: string;
+  title: string;
+  category: string;
+  location: string;
+  year: string;
+  coverUrl?: string | null;
+};
 
 const FILTERS = [
   "Todos",
@@ -46,7 +54,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
       <div className="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((p) => (
           <Link key={p.slug} href={`/projetos/${p.slug}`} className="group">
-            <ImagePlaceholder ratio="4 / 5" />
+            <ImageBox src={p.coverUrl} alt={p.title} ratio="4 / 5" />
             <div className="mt-4 flex items-baseline justify-between gap-4">
               <h2 className="text-[16px] transition-colors group-hover:text-ember">
                 {p.title}

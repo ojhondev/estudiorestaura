@@ -3,13 +3,18 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, reducedMotion, useIso } from "@/lib/anim";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
-import { projects } from "@/lib/content";
 
-const items = projects.slice(0, 4);
+export type FeedItem = {
+  slug: string;
+  title: string;
+  category: string;
+  summary: string;
+  coverUrl?: string | null;
+};
 
-export function HeroFeed() {
+export function HeroFeed({ items }: { items: FeedItem[] }) {
   const [i, setI] = useState(0);
   const card = useRef<HTMLAnchorElement>(null);
 
@@ -39,36 +44,38 @@ export function HeroFeed() {
       <Link
         ref={card}
         href={`/projetos/${p.slug}`}
-        className="group flex gap-4 rounded-[8px] bg-char/85 p-3.5 text-paper backdrop-blur-md"
+        className="group flex gap-4 rounded-[8px] bg-paper/95 p-3.5 text-ink shadow-[0_18px_50px_-20px_rgba(0,0,0,0.4)] backdrop-blur-md"
       >
         <div className="w-[42%] shrink-0 overflow-hidden rounded-[6px]">
-          <ImagePlaceholder
+          <ImageBox
+            src={p.coverUrl}
+            alt={p.title}
             variant="bleed"
             ratio="4 / 3"
-            className="h-full bg-slate/40 text-paper/30"
+            className="h-full bg-mist text-pewter"
             label="Projeto"
           />
         </div>
         <div className="flex flex-1 flex-col justify-between py-1 pr-1">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-paper/60">
+            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-smoke">
               {p.category}
             </p>
             <p className="mt-1.5 text-[15px] font-light leading-tight">
               {p.title}
             </p>
-            <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-paper/75">
+            <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-pewter">
               {p.summary}
             </p>
           </div>
-          <Arrow className="mt-3 h-4 w-4 self-end transition-transform duration-300 group-hover:translate-x-1" />
+          <Arrow className="mt-3 h-4 w-4 self-end text-ink transition-transform duration-300 group-hover:translate-x-1" />
         </div>
       </Link>
 
       <div className="flex gap-2">
         <Link
           href="/sobre"
-          className="flex-1 rounded-[80px] bg-char/85 px-4 py-2.5 text-center text-[13px] text-paper backdrop-blur-md transition-colors hover:bg-char"
+          className="flex-1 rounded-[80px] bg-paper/95 px-4 py-2.5 text-center text-[13px] text-ink backdrop-blur-md transition-colors hover:bg-paper"
         >
           Sobre o estúdio
         </Link>

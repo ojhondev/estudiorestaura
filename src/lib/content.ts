@@ -317,6 +317,16 @@ export const nav: {
     desc: "Quem somos, como trabalhamos e no que acreditamos.",
   },
   {
+    href: "/blog",
+    label: "Blog",
+    desc: "Textos sobre método, ética do restauro e as camadas do tempo.",
+  },
+  {
+    href: "/trabalhe-conosco",
+    label: "Trabalhe conosco",
+    desc: "Vagas abertas e como é fazer parte do estúdio.",
+  },
+  {
     href: "/contato",
     label: "Contato",
     desc: "Conte sobre o edifício, o acervo ou o projeto.",

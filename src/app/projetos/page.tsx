@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ProjectGrid } from "@/components/projetos/ProjectGrid";
-import { projects } from "@/lib/content";
+import { getProjects } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Projetos",
@@ -9,7 +9,11 @@ export const metadata: Metadata = {
     "Restauro, conservação e arquitetura em patrimônio histórico e cultural — acervo de projetos do Estúdio Restaura.",
 };
 
-export default function ProjetosPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProjetosPage() {
+  const projects = await getProjects();
+
   return (
     <>
       <PageHero

@@ -47,3 +47,5 @@ next-env.d.ts
 
 # hero source (unoptimised)
 public/hero-src*.jpg
+
+.env*

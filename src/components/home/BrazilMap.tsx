@@ -52,7 +52,7 @@ export function BrazilMap() {
         moveX.current?.(0);
         moveY.current?.(0);
       }}
-      className="bleed relative overflow-hidden bg-midnight text-paper"
+      className="bleed relative overflow-hidden bg-[#BD3219] text-paper"
     >
       {/* Per-state photo backgrounds */}
       {activeUFs.map((uf) => (
@@ -74,7 +74,9 @@ export function BrazilMap() {
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 transition-colors duration-500"
-        style={{ background: hover ? "rgba(7,7,7,0.62)" : "rgba(7,7,7,1)" }}
+        style={{
+          background: hover ? "rgba(120,30,12,0.55)" : "rgba(189,50,25,1)",
+        }}
       />
 
       <div className="relative shell py-[clamp(4.5rem,10vw,8rem)]">
@@ -102,14 +104,14 @@ export function BrazilMap() {
                 const state = mapLocations[s.uf];
                 const isOn = s.uf === current;
                 const fill = !state
-                  ? "rgba(255,255,255,0.07)"
+                  ? "rgba(255,255,255,0.1)"
                   : state.status === "atuacao"
                     ? isOn
-                      ? "var(--color-ember-bright)"
-                      : "rgba(183,89,40,0.55)"
+                      ? "#ffffff"
+                      : "rgba(255,255,255,0.78)"
                     : isOn
-                      ? "var(--color-driftwood)"
-                      : "rgba(83,113,121,0.42)";
+                      ? "var(--color-midnight)"
+                      : "rgba(7,7,7,0.5)";
                 return (
                   <path
                     key={s.uf}
@@ -131,11 +133,11 @@ export function BrazilMap() {
 
             <div className="mt-6 flex gap-7 text-[13px] text-paper/70">
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-ember-bright" />
+                <span className="h-2.5 w-2.5 rounded-full bg-white" />
                 Atuação
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-driftwood" />
+                <span className="h-2.5 w-2.5 rounded-full bg-midnight" />
                 Prospecção
               </span>
             </div>

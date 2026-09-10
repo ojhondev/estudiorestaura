@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger, reducedMotion, useIso } from "@/lib/anim";
 import { Arrow } from "@/components/ui";
+import { MediaBand, type MediaBandData } from "@/components/home/MediaBand";
 import { workAreas } from "@/lib/content";
 
 const toneClass: Record<string, string> = {
@@ -63,7 +64,7 @@ function Mark({ variant }: { variant: string }) {
   );
 }
 
-export function WorkCards() {
+export function WorkCards({ media }: { media?: MediaBandData }) {
   const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState<number | null>(null);
 
@@ -103,27 +104,8 @@ export function WorkCards() {
         </div>
       </div>
 
-      {/* Media band — vídeo entra aqui depois */}
-      <div
-        data-reveal
-        className="relative mt-14 flex aspect-[16/10] items-center justify-center overflow-hidden rounded-[8px] bg-pine text-paper sm:aspect-[16/8] lg:aspect-[16/7]"
-      >
-        <svg
-          viewBox="0 0 100 100"
-          className="mark-draw h-32 w-32 text-paper/60 md:h-48 md:w-48"
-          aria-hidden
-        >
-          <path
-            d="M50 6 L55 45 L94 50 L55 55 L50 94 L45 55 L6 50 L45 45 Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-          />
-        </svg>
-        <span className="absolute bottom-5 left-6 text-[12px] uppercase tracking-[0.18em] text-paper/50">
-          Espaço para vídeo
-        </span>
-      </div>
+      {/* Media band — vídeo do estúdio na mídia */}
+      <MediaBand {...media} />
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         {workAreas.map((w, i) => {

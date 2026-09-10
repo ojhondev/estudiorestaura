@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
 
 export function ProjectGallery({
   count,
   title,
+  images = [],
 }: {
   count: number;
   title: string;
+  images?: string[];
 }) {
   const [open, setOpen] = useState<number | null>(null);
+  count = images.length || count;
 
   useEffect(() => {
     if (open === null) return;
@@ -48,7 +51,9 @@ export function ProjectGallery({
               data-parallax="0.06"
               className="transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
             >
-              <ImagePlaceholder
+              <ImageBox
+                src={images[i]}
+                alt={`${title} — imagem ${i + 1}`}
                 ratio={i % 3 === 0 ? "16 / 9" : "4 / 3"}
                 label={`${title} — imagem ${i + 1}`}
               />
@@ -89,7 +94,9 @@ export function ProjectGallery({
                 style={{ opacity: i === open ? 1 : 0, pointerEvents: i === open ? "auto" : "none" }}
               >
                 <div className="w-full max-w-5xl">
-                  <ImagePlaceholder
+                  <ImageBox
+                    src={images[i]}
+                    alt={`${title} — imagem ${i + 1}`}
                     ratio="16 / 10"
                     variant="bleed"
                     className="bg-iron"

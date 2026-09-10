@@ -6,6 +6,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Reveal } from "@/components/Reveal";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CookieBar } from "@/components/CookieBar";
+import { AdminGate } from "@/components/AdminGate";
+import { QuotePopup } from "@/components/QuotePopup";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -49,10 +51,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <style>{`[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
         <SmoothScroll />
-        <SiteNav />
+        <AdminGate>
+          <SiteNav />
+        </AdminGate>
         <main className="flex-1">{children}</main>
-        <SiteFooter />
-        <CookieBar />
+        <AdminGate>
+          <SiteFooter />
+          <CookieBar />
+          <QuotePopup />
+        </AdminGate>
         <Reveal />
       </body>
     </html>

@@ -1,31 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { ProjectGallery } from "@/components/projetos/ProjectGallery";
 import { Arrow } from "@/components/ui";
-import { getProject, projects } from "@/lib/content";
+import { getProject, getProjects } from "@/lib/cms";
 
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/projetos/[slug]">): Promise<Metadata> {
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) return {};
   return { title: project.title, description: project.summary };
 }
 
 export default async function ProjetoPage({
   params,
-}: PageProps<"/projetos/[slug]">) {
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
+  const projects = await getProjects();
   const index = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(index + 1) % projects.length];
 
@@ -39,16 +42,19 @@ export default async function ProjetoPage({
   return (
     <article>
       <section className="bleed relative flex min-h-[78vh] items-end overflow-hidden">
-        <ImagePlaceholder fill variant="bleed" label="Espaço para imagem — projeto" />
+        <ImageBox
+          src={project.coverUrl}
+          alt={project.title}
+          fill
+          variant="bleed"
+          label="Espaço para imagem — projeto"
+        />
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/80 to-midnight/20"
         />
         <div className="relative shell pb-[clamp(2.5rem,7vw,4.5rem)] pt-[clamp(7rem,14vh,10rem)] text-paper">
-          <Link
-            href="/projetos"
-            className="text-arrow text-[13px] text-paper/80"
-          >
+          <Link href="/projetos" className="text-arrow text-[13px] text-paper/80">
             <span className="rotate-180">
               <Arrow />
             </span>
@@ -73,7 +79,10 @@ export default async function ProjetoPage({
           ))}
         </dl>
         <div>
-          <p data-reveal className="lora text-[clamp(1.05rem,1.6vw,1.25rem)] leading-[1.6] text-pewter">
+          <p
+            data-reveal
+            className="lora text-[clamp(1.05rem,1.6vw,1.25rem)] leading-[1.6] text-pewter"
+          >
             {project.summary}
           </p>
           <div className="mt-8 space-y-5 text-[15px] leading-[1.65] text-ink/80">
@@ -86,7 +95,11 @@ export default async function ProjetoPage({
         </div>
       </div>
 
-      <ProjectGallery count={project.gallery} title={project.title} />
+      <ProjectGallery
+        count={project.gallery}
+        images={project.galleryUrls}
+        title={project.title}
+      />
 
       <section className="bleed border-t border-mist">
         <div className="shell flex flex-col gap-3 py-14">
