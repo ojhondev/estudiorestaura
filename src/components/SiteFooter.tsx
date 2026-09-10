@@ -57,14 +57,19 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Giant wordmark */}
-      <div className="overflow-hidden border-t border-white/10 pt-8">
-        <p
-          aria-hidden
-          className="display whitespace-nowrap px-[2vw] text-center text-[clamp(3.5rem,19vw,15rem)] leading-none text-paper"
-        >
-          estúdio restaura
-        </p>
+      {/* Giant scrolling wordmark */}
+      <div className="marquee border-t border-white/10 py-8">
+        <div className="marquee-track">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="px-[0.15em] text-[clamp(4rem,15vw,13rem)] font-bold leading-none tracking-[-0.03em] text-paper"
+            >
+              estúdio restaura&nbsp;·&nbsp;
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="shell flex flex-col gap-2 border-t border-white/10 py-6 text-[12px] text-smoke sm:flex-row sm:justify-between">

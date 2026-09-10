@@ -170,13 +170,28 @@ body {
   opacity: 0.85;
 }
 
-/* Hide-before-animate. GSAP (<Reveal/>) takes over; <noscript> + reduced-motion
-   guarantee the content is never left hidden. */
+/* Reveal on scroll — IntersectionObserver adds `.in` (see <Reveal/>).
+   <noscript> + reduced-motion keep content visible. */
 [data-reveal] {
   opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 1s var(--ease),
+    transform 1s var(--ease),
+    clip-path 1s var(--ease);
+  will-change: opacity, transform;
+}
+[data-reveal="fade"] {
+  transform: none;
 }
 [data-reveal="clip"] {
-  clip-path: inset(0 0 100% 0);
+  transform: none;
+  clip-path: inset(0 0 110% 0);
+}
+[data-reveal].in {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(-30% 0 -30% 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -184,6 +199,7 @@ body {
     opacity: 1 !important;
     clip-path: none !important;
     transform: none !important;
+    transition: none !important;
   }
 }
 
@@ -196,6 +212,27 @@ body {
   position: relative;
   z-index: 10;
   background: var(--color-paper);
+}
+
+/* Infinite marquee (footer wordmark) */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex;
+  align-items: center;
+  animation: marquee 34s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }
 
 /* Colored feature cards ("Nosso trabalho") */

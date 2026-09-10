@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, ScrollTrigger, reducedMotion, useIso } from "@/lib/anim";
+import { useEffect, useRef } from "react";
+import { gsap, reducedMotion } from "@/lib/anim";
 import { metrics } from "@/lib/content";
 
 const align = ["items-start", "items-center", "items-end"];
@@ -9,39 +9,66 @@ const align = ["items-start", "items-center", "items-end"];
 export function Numbers() {
   const root = useRef<HTMLElement>(null);
 
-  useIso(() => {
-    if (!root.current) return;
-    const nodes = gsap.utils.toArray<HTMLElement>("[data-count]", root.current);
+  useEffect(() => {
+    const host = root.current;
+    if (!host) return;
+    const nodes = Array.from(
+      host.querySelectorAll<HTMLElement>("[data-count]"),
+    );
+    if (!nodes.length || reducedMotion()) return;
 
-    if (reducedMotion()) return;
+    const parse = (raw: string) => ({
+      target: parseInt(raw.replace(/\D/g, ""), 10),
+      suffix: raw.replace(/\d/g, ""),
+    });
 
     // start at zero so the roll is visible
     nodes.forEach((el) => {
-      const suffix = (el.dataset.count || "").replace(/[\d]/g, "");
+      const { suffix } = parse(el.dataset.count || "0");
       el.textContent = "0" + suffix;
     });
 
-    const ctx = gsap.context(() => {
-      nodes.forEach((el) => {
-        const raw = el.dataset.count || "0";
-        const target = parseInt(raw.replace(/\D/g, ""), 10);
-        const suffix = raw.replace(/[\d]/g, "");
-        const obj = { v: 0 };
-        gsap.to(obj, {
-          v: target,
-          duration: 2,
-          ease: "power2.out",
-          snap: { v: 1 },
-          scrollTrigger: { trigger: el, start: "top 82%" },
-          onUpdate: () => {
-            el.textContent = Math.round(obj.v).toLocaleString("pt-BR") + suffix;
-          },
-        });
+    const run = (el: HTMLElement) => {
+      const { target, suffix } = parse(el.dataset.count || "0");
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: target,
+        duration: 2,
+        ease: "power2.out",
+        snap: { v: 1 },
+        onUpdate: () => {
+          el.textContent = Math.round(obj.v).toLocaleString("pt-BR") + suffix;
+        },
       });
-      ScrollTrigger.refresh();
-    }, root);
+    };
 
-    return () => ctx.revert();
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            run(e.target as HTMLElement);
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+    nodes.forEach((el) => io.observe(el));
+
+    // Failsafe — never leave a number stuck on zero.
+    const failsafe = window.setTimeout(() => {
+      nodes.forEach((el) => {
+        const { target, suffix } = parse(el.dataset.count || "0");
+        if (el.textContent === "0" + suffix) {
+          el.textContent = target.toLocaleString("pt-BR") + suffix;
+        }
+      });
+    }, 4000);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(failsafe);
+    };
   }, []);
 
   return (

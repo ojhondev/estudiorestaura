@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ProjectGallery } from "@/components/projetos/ProjectGallery";
 import { Arrow } from "@/components/ui";
 import { getProject, projects } from "@/lib/content";
 
@@ -85,16 +86,7 @@ export default async function ProjetoPage({
         </div>
       </div>
 
-      <div className="shell grid gap-6 pb-[clamp(3rem,7vw,5rem)] sm:grid-cols-2">
-        {Array.from({ length: project.gallery }).map((_, i) => (
-          <ImagePlaceholder
-            key={i}
-            ratio={i % 3 === 0 ? "16 / 10" : "4 / 3"}
-            className={i % 3 === 0 ? "sm:col-span-2" : ""}
-            data-reveal="fade"
-          />
-        ))}
-      </div>
+      <ProjectGallery count={project.gallery} title={project.title} />
 
       <section className="bleed border-t border-mist">
         <div className="shell flex flex-col gap-3 py-14">

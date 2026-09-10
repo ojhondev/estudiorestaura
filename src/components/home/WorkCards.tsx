@@ -103,13 +103,14 @@ export function WorkCards() {
         </div>
       </div>
 
+      {/* Media band — vídeo entra aqui depois */}
       <div
         data-reveal
-        className="mt-14 flex min-h-[clamp(14rem,26vw,22rem)] items-center justify-center rounded-[8px] bg-pine text-paper"
+        className="relative mt-14 flex aspect-[16/10] items-center justify-center overflow-hidden rounded-[8px] bg-pine text-paper sm:aspect-[16/8] lg:aspect-[16/7]"
       >
         <svg
           viewBox="0 0 100 100"
-          className="mark-draw h-28 w-28 text-paper/70 md:h-40 md:w-40"
+          className="mark-draw h-32 w-32 text-paper/60 md:h-48 md:w-48"
           aria-hidden
         >
           <path
@@ -119,6 +120,9 @@ export function WorkCards() {
             strokeWidth="1.2"
           />
         </svg>
+        <span className="absolute bottom-5 left-6 text-[12px] uppercase tracking-[0.18em] text-paper/50">
+          Espaço para vídeo
+        </span>
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">

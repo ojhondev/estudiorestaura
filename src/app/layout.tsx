@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Reveal } from "@/components/Reveal";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { CookieBar } from "@/components/CookieBar";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -45,12 +46,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col bg-paper text-ink">
         <noscript>
-          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
         <SmoothScroll />
         <SiteNav />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <CookieBar />
         <Reveal />
       </body>
     </html>

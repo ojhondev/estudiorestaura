@@ -35,11 +35,11 @@ export default function HomePage() {
         <WorkCards />
         <Numbers />
 
-        {/* Feature cards */}
+        {/* Feature cards — square */}
         <section className="shell grid gap-4 py-[clamp(4.5rem,10vw,8rem)] lg:grid-cols-2">
           <div
             data-reveal
-            className="flex min-h-[24rem] flex-col justify-between rounded-[8px] bg-mist p-9 md:p-12"
+            className="flex aspect-square flex-col justify-between rounded-[8px] bg-mist p-9 md:p-12"
           >
             <div>
               <p className="label">Acervo</p>
@@ -52,7 +52,7 @@ export default function HomePage() {
 
           <div
             data-reveal
-            className="relative flex min-h-[24rem] flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
+            className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
           >
             <ImagePlaceholder fill variant="bleed" label="Espaço para imagem" />
             <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
