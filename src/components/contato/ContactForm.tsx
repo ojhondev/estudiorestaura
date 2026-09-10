@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Arrow } from "@/components/ui";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
@@ -13,8 +14,8 @@ const SUBJECTS = [
 ];
 
 const field =
-  "mt-2 w-full border-b border-line-strong bg-transparent pb-2 text-[16px] text-ink outline-none transition-colors focus:border-terracotta placeholder:text-muted";
-const label = "text-[12px] uppercase tracking-[0.26em] text-muted";
+  "mt-2 w-full rounded-[3.2px] border border-mist bg-paper px-3 py-2.5 text-[15px] text-ink outline-none transition-colors focus:border-ember placeholder:text-smoke";
+const label = "label";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -44,27 +45,25 @@ export function ContactForm() {
 
   if (status === "ok") {
     return (
-      <div className="border-t border-line-strong pt-8">
-        <p className="section-title text-[clamp(1.5rem,3vw,2.25rem)]">
-          Mensagem recebida.
-        </p>
-        <p className="mt-3 max-w-sm text-[15px] text-ink-soft">
+      <div className="rounded-[8px] bg-mist p-10">
+        <p className="h text-[clamp(1.5rem,3vw,2.25rem)]">Mensagem recebida.</p>
+        <p className="mt-3 max-w-sm text-[15px] text-pewter">
           Obrigado pelo contato. O estúdio responde em até dois dias úteis.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="ulink mt-6 text-[14px]"
+          className="text-arrow mt-6 text-[14px]"
         >
-          Enviar outra mensagem
+          Enviar outra mensagem <Arrow />
         </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-8" noValidate>
-      <div className="grid gap-8 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid gap-6" noValidate>
+      <div className="grid gap-6 sm:grid-cols-2">
         <label>
           <span className={label}>Nome</span>
           <input name="nome" required className={field} placeholder="Seu nome" />
@@ -81,7 +80,7 @@ export function ContactForm() {
         </label>
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         <label>
           <span className={label}>Telefone</span>
           <input name="telefone" className={field} placeholder="(11) 90000-0000" />
@@ -108,15 +107,16 @@ export function ContactForm() {
       </label>
 
       {status === "error" && (
-        <p className="text-[14px] text-terracotta">{error}</p>
+        <p className="text-[14px] text-ember">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={status === "sending"}
-        className="ulink w-fit text-[15px] disabled:opacity-50"
+        className="btn-fill w-fit disabled:opacity-50"
       >
         {status === "sending" ? "Enviando…" : "Enviar mensagem"}
+        <Arrow className="h-4 w-4" />
       </button>
     </form>
   );

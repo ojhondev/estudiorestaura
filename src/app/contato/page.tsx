@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/PageIntro";
+import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/components/contato/ContactForm";
 
 export const metadata: Metadata = {
@@ -18,26 +18,26 @@ const INFO = [
 export default function ContatoPage() {
   return (
     <>
-      <PageIntro kicker="Vamos conversar" title="Contato">
-        Conte sobre o edifício, o acervo ou o projeto. Respondemos em até dois
-        dias úteis.
-      </PageIntro>
+      <PageHero
+        label="Vamos conversar"
+        title="Contato"
+        intro="Conte sobre o edifício, o acervo ou o projeto. Respondemos em até dois dias úteis."
+        imageLabel="Espaço para imagem — recepção do estúdio"
+      />
 
-      <div className="shell mt-16 grid gap-14 md:mt-24 md:grid-cols-[1.2fr_0.8fr]">
+      <div className="container grid gap-14 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[1.2fr_0.8fr]">
         <ContactForm />
 
         <aside className="flex flex-col gap-8" data-reveal>
           {INFO.map(([label, value, href]) => (
             <div key={label}>
-              <h2 className="text-[12px] uppercase tracking-[0.3em] text-muted">
-                {label}
-              </h2>
+              <h2 className="label">{label}</h2>
               {href ? (
-                <a href={href} className="ulink mt-2 text-[16px]">
+                <a href={href} className="mt-2 block text-[16px] hover:text-ember">
                   {value}
                 </a>
               ) : (
-                <p className="mt-2 text-[16px] text-ink-soft">{value}</p>
+                <p className="mt-2 text-[16px] text-pewter">{value}</p>
               )}
             </div>
           ))}

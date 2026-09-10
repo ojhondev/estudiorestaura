@@ -187,9 +187,29 @@ export const services: Service[] = [
   },
 ];
 
-export const nav = [
-  { href: "/projetos", label: "Projetos" },
-  { href: "/servicos", label: "Serviços" },
-  { href: "/sobre", label: "Sobre o Estúdio" },
-  { href: "/contato", label: "Contato" },
+export const nav: {
+  href: string;
+  label: string;
+  desc: string;
+}[] = [
+  {
+    href: "/projetos",
+    label: "Projetos",
+    desc: "O acervo de restauros, conservações e obras contemporâneas.",
+  },
+  {
+    href: "/servicos",
+    label: "Serviços",
+    desc: "Do diagnóstico técnico ao acompanhamento de obra.",
+  },
+  {
+    href: "/sobre",
+    label: "Sobre o Estúdio",
+    desc: "Quem somos, como trabalhamos e no que acreditamos.",
+  },
+  {
+    href: "/contato",
+    label: "Contato",
+    desc: "Conte sobre o edifício, o acervo ou o projeto.",
+  },
 ];

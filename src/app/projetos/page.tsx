@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/PageIntro";
+import { PageHero } from "@/components/PageHero";
 import { ProjectGrid } from "@/components/projetos/ProjectGrid";
 import { projects } from "@/lib/content";
 
@@ -12,15 +12,13 @@ export const metadata: Metadata = {
 export default function ProjetosPage() {
   return (
     <>
-      <PageIntro kicker="Acervo" title="Projetos">
-        Cada projeto começa por uma leitura atenta do que já existe. Intervenções
-        de restauro, planos de conservação preventiva e arquitetura nova que
-        dialoga com a preexistência.
-      </PageIntro>
-
-      <div className="mt-16 md:mt-24">
-        <ProjectGrid projects={projects} />
-      </div>
+      <PageHero
+        label="Acervo"
+        title="Projetos"
+        intro="Intervenções de restauro, planos de conservação preventiva e arquitetura nova que dialoga com a preexistência."
+        imageLabel="Espaço para imagem — projeto em destaque"
+      />
+      <ProjectGrid projects={projects} />
     </>
   );
 }

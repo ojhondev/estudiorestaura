@@ -1,24 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand + editorial palette. Mono ink on paper; brand hues used only as
-     large fields (the "restauro" spread) and small accents. */
+  /* Colors — Aker system */
+  --color-ink: #000000;
   --color-paper: #ffffff;
-  --color-ink: #141210;
-  --color-ink-soft: #4b453d;
-  --color-muted: #8f8983;
-  --color-line: rgba(20, 18, 16, 0.16);
-  --color-line-strong: #141210;
+  --color-char: #1c1c1c;
+  --color-midnight: #070707;
+  --color-iron: #262626;
+  --color-slate: #38464a;
+  --color-mist: #e5e4e4;
+  --color-smoke: #8d8d8d;
+  --color-pewter: #666666;
+  --color-ember: #b75928;
+  --color-pine: #193f32;
+  --color-tide: #002934;
+  --color-driftwood: #537179;
+  --color-cedar: #776157;
+  --color-coral: #df6a6b;
+  --color-action: #494949;
 
-  --color-terracotta: #bf4526;
-  --color-blush: #f2d4ca;
-  --color-blush-deep: #e7bcae;
-  --color-peach: #f8e6d7;
-
-  --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
+  --font-sans: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui,
     sans-serif;
+  --font-serif: var(--font-lora), "Lora", Georgia, serif;
 
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-sm: 3.2px;
+  --radius-lg: 8px;
+  --radius-pill: 80px;
+  --radius-round: 1584px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
@@ -27,7 +37,6 @@
 
 * {
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 html {
@@ -39,112 +48,136 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
   font-synthesis-weight: none;
-  letter-spacing: -0.02em;
-  line-height: 1.4;
-  /* `clip` (not `hidden`) — `hidden` makes body a scroll container and breaks
-     GSAP ScrollTrigger pinning. */
   overflow-x: clip;
 }
 
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-ember);
+  color: #fff;
 }
 
-/* Fluid full-width shell: content fills the screen with editorial margins. */
-.shell {
+/* 1200px content column */
+.container {
   width: 100%;
-  padding-inline: clamp(1.25rem, 4.5vw, 5rem);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Full-bleed section (used on direct children of <main> / <body>) */
+.bleed {
+  width: 100%;
 }
 
-/* Editorial hairline rule */
-.rule {
-  border: 0;
-  border-top: 1px solid var(--color-line);
-}
-
-/* Ghost / underline link — the only interactive style on the site */
-.ulink {
-  display: inline-block;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 1px;
-  transition: color 0.25s var(--ease-out-expo);
-}
-.ulink:hover {
-  color: var(--color-terracotta);
-}
-
-/* Display type — the monumental brand words. Heavy, tight, like the logo. */
+/* Display / heading type — whisper weight, tight tracking */
 .display {
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 0.9;
-  text-wrap: balance;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 0.82;
+}
+.h-lg {
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+}
+.h {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.h-sm {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
-/* Section titles — moderate weight, tight tracking, scaled to the column edge */
-.section-title {
+.label {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-smoke);
+}
+
+.lora {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.011em;
+}
+
+/* Text-and-arrow link — the default action affordance */
+.text-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  transition: gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+.text-arrow svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease);
+}
+.text-arrow:hover {
+  color: var(--color-ember);
+}
+.text-arrow:hover svg {
+  transform: translateX(4px);
+}
+
+/* Pill variants */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  padding: 0.75rem 1.35rem;
+  font-size: 14px;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.btn-fill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--color-char);
+  color: var(--color-paper);
+  border-radius: var(--radius-pill);
+  padding: 0.85rem 1.5rem;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  transition: opacity 0.3s var(--ease);
+}
+.btn-fill:hover {
+  opacity: 0.85;
 }
 
-/* Per-letter / per-word reveal masks */
-.mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding: 0.14em 0.05em 0.04em;
-  margin: -0.14em -0.05em -0.04em;
-}
-.mask > span {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* Scroll reveal — CSS transition driven by an IntersectionObserver (no JS
-   animation-loop dependency). A failsafe timeout and <noscript> guarantee the
-   content is never left hidden. */
+/* Scroll reveal — IntersectionObserver + CSS transition (no JS anim loop). */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(24px);
   transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
+    opacity 1s var(--ease),
+    transform 1s var(--ease);
 }
-[data-reveal="wipe"] {
+[data-reveal="fade"] {
   transform: none;
 }
-[data-reveal].is-in {
+[data-reveal].in {
   opacity: 1;
   transform: none;
 }
 
-/* GSAP-orchestrated intros (hero, "restauro" spread). */
-[data-anim] {
-  opacity: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal],
-  [data-anim] {
+  [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-  }
-  .mask > span {
-    transform: none !important;
-  }
-  .showcase-pin {
-    height: auto !important;
-  }
-  .showcase-panel {
-    height: 72vh !important;
   }
 }

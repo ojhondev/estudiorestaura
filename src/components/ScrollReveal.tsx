@@ -2,25 +2,28 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { prefersReducedMotion } from "@/lib/gsap";
 
 /**
- * Global scroll reveal. Any element with `data-reveal` fades + rises into place
- * as it enters the viewport. Driven by IntersectionObserver + a CSS transition
- * (no animation-loop dependency), with a failsafe so nothing is ever stuck
- * hidden. `data-reveal="wipe"` skips the rise. Re-runs on route change.
+ * Elements with `data-reveal` fade + rise as they enter the viewport
+ * (`data-reveal="fade"` skips the rise). IntersectionObserver + a CSS
+ * transition — no animation-loop dependency — with a failsafe so nothing
+ * stays hidden. Re-runs on route change.
  */
 export function ScrollReveal() {
   const pathname = usePathname();
 
   useEffect(() => {
     const items = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)"),
+      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.in)"),
     );
     if (!items.length) return;
 
-    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-in"));
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduce || !("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("in"));
       return;
     }
 
@@ -28,22 +31,20 @@ export function ScrollReveal() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
+            entry.target.classList.add("in");
             io.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
     );
 
     items.forEach((el) => io.observe(el));
 
-    // Failsafe: reveal anything at/near the viewport that the observer somehow
-    // hasn't caught. The observer keeps running for the rest.
     const failsafe = window.setTimeout(() => {
       items.forEach((el) => {
         if (el.getBoundingClientRect().top < window.innerHeight * 1.15) {
-          el.classList.add("is-in");
+          el.classList.add("in");
         }
       });
     }, 2400);

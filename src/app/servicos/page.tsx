@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PageIntro } from "@/components/PageIntro";
+import { PageHero } from "@/components/PageHero";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { TextArrow } from "@/components/ui";
 import { services } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -13,32 +13,31 @@ export const metadata: Metadata = {
 export default function ServicosPage() {
   return (
     <>
-      <PageIntro kicker="O que fazemos" title="Serviços">
-        Do diagnóstico técnico ao acompanhamento de obra. Trabalhamos com
-        intervenção mínima, reversibilidade e documentação rigorosa de cada
-        etapa.
-      </PageIntro>
+      <PageHero
+        label="O que fazemos"
+        title="Serviços"
+        intro="Do diagnóstico técnico ao acompanhamento de obra. Trabalhamos com intervenção mínima, reversibilidade e documentação rigorosa de cada etapa."
+        imageLabel="Espaço para imagem — canteiro de obra"
+      />
 
-      <div className="shell mt-20 md:mt-28">
+      <div className="container py-[clamp(3rem,7vw,5rem)]">
         {services.map((s, i) => (
           <article
             key={s.number}
             data-reveal
-            className="grid gap-8 border-t border-line py-12 md:grid-cols-[3rem_1fr_1fr] md:gap-12 md:py-16"
+            className="grid gap-8 border-t border-mist py-14 md:grid-cols-[3rem_1fr_1fr] md:gap-12"
           >
-            <span className="text-[13px] text-terracotta">{s.number}</span>
+            <span className="text-[13px] text-ember">{s.number}</span>
 
             <div className="md:pr-8">
-              <h2 className="section-title text-[clamp(1.4rem,2.8vw,2.1rem)]">
-                {s.title}
-              </h2>
-              <p className="mt-4 max-w-md text-[15px] text-ink-soft">
+              <h2 className="h text-[clamp(1.5rem,3vw,2rem)]">{s.title}</h2>
+              <p className="mt-4 max-w-md text-[15px] text-pewter">
                 {s.description}
               </p>
-              <ul className="mt-5 space-y-2 text-[14px] text-ink-soft">
+              <ul className="mt-5 space-y-2 text-[14px] text-pewter">
                 {s.bullets.map((b) => (
                   <li key={b} className="flex gap-3">
-                    <span className="mt-2.5 h-px w-4 shrink-0 bg-terracotta" />
+                    <span className="mt-2.5 h-px w-4 shrink-0 bg-ember" />
                     {b}
                   </li>
                 ))}
@@ -52,13 +51,20 @@ export default function ServicosPage() {
         ))}
       </div>
 
-      <section className="shell mt-24 border-t border-line pt-14" data-reveal>
-        <h2 className="display text-[clamp(2rem,7vw,4.5rem)]">
-          Tem um edifício com história?
-        </h2>
-        <Link href="/contato" className="ulink mt-8 text-[15px]">
-          Fale com o estúdio
-        </Link>
+      <section className="bleed relative flex min-h-[60vh] items-center overflow-hidden">
+        <ImagePlaceholder fill variant="bleed" label="Espaço para imagem" />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-midnight/55"
+        />
+        <div className="relative container py-16 text-paper">
+          <h2 className="h-lg max-w-3xl text-[clamp(2rem,5vw,3.5rem)]">
+            Tem um edifício com história?
+          </h2>
+          <TextArrow href="/contato" className="mt-8 text-[15px]">
+            Fale com o estúdio
+          </TextArrow>
+        </div>
       </section>
     </>
   );

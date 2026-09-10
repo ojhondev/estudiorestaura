@@ -2,20 +2,13 @@ import type { HTMLAttributes } from "react";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
   className?: string;
-  /** CSS aspect-ratio value, e.g. "16 / 9". Ignored when `fill` is set. */
   ratio?: string;
   /** Fill the parent (parent must be positioned + sized). */
   fill?: boolean;
   label?: string;
-  tone?: "default" | "blush" | "peach" | "ink";
+  /** "card" = 8px radius muted panel; "bleed" = square-cornered dark hero. */
+  variant?: "card" | "bleed";
   "data-reveal"?: string;
-};
-
-const tones: Record<NonNullable<Props["tone"]>, string> = {
-  default: "bg-[#efece6] text-muted",
-  blush: "bg-blush-deep/45 text-ink-soft",
-  peach: "bg-peach text-ink-soft",
-  ink: "bg-ink text-white/45",
 };
 
 export function ImagePlaceholder({
@@ -23,19 +16,23 @@ export function ImagePlaceholder({
   ratio = "4 / 3",
   fill = false,
   label = "Espaço para imagem",
-  tone = "default",
+  variant = "card",
   style,
   ...rest
 }: Props) {
+  const skin =
+    variant === "bleed"
+      ? "bg-iron text-paper/45"
+      : "bg-mist text-pewter rounded-[8px]";
+  const position = fill ? "absolute inset-0 h-full w-full" : "relative";
+
   return (
     <div
       {...rest}
-      className={`relative flex items-center justify-center overflow-hidden ${tones[tone]} ${
-        fill ? "absolute inset-0 h-full w-full" : ""
-      } ${className}`}
+      className={`flex items-center justify-center overflow-hidden ${skin} ${position} ${className}`}
       style={fill ? style : { aspectRatio: ratio, ...style }}
     >
-      <span className="px-4 text-center text-[10px] font-medium uppercase tracking-[0.34em]">
+      <span className="px-4 text-center text-[11px] font-medium uppercase tracking-[0.22em]">
         {label}
       </span>
     </div>

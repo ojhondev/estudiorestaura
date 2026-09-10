@@ -25,36 +25,35 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
   );
 
   return (
-    <section className="shell">
-      <div className="flex flex-wrap gap-x-6 gap-y-2 border-y border-line py-4 text-[13px]">
+    <section className="container py-[clamp(3rem,7vw,5rem)]">
+      <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
-            className={`border-b pb-px transition-colors hover:text-terracotta ${
-              filter === f ? "border-current text-terracotta" : "border-transparent"
+            className={`rounded-[1584px] px-4 py-1.5 text-[13px] transition-colors ${
+              filter === f
+                ? "bg-char text-paper"
+                : "bg-mist text-pewter hover:text-ink"
             }`}
           >
             {f}
           </button>
         ))}
-        <span className="ml-auto text-muted">
-          {String(list.length).padStart(2, "0")}
-        </span>
       </div>
 
-      <div className="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((p) => (
-          <Link key={p.slug} href={`/projetos/${p.slug}`} className="group block">
+          <Link key={p.slug} href={`/projetos/${p.slug}`} className="group">
             <ImagePlaceholder ratio="4 / 5" />
             <div className="mt-4 flex items-baseline justify-between gap-4">
-              <h2 className="text-[16px] transition-colors group-hover:text-terracotta">
+              <h2 className="text-[16px] transition-colors group-hover:text-ember">
                 {p.title}
               </h2>
-              <span className="shrink-0 text-[13px] text-muted">{p.year}</span>
+              <span className="shrink-0 text-[13px] text-smoke">{p.year}</span>
             </div>
-            <p className="mt-1 text-[13px] text-muted">
+            <p className="mt-1 text-[13px] text-pewter">
               {p.category} · {p.location}
             </p>
           </Link>
@@ -62,7 +61,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
       </div>
 
       {list.length === 0 && (
-        <p className="mt-12 text-muted">Nenhum projeto nesta categoria ainda.</p>
+        <p className="mt-12 text-pewter">Nenhum projeto nesta categoria ainda.</p>
       )}
     </section>
   );
