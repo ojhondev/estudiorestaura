@@ -24,11 +24,12 @@ export function BackToTop() {
             : "smooth",
         })
       }
-      className={`fixed bottom-[clamp(1rem,4vw,1.75rem)] right-[clamp(1rem,4vw,2rem)] z-40 flex h-11 w-11 items-center justify-center rounded-full border border-mist bg-paper text-ink shadow-[0_12px_36px_-12px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-ember hover:text-ember ${
-        show
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-3 opacity-0"
-      }`}
+      style={{
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(12px)",
+        pointerEvents: show ? "auto" : "none",
+      }}
+      className="fixed bottom-[clamp(1rem,4vw,1.75rem)] right-[clamp(1rem,4vw,2rem)] z-40 flex h-11 w-11 items-center justify-center rounded-full border border-mist bg-paper text-ink shadow-[0_12px_36px_-12px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-ember hover:text-ember"
     >
       <svg
         width="15"

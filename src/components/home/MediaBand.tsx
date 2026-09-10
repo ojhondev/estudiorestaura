@@ -40,9 +40,11 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
 
       {/* Default: darkened with the caption. On hover/tap it clears. */}
       <div
-        className={`absolute inset-0 flex flex-col justify-end p-6 text-paper transition-opacity duration-500 md:p-10 ${
-          hover ? "bg-black/0 opacity-0" : "bg-black/55 opacity-100"
-        }`}
+        style={{
+          opacity: hover ? 0 : 1,
+          background: hover ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.55)",
+        }}
+        className="absolute inset-0 flex flex-col justify-end p-6 text-paper transition-opacity duration-500 md:p-10"
       >
         {title && (
           <p className="text-[12px] font-medium uppercase tracking-[0.2em] text-paper/75">
