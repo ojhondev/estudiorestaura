@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
 import { nav } from "@/lib/content";
+import { photo } from "@/lib/photos";
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -75,7 +76,9 @@ export function SiteNav() {
                 className="group flex items-stretch gap-4 rounded-[8px] border border-mist bg-[#faf9f7] p-3 transition-colors hover:border-ember hover:bg-mist"
               >
                 <div className="w-2/5 shrink-0 overflow-hidden rounded-[6px]">
-                  <ImagePlaceholder
+                  <ImageBox
+                    src={photo(`nav:${item.href}`)}
+                    alt=""
                     ratio="4 / 3"
                     className="h-full"
                     label="Imagem"

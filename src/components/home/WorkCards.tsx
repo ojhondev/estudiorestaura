@@ -107,44 +107,40 @@ export function WorkCards({ media }: { media?: MediaBandData }) {
       {/* Media band — vídeo do estúdio na mídia */}
       <MediaBand {...media} />
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="mt-4 grid items-start gap-4 lg:grid-cols-3">
         {workAreas.map((w, i) => {
           const isOpen = open === i;
           return (
             <article
               key={w.index}
               data-reveal
-              className={`card-dark ${isOpen ? "is-open" : ""} flex min-h-[clamp(24rem,32vw,30rem)] flex-col justify-between ${toneClass[w.tone]}`}
+              className={`card-dark ${isOpen ? "is-open" : ""} flex flex-col ${toneClass[w.tone]}`}
             >
-              <div>
-                <span className="rounded-[80px] bg-white/12 px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em]">
-                  {w.index}
-                </span>
-                <h3 className="h mt-6 text-[clamp(1.9rem,3.6vw,2.75rem)]">
-                  {w.title}
-                </h3>
-                <p className="mt-3 text-[14px] text-paper/85">
-                  {w.tags.join("  ·  ")}
-                </p>
-                <p className="measure mt-5 text-[16px] leading-relaxed text-paper/90">
-                  {w.body}
-                </p>
+              <span className="w-fit rounded-[80px] bg-white/12 px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em]">
+                {w.index}
+              </span>
+              <h3 className="h mt-6 text-[clamp(1.9rem,3.6vw,2.75rem)]">
+                {w.title}
+              </h3>
+              <p className="mt-3 text-[14px] text-paper/85">
+                {w.tags.join("  ·  ")}
+              </p>
+              <p className="measure mt-5 text-[16px] leading-relaxed text-paper/90">
+                {w.body}
+              </p>
 
-                <div className="acc-content mt-1">
-                  <div>
-                    <ul className="space-y-2.5 pt-4 text-[14px] text-paper/80">
-                      {w.details.map((d) => (
-                        <li key={d} className="flex gap-3">
-                          <span className="mt-2.5 h-px w-4 shrink-0 bg-paper/50" />
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              {isOpen && (
+                <ul className="mt-5 space-y-2.5 border-t border-white/15 pt-5 text-[14px] text-paper/80 [animation:workDetail_.45s_var(--ease)_both]">
+                  {w.details.map((d) => (
+                    <li key={d} className="flex gap-3">
+                      <span className="mt-2.5 h-px w-4 shrink-0 bg-paper/50" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              )}
 
-              <div className="mt-8 flex items-end justify-between gap-4">
+              <div className="mt-6 flex items-end justify-between gap-4">
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? null : i)}

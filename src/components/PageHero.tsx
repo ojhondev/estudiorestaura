@@ -1,20 +1,31 @@
 import type { ReactNode } from "react";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
+import { photo } from "@/lib/photos";
 
 export function PageHero({
   label,
   title,
   intro,
   imageLabel = "Espaço para imagem",
+  imageUrl,
 }: {
   label: string;
   title: string;
   intro?: ReactNode;
   imageLabel?: string;
+  imageUrl?: string;
 }) {
   return (
     <section className="bleed relative flex min-h-[72vh] items-end overflow-hidden">
-      <ImagePlaceholder fill variant="bleed" label={imageLabel} />
+      <ImageBox
+        fill
+        variant="bleed"
+        src={imageUrl ?? photo(`pagehero:${title}`)}
+        alt=""
+        label={imageLabel}
+        sizes="100vw"
+        priority
+      />
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/75 via-midnight/20 to-midnight/40"

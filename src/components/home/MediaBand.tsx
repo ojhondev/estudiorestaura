@@ -39,7 +39,7 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
 
       {/* hover / tap overlay */}
       <div
-        className={`absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/25 to-transparent p-6 text-paper transition-opacity duration-500 md:p-10 ${
+        className={`absolute inset-0 flex flex-col justify-end bg-black/70 p-6 text-paper transition-opacity duration-500 md:p-10 ${
           show ? "opacity-100" : "opacity-0"
         }`}
       >

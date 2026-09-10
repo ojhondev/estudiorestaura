@@ -4,9 +4,10 @@ import { BrazilMap } from "@/components/home/BrazilMap";
 import { Criteria } from "@/components/home/Criteria";
 import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { TextArrow } from "@/components/ui";
 import { getProjects, getSetting } from "@/lib/cms";
+import { photo } from "@/lib/photos";
 
 export default async function HomePage() {
   const [hero, statement, mediaBand, projects] = await Promise.all([
@@ -67,7 +68,13 @@ export default async function HomePage() {
             data-reveal
             className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
           >
-            <ImagePlaceholder fill variant="bleed" label="Espaço para imagem" />
+            <ImageBox
+              fill
+              variant="bleed"
+              src={photo("home:quem-esta-por-tras")}
+              alt="Equipe do Estúdio Restaura"
+              label="Espaço para imagem"
+            />
             <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
             <div className="relative">
               <p className="label text-paper/70">O estúdio</p>

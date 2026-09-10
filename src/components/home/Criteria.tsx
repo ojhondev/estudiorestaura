@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { criteria } from "@/lib/content";
+import { photo } from "@/lib/photos";
 
 export function Criteria() {
   const [open, setOpen] = useState(0);
@@ -35,8 +36,10 @@ export function Criteria() {
                 transform: i === open ? "scale(1)" : "scale(1.06)",
               }}
             >
-              <ImagePlaceholder
+              <ImageBox
                 fill
+                src={photo(`criteria:${c.title}`)}
+                alt={c.title}
                 label={`Espaço para imagem — ${c.title.toLowerCase()}`}
               />
             </div>

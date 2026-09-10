@@ -271,9 +271,9 @@ export const workAreas = [
 
 /** "Em números" */
 export const metrics = [
-  ["18", "anos de atuação"],
-  ["120+", "edifícios estudados"],
-  ["9", "estados"],
+  ["8", "anos de atuação"],
+  ["20+", "projetos de restauro"],
+  ["3", "estados de atuação"],
 ] as const;
 
 /** Where we work — Brazilian states (UF) with status. */
@@ -281,19 +281,9 @@ export const mapLocations: Record<
   string,
   { status: "atuacao" | "prospeccao"; note: string }
 > = {
-  SP: { status: "atuacao", note: "Escritório e obras em andamento." },
-  RJ: { status: "atuacao", note: "Restauro de bens integrados no centro histórico." },
+  SP: { status: "atuacao", note: "Escritório e obras de restauro em andamento." },
   MG: { status: "atuacao", note: "Conservação preventiva em conjuntos coloniais." },
-  BA: { status: "atuacao", note: "Restauro de pavilhões do século XIX." },
-  PE: { status: "atuacao", note: "Diagnóstico de igrejas e casarões." },
-  PR: { status: "atuacao", note: "Adaptação de uso de edifícios ferroviários." },
-  RS: { status: "atuacao", note: "Laudos técnicos e projetos executivos." },
-  SC: { status: "prospeccao", note: "Prospecção de novos projetos." },
-  GO: { status: "prospeccao", note: "Prospecção de novos projetos." },
-  DF: { status: "prospeccao", note: "Consultoria a órgãos de preservação." },
-  ES: { status: "prospeccao", note: "Prospecção de novos projetos." },
-  CE: { status: "prospeccao", note: "Prospecção de novos projetos." },
-  PA: { status: "prospeccao", note: "Prospecção de novos projetos." },
+  GO: { status: "atuacao", note: "Restauro de bens integrados e laudos técnicos." },
 };
 
 export const nav: {

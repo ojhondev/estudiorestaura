@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
 import { doList } from "@/lib/content";
+import { photo } from "@/lib/photos";
 
 export function WhatWeDo() {
   const [active, setActive] = useState(0);
@@ -85,8 +86,10 @@ export function WhatWeDo() {
                 transform: idx === active ? "scale(1)" : "scale(1.06)",
               }}
             >
-              <ImagePlaceholder
+              <ImageBox
                 fill
+                src={photo(`whatwedo:${s.number}`)}
+                alt={s.title}
                 label={`Espaço para imagem — ${s.title.toLowerCase()}`}
               />
             </div>

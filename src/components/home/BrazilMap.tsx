@@ -2,9 +2,10 @@
 
 import { useMemo, useRef, useState } from "react";
 import { gsap, reducedMotion, useIso } from "@/lib/anim";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { BR_STATES, BR_VIEWBOX } from "@/lib/brazil-map";
 import { mapLocations } from "@/lib/content";
+import { photo } from "@/lib/photos";
 
 const NAMES: Record<string, string> = Object.fromEntries(
   BR_STATES.map((s) => [s.uf, s.name]),
@@ -52,7 +53,7 @@ export function BrazilMap() {
         moveX.current?.(0);
         moveY.current?.(0);
       }}
-      className="bleed relative overflow-hidden bg-[#BD3219] text-paper"
+      className="bleed relative overflow-hidden bg-[#7c2011] text-paper"
     >
       {/* Per-state photo backgrounds */}
       {activeUFs.map((uf) => (
@@ -62,9 +63,11 @@ export function BrazilMap() {
           className="absolute inset-0 transition-opacity duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{ opacity: hover === uf ? 1 : 0 }}
         >
-          <ImagePlaceholder
+          <ImageBox
             fill
             variant="bleed"
+            src={photo(`brazil:${uf}`)}
+            alt={`Obras em ${NAMES[uf] ?? uf}`}
             className="bg-iron"
             label={`Espaço para imagem — obras em ${NAMES[uf] ?? uf}`}
           />
@@ -75,7 +78,7 @@ export function BrazilMap() {
         aria-hidden
         className="pointer-events-none absolute inset-0 transition-colors duration-500"
         style={{
-          background: hover ? "rgba(120,30,12,0.55)" : "rgba(189,50,25,1)",
+          background: hover ? "rgba(40,10,4,0.7)" : "rgba(124,32,17,1)",
         }}
       />
 
@@ -83,7 +86,7 @@ export function BrazilMap() {
         <div className="flex items-start gap-6">
           <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-paper/25" />
           <div>
-            <p data-reveal="fade" className="label text-paper/55">
+            <p data-reveal="fade" className="label !text-paper/85">
               Presença
             </p>
             <h2 data-reveal="clip" className="h-lg mt-4 text-[clamp(2.5rem,7vw,5rem)]">
@@ -130,17 +133,6 @@ export function BrazilMap() {
                 );
               })}
             </svg>
-
-            <div className="mt-6 flex gap-7 text-[13px] text-paper/70">
-              <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-white" />
-                Atuação
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-midnight" />
-                Prospecção
-              </span>
-            </div>
           </div>
 
           <div data-reveal className="flex flex-col justify-between gap-8">
