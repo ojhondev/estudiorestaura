@@ -7,7 +7,7 @@ export function SiteFooter() {
   return (
     <footer className="bleed bg-midnight text-paper">
       {/* Partnership CTA */}
-      <div className="container grid gap-8 border-b border-white/10 py-16 md:grid-cols-2 md:items-end md:py-24">
+      <div className="shell grid gap-8 border-b border-white/10 py-16 md:grid-cols-2 md:items-end md:py-24">
         <div>
           <p className="label text-mist/60">Parcerias</p>
           <h2 className="h-lg mt-4 text-[clamp(2rem,5vw,3.5rem)]">
@@ -19,7 +19,7 @@ export function SiteFooter() {
         </Link>
       </div>
 
-      <div className="container grid gap-14 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div className="shell grid gap-14 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Logo variant="light" className="h-7 w-auto" />
           <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-mist/70">
@@ -67,7 +67,7 @@ export function SiteFooter() {
         </p>
       </div>
 
-      <div className="container flex flex-col gap-2 border-t border-white/10 py-6 text-[12px] text-smoke sm:flex-row sm:justify-between">
+      <div className="shell flex flex-col gap-2 border-t border-white/10 py-6 text-[12px] text-smoke sm:flex-row sm:justify-between">
         <p>
           © {new Date().getFullYear()} Estúdio Restaura. Todos os direitos
           reservados.

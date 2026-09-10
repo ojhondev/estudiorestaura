@@ -50,7 +50,7 @@ export default function SobrePage() {
         imageLabel="Espaço para imagem — equipe / atelier"
       />
 
-      <section className="container grid gap-10 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+      <section className="shell grid gap-10 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         <p data-reveal="fade" className="label">
           Manifesto
         </p>
@@ -64,7 +64,7 @@ export default function SobrePage() {
       </section>
 
       <section className="bleed border-y border-mist">
-        <div className="container grid gap-8 py-14 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="shell grid gap-8 py-14 sm:grid-cols-2 lg:grid-cols-4">
           {NUMBERS.map(([n, label]) => (
             <div key={label} data-reveal>
               <p className="display text-[clamp(2.5rem,6vw,4.5rem)]">{n}</p>
@@ -74,7 +74,7 @@ export default function SobrePage() {
         </div>
       </section>
 
-      <section className="container grid gap-10 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[0.8fr_1.2fr]">
+      <section className="shell grid gap-10 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[0.8fr_1.2fr]">
         <h2 data-reveal className="h text-[clamp(1.75rem,3.5vw,2.5rem)]">
           Como trabalhamos
         </h2>
@@ -88,7 +88,7 @@ export default function SobrePage() {
         </div>
       </section>
 
-      <section className="container py-[clamp(3rem,7vw,5rem)]">
+      <section className="shell py-[clamp(3rem,7vw,5rem)]">
         <h2 data-reveal className="h text-[clamp(1.75rem,3.5vw,2.5rem)]">
           Equipe
         </h2>

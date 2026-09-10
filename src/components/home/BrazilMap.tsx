@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { gsap, reducedMotion, useIso } from "@/lib/anim";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { BR_STATES, BR_VIEWBOX } from "@/lib/brazil-map";
 import { mapLocations } from "@/lib/content";
@@ -11,95 +12,154 @@ const NAMES: Record<string, string> = Object.fromEntries(
 
 export function BrazilMap() {
   const activeUFs = useMemo(() => Object.keys(mapLocations), []);
-  const [uf, setUf] = useState(activeUFs[0]);
-  const loc = mapLocations[uf];
+  const [hover, setHover] = useState<string | null>(null);
+  const [pinned, setPinned] = useState(activeUFs[0]);
+  const current = hover ?? pinned;
+  const loc = mapLocations[current];
+
+  const section = useRef<HTMLElement>(null);
+  const mapWrap = useRef<HTMLDivElement>(null);
+  const moveX = useRef<((v: number) => void) | null>(null);
+  const moveY = useRef<((v: number) => void) | null>(null);
+
+  useIso(() => {
+    if (reducedMotion() || !mapWrap.current) return;
+    moveX.current = gsap.quickTo(mapWrap.current, "x", {
+      duration: 0.8,
+      ease: "power3.out",
+    });
+    moveY.current = gsap.quickTo(mapWrap.current, "y", {
+      duration: 0.8,
+      ease: "power3.out",
+    });
+  }, []);
+
+  function onMove(e: React.MouseEvent) {
+    const r = section.current?.getBoundingClientRect();
+    if (!r) return;
+    const dx = (e.clientX - r.left) / r.width - 0.5;
+    const dy = (e.clientY - r.top) / r.height - 0.5;
+    moveX.current?.(dx * -34);
+    moveY.current?.(dy * -24);
+  }
 
   return (
-    <section className="bleed bg-midnight text-paper">
-      <div className="container py-[clamp(4rem,9vw,7rem)]">
+    <section
+      ref={section}
+      onMouseMove={onMove}
+      onMouseLeave={() => {
+        setHover(null);
+        moveX.current?.(0);
+        moveY.current?.(0);
+      }}
+      className="bleed relative overflow-hidden bg-midnight text-paper"
+    >
+      {/* Per-state photo backgrounds */}
+      {activeUFs.map((uf) => (
+        <div
+          key={uf}
+          aria-hidden
+          className="absolute inset-0 transition-opacity duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ opacity: hover === uf ? 1 : 0 }}
+        >
+          <ImagePlaceholder
+            fill
+            variant="bleed"
+            className="bg-iron"
+            label={`Espaço para imagem — obras em ${NAMES[uf] ?? uf}`}
+          />
+        </div>
+      ))}
+      {/* Contrast overlay (not too dark) */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 transition-colors duration-500"
+        style={{ background: hover ? "rgba(7,7,7,0.62)" : "rgba(7,7,7,1)" }}
+      />
+
+      <div className="relative shell py-[clamp(4.5rem,10vw,8rem)]">
         <div className="flex items-start gap-6">
-          <span aria-hidden className="mt-3 h-px w-16 shrink-0 bg-paper/25" />
+          <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-paper/25" />
           <div>
-            <p data-reveal="fade" className="label text-mist/60">
-              Onde atuamos
+            <p data-reveal="fade" className="label text-paper/55">
+              Presença
             </p>
-            <h2
-              data-reveal="clip"
-              className="h-lg mt-3 text-[clamp(2.25rem,6vw,3.875rem)]"
-            >
-              No mapa do Brasil
+            <h2 data-reveal="clip" className="h-lg mt-4 text-[clamp(2.5rem,7vw,5rem)]">
+              Onde já atuamos no Brasil
             </h2>
           </div>
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
-          <div data-reveal className="relative">
+        <div className="mt-16 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
+          <div ref={mapWrap} data-reveal className="will-change-transform">
             <svg
               viewBox={BR_VIEWBOX}
-              className="h-auto w-full"
+              className="h-auto w-full max-w-[42rem] lg:max-w-none"
               role="img"
               aria-label="Mapa do Brasil com os estados de atuação"
             >
               {BR_STATES.map((s) => {
                 const state = mapLocations[s.uf];
-                const isActive = s.uf === uf;
+                const isOn = s.uf === current;
                 const fill = !state
-                  ? "var(--color-iron)"
+                  ? "rgba(255,255,255,0.07)"
                   : state.status === "atuacao"
-                    ? isActive
-                      ? "var(--color-ember)"
+                    ? isOn
+                      ? "var(--color-ember-bright)"
                       : "rgba(183,89,40,0.55)"
-                    : isActive
+                    : isOn
                       ? "var(--color-driftwood)"
-                      : "rgba(83,113,121,0.4)";
+                      : "rgba(83,113,121,0.42)";
                 return (
                   <path
                     key={s.uf}
                     d={s.d}
                     fill={fill}
-                    stroke="var(--color-midnight)"
+                    stroke="rgba(7,7,7,0.8)"
                     strokeWidth={1}
-                    className={state ? "cursor-pointer transition-[fill] duration-300" : ""}
-                    onMouseEnter={() => state && setUf(s.uf)}
-                    onClick={() => state && setUf(s.uf)}
+                    className={
+                      state
+                        ? "cursor-pointer transition-[fill] duration-300"
+                        : "transition-[fill] duration-300"
+                    }
+                    onMouseEnter={() => state && setHover(s.uf)}
+                    onClick={() => state && setPinned(s.uf)}
                   />
                 );
               })}
             </svg>
 
-            <div className="mt-6 flex gap-6 text-[12px] text-mist/70">
+            <div className="mt-6 flex gap-7 text-[13px] text-paper/70">
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-ember" /> Atuação
+                <span className="h-2.5 w-2.5 rounded-full bg-ember-bright" />
+                Atuação
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-driftwood" /> Prospecção
+                <span className="h-2.5 w-2.5 rounded-full bg-driftwood" />
+                Prospecção
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col justify-between gap-6">
+          <div data-reveal className="flex flex-col justify-between gap-8">
             <div>
-              <div className="overflow-hidden rounded-[8px]">
-                <ImagePlaceholder
-                  variant="bleed"
-                  ratio="4 / 3"
-                  className="bg-iron"
-                  label={`Espaço para imagem — ${NAMES[uf] ?? uf}`}
-                />
-              </div>
-              <p className="mt-5 text-[12px] uppercase tracking-[0.2em] text-mist/60">
-                {loc.status === "atuacao"
-                  ? "Aker é ativo aqui"
-                  : "Explorando prospectos"}
-              </p>
-              <p className="mt-2 text-[15px] text-mist/80">{loc.note}</p>
-            </div>
-
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <p className="text-[15px]">{NAMES[uf] ?? uf}</p>
-              <span className="display text-[clamp(3rem,10vw,7rem)] leading-none">
-                {uf}
+              <span className="display block text-[clamp(4rem,12vw,9rem)] leading-none">
+                {current}
               </span>
+              <p className="mt-2 text-[clamp(1.25rem,2.4vw,1.75rem)] font-light">
+                {NAMES[current] ?? current}
+              </p>
+              <p className="mt-5 text-[13px] uppercase tracking-[0.18em] text-paper/60">
+                {loc.status === "atuacao"
+                  ? "Atuação em andamento"
+                  : "Prospecção de novos projetos"}
+              </p>
+              <p className="measure mt-3 text-[16px] leading-relaxed text-paper/85">
+                {loc.note}
+              </p>
+              <p className="mt-4 text-[13px] text-paper/45">
+                Passe o mouse pelos estados para ver as obras.
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -107,11 +167,13 @@ export function BrazilMap() {
                 <button
                   key={code}
                   type="button"
-                  onClick={() => setUf(code)}
-                  className={`rounded-[80px] px-3 py-1 text-[12px] transition-colors ${
-                    code === uf
+                  onMouseEnter={() => setHover(code)}
+                  onFocus={() => setHover(code)}
+                  onClick={() => setPinned(code)}
+                  className={`rounded-[80px] px-3.5 py-1.5 text-[13px] transition-colors ${
+                    code === current
                       ? "bg-paper text-ink"
-                      : "bg-white/10 text-mist/70 hover:bg-white/20"
+                      : "bg-white/10 text-paper/70 hover:bg-white/20"
                   }`}
                 >
                   {code}

@@ -25,7 +25,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
   );
 
   return (
-    <section className="container py-[clamp(3rem,7vw,5rem)]">
+    <section className="shell py-[clamp(3rem,7vw,5rem)]">
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button

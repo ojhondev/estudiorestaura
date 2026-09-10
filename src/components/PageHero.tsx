@@ -19,7 +19,7 @@ export function PageHero({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/75 via-midnight/20 to-midnight/40"
       />
-      <div className="relative container pb-[clamp(2.5rem,7vw,4.5rem)] pt-[clamp(7rem,14vh,10rem)] text-paper">
+      <div className="relative shell pb-[clamp(2.5rem,7vw,4.5rem)] pt-[clamp(7rem,14vh,10rem)] text-paper">
         <p data-reveal="fade" className="label text-mist/70">
           {label}
         </p>

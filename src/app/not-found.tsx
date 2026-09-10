@@ -3,7 +3,7 @@ import { Arrow } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <section className="container flex min-h-[80vh] flex-col justify-center py-32">
+    <section className="shell flex min-h-[80vh] flex-col justify-center py-32">
       <p className="label">Erro 404</p>
       <h1 className="display mt-4 text-[clamp(2.5rem,9vw,7rem)]">
         Página não encontrada

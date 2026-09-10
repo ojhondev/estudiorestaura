@@ -20,7 +20,7 @@ export default function ServicosPage() {
         imageLabel="Espaço para imagem — canteiro de obra"
       />
 
-      <div className="container py-[clamp(3rem,7vw,5rem)]">
+      <div className="shell py-[clamp(3rem,7vw,5rem)]">
         {services.map((s, i) => (
           <article
             key={s.number}
@@ -57,7 +57,7 @@ export default function ServicosPage() {
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-midnight/55"
         />
-        <div className="relative container py-16 text-paper">
+        <div className="relative shell py-16 text-paper">
           <h2 className="h-lg max-w-3xl text-[clamp(2rem,5vw,3.5rem)]">
             Tem um edifício com história?
           </h2>

@@ -35,44 +35,46 @@ export function HeroFeed() {
   const p = items[i];
 
   return (
-    <div className="relative flex w-full max-w-[24rem] flex-col gap-3 self-end sm:max-w-[26rem]">
+    <div className="relative flex w-full max-w-[27rem] flex-col gap-3 self-end sm:max-w-[30rem]">
       <Link
         ref={card}
         href={`/projetos/${p.slug}`}
-        className="group flex gap-4 rounded-[8px] bg-char/85 p-3 text-paper backdrop-blur-md"
+        className="group flex gap-4 rounded-[8px] bg-char/85 p-3.5 text-paper backdrop-blur-md"
       >
         <div className="w-[42%] shrink-0 overflow-hidden rounded-[6px]">
           <ImagePlaceholder
             variant="bleed"
             ratio="4 / 3"
-            className="h-full bg-slate/40 text-paper/25"
+            className="h-full bg-slate/40 text-paper/30"
             label="Projeto"
           />
         </div>
         <div className="flex flex-1 flex-col justify-between py-1 pr-1">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-mist/60">
+            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-paper/60">
               {p.category}
             </p>
-            <p className="mt-1 text-[14px] leading-tight">{p.title}</p>
-            <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-mist/70">
+            <p className="mt-1.5 text-[15px] font-light leading-tight">
+              {p.title}
+            </p>
+            <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-paper/75">
               {p.summary}
             </p>
           </div>
-          <Arrow className="mt-2 h-3.5 w-3.5 self-end transition-transform duration-300 group-hover:translate-x-1" />
+          <Arrow className="mt-3 h-4 w-4 self-end transition-transform duration-300 group-hover:translate-x-1" />
         </div>
       </Link>
 
       <div className="flex gap-2">
         <Link
           href="/sobre"
-          className="flex-1 rounded-[80px] bg-char/85 px-4 py-2 text-center text-[12px] text-paper backdrop-blur-md transition-colors hover:bg-char"
+          className="flex-1 rounded-[80px] bg-char/85 px-4 py-2.5 text-center text-[13px] text-paper backdrop-blur-md transition-colors hover:bg-char"
         >
           Sobre o estúdio
         </Link>
         <Link
           href="/contato"
-          className="flex-1 rounded-[80px] bg-ember px-4 py-2 text-center text-[12px] text-paper transition-opacity hover:opacity-90"
+          className="flex-1 rounded-[80px] bg-ember px-4 py-2.5 text-center text-[13px] font-medium text-paper transition-opacity hover:opacity-90"
         >
           Contato
         </Link>

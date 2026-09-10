@@ -61,13 +61,13 @@ export function SiteNav() {
         }`}
       >
         <div className="flex h-full flex-col overflow-y-auto">
-          <div className="container flex items-center justify-between pt-[clamp(1.25rem,4vw,2rem)]">
+          <div className="shell flex items-center justify-between pt-[clamp(1.25rem,4vw,2rem)]">
             <Link href="/" aria-label="Início">
               <Logo variant="light" className="h-4 w-auto md:h-5" />
             </Link>
           </div>
 
-          <nav className="container grid flex-1 content-center gap-4 py-16 sm:grid-cols-2">
+          <nav className="shell grid flex-1 content-center gap-4 py-16 sm:grid-cols-2">
             {nav.map((item) => (
               <Link
                 key={item.href}
@@ -95,7 +95,7 @@ export function SiteNav() {
             ))}
           </nav>
 
-          <div className="container flex flex-col gap-1 pb-[clamp(1.5rem,5vw,2.5rem)] text-[13px] text-smoke sm:flex-row sm:justify-between">
+          <div className="shell flex flex-col gap-1 pb-[clamp(1.5rem,5vw,2.5rem)] text-[13px] text-smoke sm:flex-row sm:justify-between">
             <a href="mailto:contato@estudiorestaura.com.br" className="hover:text-ember">
               contato@estudiorestaura.com.br
             </a>

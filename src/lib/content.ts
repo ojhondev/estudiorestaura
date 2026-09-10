@@ -229,25 +229,43 @@ export const criteria = [
 /** "Nosso trabalho" — three fronts. */
 export const workAreas = [
   {
-    index: "1.1",
+    index: "01",
     title: "Arquitetura",
     tags: ["Restauro", "Adaptação de uso", "Ampliações"],
     body: "Intervenção arquitetônica em patrimônio e novas construções que dialogam com a preexistência.",
     tone: "pine" as const,
+    details: [
+      "Leitura histórica, prospecções e projeto executivo de restauro",
+      "Estruturas autônomas e reversíveis para ampliações contemporâneas",
+      "Compatibilização com acessibilidade e segurança contra incêndio",
+      "Aprovação em órgãos de preservação",
+    ],
   },
   {
-    index: "1.2",
+    index: "02",
     title: "Conservação",
     tags: ["Planos preventivos", "Monitoramento", "Manutenção"],
     body: "Antecipar a deterioração com inspeções, sensores e protocolos que reduzem grandes intervenções.",
     tone: "tide" as const,
+    details: [
+      "Monitoramento de temperatura, umidade e movimentação",
+      "Calendário de inspeções e plano de manutenção por elemento",
+      "Treinamento de equipes locais",
+      "Gestão de acervos edificados",
+    ],
   },
   {
-    index: "1.3",
+    index: "03",
     title: "Restauro & laudos",
     tags: ["Bens integrados", "Diagnóstico", "Documentação"],
     body: "Consolidação, limpeza controlada e reintegração cromática — sempre com registro por elemento.",
     tone: "ember" as const,
+    details: [
+      "Mapa de danos georreferenciado e ensaios de caracterização",
+      "Consolidação, fixação e limpeza controlada",
+      "Reintegração cromática identificável e reversível",
+      "Ficha por elemento como arquivo de manutenção futura",
+    ],
   },
 ] as const;
 

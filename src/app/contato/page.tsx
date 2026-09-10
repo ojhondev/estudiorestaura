@@ -25,7 +25,7 @@ export default function ContatoPage() {
         imageLabel="Espaço para imagem — recepção do estúdio"
       />
 
-      <div className="container grid gap-14 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[1.2fr_0.8fr]">
+      <div className="shell grid gap-14 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[1.2fr_0.8fr]">
         <ContactForm />
 
         <aside className="flex flex-col gap-8" data-reveal>

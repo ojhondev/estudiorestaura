@@ -1,70 +1,89 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { gsap, ScrollTrigger, reducedMotion, useIso } from "@/lib/anim";
+import { useState } from "react";
+import Link from "next/link";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { Arrow } from "@/components/ui";
 import { doList } from "@/lib/content";
 
 export function WhatWeDo() {
-  const root = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
-  useIso(() => {
-    if (reducedMotion() || !root.current) return;
-    const ctx = gsap.context(() => {
-      const items = gsap.utils.toArray<HTMLElement>("[data-do-item]");
-      items.forEach((el, idx) => {
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top 60%",
-          end: "bottom 60%",
-          onToggle: (self) => self.isActive && setActive(idx),
-        });
-      });
-    }, root);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={root} className="container py-[clamp(4rem,9vw,7rem)]">
+    <section className="shell py-[clamp(4.5rem,10vw,8rem)]">
       <div className="flex items-start gap-6">
-        <span aria-hidden className="mt-3 h-px w-16 shrink-0 bg-ink/25" />
+        <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-ink/25" />
         <div>
           <p data-reveal="fade" className="label">
             O método
           </p>
-          <h2 data-reveal="clip" className="h-lg mt-3 text-[clamp(2.25rem,6vw,3.875rem)]">
+          <h2 data-reveal="clip" className="h-lg mt-4 text-[clamp(2.5rem,7vw,5rem)]">
             O que fazemos
           </h2>
         </div>
       </div>
 
-      <div className="mt-14 grid gap-10 md:grid-cols-2 md:gap-16">
-        <div>
-          {doList.map((s, idx) => (
-            <div
-              key={s.number}
-              data-do-item
-              className="grid grid-cols-[3rem_1fr] items-baseline gap-2 border-t border-mist py-8 transition-opacity duration-500"
-              style={{ opacity: idx === active ? 1 : 0.45 }}
-            >
-              <span className="text-[12px] text-smoke">{s.number}</span>
-              <div>
-                <h3 className="text-[clamp(1.25rem,2.4vw,1.6rem)] font-light">
-                  {s.title}
-                </h3>
-                <p className="mt-2 max-w-md text-[14px] text-pewter">{s.body}</p>
-              </div>
-            </div>
-          ))}
+      <div className="mt-16 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <div data-reveal>
+          {doList.map((s, idx) => {
+            const on = idx === active;
+            return (
+              <button
+                key={s.number}
+                type="button"
+                onClick={() => setActive(idx)}
+                aria-pressed={on}
+                className="grid w-full grid-cols-[3.5rem_1fr] items-start gap-3 border-t border-mist py-8 text-left transition-colors"
+              >
+                <span
+                  className={`text-[14px] transition-colors ${
+                    on ? "text-ember" : "text-smoke"
+                  }`}
+                >
+                  {s.number}
+                </span>
+                <span>
+                  <span
+                    className={`flex items-center gap-3 text-[clamp(1.4rem,2.8vw,2rem)] font-light transition-opacity ${
+                      on ? "opacity-100" : "opacity-45"
+                    }`}
+                  >
+                    {s.title}
+                    <Arrow
+                      className={`h-4 w-4 text-ember transition-all duration-300 ${
+                        on ? "translate-x-1 opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  </span>
+                  <span
+                    className={`grid transition-[grid-template-rows,opacity] duration-500 ${
+                      on ? "mt-3 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <span className="overflow-hidden">
+                      <span className="measure block text-[15px] text-pewter">
+                        {s.body}
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+          <Link href="/servicos" className="text-arrow mt-10 border-t-0 pt-2">
+            Todos os serviços <Arrow />
+          </Link>
         </div>
 
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[8px] md:sticky md:top-24 md:aspect-auto md:h-[26rem]">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[8px] lg:sticky lg:top-24 lg:aspect-auto lg:h-[clamp(24rem,44vw,38rem)]">
           {doList.map((s, idx) => (
             <div
               key={s.number}
-              className="absolute inset-0 transition-opacity duration-700"
-              style={{ opacity: idx === active ? 1 : 0 }}
+              className="absolute inset-0 transition-[opacity,transform] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{
+                opacity: idx === active ? 1 : 0,
+                transform: idx === active ? "scale(1)" : "scale(1.06)",
+              }}
             >
               <ImagePlaceholder
                 fill

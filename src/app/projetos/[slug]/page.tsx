@@ -43,7 +43,7 @@ export default async function ProjetoPage({
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/80 to-midnight/20"
         />
-        <div className="relative container pb-[clamp(2.5rem,7vw,4.5rem)] pt-[clamp(7rem,14vh,10rem)] text-paper">
+        <div className="relative shell pb-[clamp(2.5rem,7vw,4.5rem)] pt-[clamp(7rem,14vh,10rem)] text-paper">
           <Link
             href="/projetos"
             className="text-arrow text-[13px] text-paper/80"
@@ -62,7 +62,7 @@ export default async function ProjetoPage({
         </div>
       </section>
 
-      <div className="container grid gap-10 py-[clamp(3rem,7vw,5rem)] md:grid-cols-[1fr_1.4fr] md:gap-16">
+      <div className="shell grid gap-10 py-[clamp(3rem,7vw,5rem)] md:grid-cols-[1fr_1.4fr] md:gap-16">
         <dl className="grid grid-cols-2 gap-6 self-start md:grid-cols-1">
           {meta.map(([k, v]) => (
             <div key={k} className="border-t border-mist pt-3">
@@ -85,7 +85,7 @@ export default async function ProjetoPage({
         </div>
       </div>
 
-      <div className="container grid gap-6 pb-[clamp(3rem,7vw,5rem)] sm:grid-cols-2">
+      <div className="shell grid gap-6 pb-[clamp(3rem,7vw,5rem)] sm:grid-cols-2">
         {Array.from({ length: project.gallery }).map((_, i) => (
           <ImagePlaceholder
             key={i}
@@ -97,7 +97,7 @@ export default async function ProjetoPage({
       </div>
 
       <section className="bleed border-t border-mist">
-        <div className="container flex flex-col gap-3 py-14">
+        <div className="shell flex flex-col gap-3 py-14">
           <p className="label">Próximo projeto</p>
           <Link
             href={`/projetos/${next.slug}`}
