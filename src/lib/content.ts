@@ -187,6 +187,97 @@ export const services: Service[] = [
   },
 ];
 
+/** "O que fazemos" — three areas, each with a paired image. */
+export const doList = [
+  {
+    number: "01",
+    title: "Investigar",
+    body: "Leitura histórica, prospecções e diagnóstico de patologias. Antes de qualquer intervenção, entender o que já existe e por quê.",
+  },
+  {
+    number: "02",
+    title: "Intervir",
+    body: "Restauro, consolidação e adaptação de uso — com intervenção mínima, reversibilidade e a distinção clara entre o antigo e o novo.",
+  },
+  {
+    number: "03",
+    title: "Preservar",
+    body: "Planos de conservação preventiva, monitoramento e documentação que mantêm o edifício vivo depois que a obra termina.",
+  },
+] as const;
+
+/** "O que buscamos" — accordion criteria, each with a paired image. */
+export const criteria = [
+  {
+    title: "Valor histórico e artístico",
+    body: "Edifícios e acervos cuja preservação importa para a memória de uma cidade, de uma instituição ou de uma comunidade.",
+  },
+  {
+    title: "Camadas do tempo legíveis",
+    body: "Preexistências onde as diferentes épocas ainda podem ser lidas — e onde a intervenção pode reforçar essa leitura em vez de apagá-la.",
+  },
+  {
+    title: "Uso que dá futuro",
+    body: "Projetos com um programa que garante manutenção e presença: um uso contemporâneo que sustenta o bem a longo prazo.",
+  },
+  {
+    title: "Parceria de longo prazo",
+    body: "Clientes e órgãos dispostos a documentar, monitorar e conservar — não só a executar uma obra pontual.",
+  },
+] as const;
+
+/** "Nosso trabalho" — three fronts. */
+export const workAreas = [
+  {
+    index: "1.1",
+    title: "Arquitetura",
+    tags: ["Restauro", "Adaptação de uso", "Ampliações"],
+    body: "Intervenção arquitetônica em patrimônio e novas construções que dialogam com a preexistência.",
+    tone: "pine" as const,
+  },
+  {
+    index: "1.2",
+    title: "Conservação",
+    tags: ["Planos preventivos", "Monitoramento", "Manutenção"],
+    body: "Antecipar a deterioração com inspeções, sensores e protocolos que reduzem grandes intervenções.",
+    tone: "tide" as const,
+  },
+  {
+    index: "1.3",
+    title: "Restauro & laudos",
+    tags: ["Bens integrados", "Diagnóstico", "Documentação"],
+    body: "Consolidação, limpeza controlada e reintegração cromática — sempre com registro por elemento.",
+    tone: "ember" as const,
+  },
+] as const;
+
+/** "Em números" */
+export const metrics = [
+  ["18", "anos de atuação"],
+  ["120+", "edifícios estudados"],
+  ["9", "estados"],
+] as const;
+
+/** Where we work — Brazilian states (UF) with status. */
+export const mapLocations: Record<
+  string,
+  { status: "atuacao" | "prospeccao"; note: string }
+> = {
+  SP: { status: "atuacao", note: "Escritório e obras em andamento." },
+  RJ: { status: "atuacao", note: "Restauro de bens integrados no centro histórico." },
+  MG: { status: "atuacao", note: "Conservação preventiva em conjuntos coloniais." },
+  BA: { status: "atuacao", note: "Restauro de pavilhões do século XIX." },
+  PE: { status: "atuacao", note: "Diagnóstico de igrejas e casarões." },
+  PR: { status: "atuacao", note: "Adaptação de uso de edifícios ferroviários." },
+  RS: { status: "atuacao", note: "Laudos técnicos e projetos executivos." },
+  SC: { status: "prospeccao", note: "Prospecção de novos projetos." },
+  GO: { status: "prospeccao", note: "Prospecção de novos projetos." },
+  DF: { status: "prospeccao", note: "Consultoria a órgãos de preservação." },
+  ES: { status: "prospeccao", note: "Prospecção de novos projetos." },
+  CE: { status: "prospeccao", note: "Prospecção de novos projetos." },
+  PA: { status: "prospeccao", note: "Prospecção de novos projetos." },
+};
+
 export const nav: {
   href: string;
   label: string;

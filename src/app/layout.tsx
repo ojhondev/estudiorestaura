@@ -3,7 +3,8 @@ import { Montserrat, Lora } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-import { ScrollReveal } from "@/components/ScrollReveal";
+import { Reveal } from "@/components/Reveal";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -46,10 +47,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>
+        <SmoothScroll />
         <SiteNav />
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <ScrollReveal />
+        <Reveal />
       </body>
     </html>
   );

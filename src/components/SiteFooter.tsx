@@ -6,7 +6,20 @@ import { nav } from "@/lib/content";
 export function SiteFooter() {
   return (
     <footer className="bleed bg-midnight text-paper">
-      <div className="container grid gap-14 py-20 md:grid-cols-[1.4fr_1fr_1fr] md:py-28">
+      {/* Partnership CTA */}
+      <div className="container grid gap-8 border-b border-white/10 py-16 md:grid-cols-2 md:items-end md:py-24">
+        <div>
+          <p className="label text-mist/60">Parcerias</p>
+          <h2 className="h-lg mt-4 text-[clamp(2rem,5vw,3.5rem)]">
+            Aberto a colaborar.
+          </h2>
+        </div>
+        <Link href="/contato" className="text-arrow text-[15px] md:justify-self-end">
+          Vamos conversar <Arrow />
+        </Link>
+      </div>
+
+      <div className="container grid gap-14 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Logo variant="light" className="h-7 w-auto" />
           <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-mist/70">
@@ -42,6 +55,16 @@ export function SiteFooter() {
             São Paulo · SP
           </p>
         </div>
+      </div>
+
+      {/* Giant wordmark */}
+      <div className="overflow-hidden border-t border-white/10 pt-8">
+        <p
+          aria-hidden
+          className="display whitespace-nowrap px-[2vw] text-center text-[clamp(3.5rem,19vw,15rem)] leading-none text-paper"
+        >
+          estúdio restaura
+        </p>
       </div>
 
       <div className="container flex flex-col gap-2 border-t border-white/10 py-6 text-[12px] text-smoke sm:flex-row sm:justify-between">

@@ -5,14 +5,19 @@ import logoLight from "../../public/logo-white.png";
 type Props = {
   className?: string;
   priority?: boolean;
-  /** "light" = white wordmark for dark surfaces; "dark" = default (light bg). */
   variant?: "dark" | "light";
-};
+} & Record<`data-${string}`, string | undefined>;
 
 /** The Estúdio Restaura wordmark lockup (mark + "estúdio restaura"). */
-export function Logo({ className = "", priority = false, variant = "dark" }: Props) {
+export function Logo({
+  className = "",
+  priority = false,
+  variant = "dark",
+  ...rest
+}: Props) {
   return (
     <Image
+      {...rest}
       src={variant === "light" ? logoLight : logoDark}
       alt="Estúdio Restaura"
       priority={priority}
