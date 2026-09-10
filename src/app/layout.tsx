@@ -8,6 +8,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { CookieBar } from "@/components/CookieBar";
 import { AdminGate } from "@/components/AdminGate";
 import { QuotePopup } from "@/components/QuotePopup";
+import { BackToTop } from "@/components/BackToTop";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
           <CookieBar />
           <QuotePopup />
+          <BackToTop />
         </AdminGate>
         <Reveal />
       </body>

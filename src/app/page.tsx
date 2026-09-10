@@ -53,15 +53,25 @@ export default async function HomePage() {
         <section className="shell grid gap-4 py-[clamp(4.5rem,10vw,8rem)] lg:grid-cols-2">
           <div
             data-reveal
-            className="flex aspect-square flex-col justify-between rounded-[8px] bg-mist p-9 md:p-12"
+            className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
           >
-            <div>
+            <ImageBox
+              fill
+              variant="bleed"
+              src={photo("home:conheca-os-projetos")}
+              alt="Projetos do Estúdio Restaura"
+              label="Espaço para imagem"
+            />
+            <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
+            <div className="relative">
               <p className="label">Acervo</p>
               <h3 className="h mt-4 text-[clamp(2rem,4vw,3rem)]">
                 Conheça os projetos
               </h3>
             </div>
-            <TextArrow href="/projetos">Ver projetos</TextArrow>
+            <TextArrow href="/projetos" className="relative">
+              Ver projetos
+            </TextArrow>
           </div>
 
           <div
@@ -77,7 +87,7 @@ export default async function HomePage() {
             />
             <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
             <div className="relative">
-              <p className="label text-paper/70">O estúdio</p>
+              <p className="label">O estúdio</p>
               <h3 className="h mt-4 text-[clamp(2rem,4vw,3rem)]">
                 Quem está por trás
               </h3>

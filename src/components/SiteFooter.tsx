@@ -9,7 +9,7 @@ export function SiteFooter() {
       {/* Partnership CTA */}
       <div className="shell grid gap-8 border-b border-white/15 py-16 md:grid-cols-2 md:items-end md:py-24">
         <div>
-          <p className="label text-paper/60">Parcerias</p>
+          <p className="label">Parcerias</p>
           <h2 className="h-lg mt-4 text-[clamp(2rem,5vw,3.5rem)]">
             Aberto a colaborar.
           </h2>
@@ -30,7 +30,7 @@ export function SiteFooter() {
         </div>
 
         <nav className="flex flex-col gap-3">
-          <span className="label text-paper/60">Navegação</span>
+          <span className="label">Navegação</span>
           <Link href="/" className="text-arrow text-[14px]">
             Início <Arrow />
           </Link>
@@ -42,7 +42,7 @@ export function SiteFooter() {
         </nav>
 
         <div className="flex flex-col gap-3 text-[14px]">
-          <span className="label text-paper/60">Contato</span>
+          <span className="label">Contato</span>
           <a href="mailto:contato@estudiorestaura.com.br" className="hover:text-midnight">
             contato@estudiorestaura.com.br
           </a>

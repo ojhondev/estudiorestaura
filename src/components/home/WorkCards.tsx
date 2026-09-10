@@ -130,7 +130,7 @@ export function WorkCards({ media }: { media?: MediaBandData }) {
               </p>
 
               {isOpen && (
-                <ul className="mt-5 space-y-2.5 border-t border-white/15 pt-5 text-[14px] text-paper/80 [animation:workDetail_.45s_var(--ease)_both]">
+                <ul className="mt-5 space-y-2.5 border-t border-white/15 pt-5 text-[14px] text-paper/80">
                   {w.details.map((d) => (
                     <li key={d} className="flex gap-3">
                       <span className="mt-2.5 h-px w-4 shrink-0 bg-paper/50" />

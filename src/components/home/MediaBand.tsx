@@ -10,14 +10,15 @@ export type MediaBandData = {
 };
 
 export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData) {
-  const [show, setShow] = useState(false);
+  // `hover` = mouse over / tapped → video clears and the text hides.
+  const [hover, setHover] = useState(false);
 
   return (
     <div
       data-reveal
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-      onClick={() => setShow((v) => !v)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onClick={() => setHover((v) => !v)}
       className="group relative mt-14 flex aspect-[16/10] cursor-pointer items-center justify-center overflow-hidden rounded-[8px] bg-mist text-ink sm:aspect-[16/8] lg:aspect-[16/7]"
     >
       {videoUrl ? (
@@ -37,14 +38,14 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
         </span>
       )}
 
-      {/* hover / tap overlay */}
+      {/* Default: darkened with the caption. On hover/tap it clears. */}
       <div
-        className={`absolute inset-0 flex flex-col justify-end bg-black/70 p-6 text-paper transition-opacity duration-500 md:p-10 ${
-          show ? "opacity-100" : "opacity-0"
+        className={`absolute inset-0 flex flex-col justify-end p-6 text-paper transition-opacity duration-500 md:p-10 ${
+          hover ? "bg-black/0 opacity-0" : "bg-black/55 opacity-100"
         }`}
       >
         {title && (
-          <p className="text-[12px] font-medium uppercase tracking-[0.2em] text-paper/70">
+          <p className="text-[12px] font-medium uppercase tracking-[0.2em] text-paper/75">
             {title}
           </p>
         )}

@@ -86,7 +86,7 @@ export function BrazilMap() {
         <div className="flex items-start gap-6">
           <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-paper/25" />
           <div>
-            <p data-reveal="fade" className="label !text-paper/85">
+            <p data-reveal="fade" className="label">
               Presença
             </p>
             <h2 data-reveal="clip" className="h-lg mt-4 text-[clamp(2.5rem,7vw,5rem)]">
