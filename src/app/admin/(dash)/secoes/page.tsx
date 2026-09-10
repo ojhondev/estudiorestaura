@@ -28,6 +28,7 @@ export default async function SecoesAdmin({
 
       <form action={saveSetting} className="mt-7 space-y-8">
         <input type="hidden" name="_key" value="sections" />
+        <input type="hidden" name="_return" value="/admin/secoes" />
 
         {groups.map((group) => (
           <section

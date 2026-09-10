@@ -166,7 +166,7 @@ export async function saveSetting(form: FormData) {
   if (!key) throw new Error("chave ausente");
   const value: Record<string, string> = {};
   for (const [k, v] of form.entries()) {
-    if (k.startsWith("_")) continue;
+    if (k.startsWith("_") || k.startsWith("$")) continue;
     value[k] = String(v);
   }
   await database
@@ -177,5 +177,6 @@ export async function saveSetting(form: FormData) {
       set: { value, updatedAt: new Date() },
     });
   revalidatePath("/", "layout");
-  redirect("/admin/conteudo?ok=1");
+  const back = String(form.get("_return") ?? "/admin/conteudo");
+  redirect(`${back}?ok=1`);
 }
