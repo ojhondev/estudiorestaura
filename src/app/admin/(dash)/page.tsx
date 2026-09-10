@@ -28,10 +28,16 @@ export default async function AdminHome() {
       sub: `${jobs.filter((j) => j.published).length} abertas`,
     },
     {
+      href: "/admin/secoes",
+      label: "Seções",
+      count: "—",
+      sub: "imagens de cada seção do site",
+    },
+    {
       href: "/admin/conteudo",
       label: "Conteúdo",
       count: "—",
-      sub: "textos e imagens das seções",
+      sub: "textos e mídia fixa",
     },
   ];
 

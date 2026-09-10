@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { Arrow } from "@/components/ui";
-import { getJobs, getSetting } from "@/lib/cms";
+import { getJobs, getSectionImages, getSetting } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Trabalhe conosco",
@@ -13,9 +13,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function TrabalheConoscoPage() {
-  const [careers, jobs] = await Promise.all([
+  const [careers, jobs, sections] = await Promise.all([
     getSetting("careers.intro"),
     getJobs(),
+    getSectionImages(),
   ]);
 
   return (
@@ -25,6 +26,7 @@ export default async function TrabalheConoscoPage() {
         title="Trabalhe conosco"
         intro={careers.text}
         imageLabel="Espaço para imagem — equipe em obra"
+        imageUrl={sections["pagehero.trabalhe"] || undefined}
       />
 
       <section className="shell py-[clamp(3rem,7vw,5rem)]">

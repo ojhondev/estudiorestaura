@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ProjectGrid } from "@/components/projetos/ProjectGrid";
-import { getProjects } from "@/lib/cms";
+import { getProjects, getSectionImages } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Projetos",
@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ProjetosPage() {
-  const projects = await getProjects();
+  const [projects, sections] = await Promise.all([
+    getProjects(),
+    getSectionImages(),
+  ]);
 
   return (
     <>
@@ -21,6 +24,7 @@ export default async function ProjetosPage() {
         title="Projetos"
         intro="Intervenções de restauro, planos de conservação preventiva e arquitetura nova que dialoga com a preexistência."
         imageLabel="Espaço para imagem — projeto em destaque"
+        imageUrl={sections["pagehero.projetos"] || undefined}
       />
       <ProjectGrid projects={projects} />
     </>

@@ -11,7 +11,7 @@ const NAMES: Record<string, string> = Object.fromEntries(
   BR_STATES.map((s) => [s.uf, s.name]),
 );
 
-export function BrazilMap() {
+export function BrazilMap({ images = {} }: { images?: Record<string, string> }) {
   const activeUFs = useMemo(() => Object.keys(mapLocations), []);
   const [hover, setHover] = useState<string | null>(null);
   const [pinned, setPinned] = useState(activeUFs[0]);
@@ -66,7 +66,7 @@ export function BrazilMap() {
           <ImageBox
             fill
             variant="bleed"
-            src={photo(`brazil:${uf}`)}
+            src={images[`brazil.${uf}`] || photo(`brazil:${uf}`)}
             alt={`Obras em ${NAMES[uf] ?? uf}`}
             className="bg-iron"
             label={`Espaço para imagem — obras em ${NAMES[uf] ?? uf}`}

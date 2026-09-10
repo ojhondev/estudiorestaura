@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/components/contato/ContactForm";
+import { getSectionImages } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Contato",
   description:
     "Fale com o Estúdio Restaura sobre projetos de arquitetura, conservação e restauro de patrimônio.",
 };
+
+export const dynamic = "force-dynamic";
 
 const INFO = [
   ["E-mail", "contato@estudiorestaura.com.br", "mailto:contato@estudiorestaura.com.br"],
@@ -15,7 +18,8 @@ const INFO = [
   ["Atendimento", "Segunda a sexta, 9h às 18h", null],
 ] as const;
 
-export default function ContatoPage() {
+export default async function ContatoPage() {
+  const sections = await getSectionImages();
   return (
     <>
       <PageHero
@@ -23,6 +27,7 @@ export default function ContatoPage() {
         title="Contato"
         intro="Conte sobre o edifício, o acervo ou o projeto. Respondemos em até dois dias úteis."
         imageLabel="Espaço para imagem — recepção do estúdio"
+        imageUrl={sections["pagehero.contato"] || undefined}
       />
 
       <div className="shell grid gap-14 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[1.2fr_0.8fr]">

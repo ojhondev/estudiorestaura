@@ -243,7 +243,35 @@ export const settingDefaults: Record<string, Record<string, string>> = {
   "careers.intro": {
     text: "O Estúdio Restaura cresce devagar e por afinidade. Se o patrimônio te move e você trabalha com rigor e cuidado, queremos te conhecer — mesmo que não haja uma vaga aberta agora.",
   },
+  // Imagens por seção — chave do slot → URL (vazio = usa a foto padrão).
+  sections: {},
 };
+
+/** Slots de imagem editáveis na página "Seções" do CMS. */
+export const sectionSlots: { key: string; group: string; label: string }[] = [
+  { key: "home.conhecaProjetos", group: "Início", label: "Card “Conheça os projetos”" },
+  { key: "home.quemPorTras", group: "Início", label: "Card “Quem está por trás”" },
+  { key: "whatwedo.01", group: "O que fazemos", label: "Investigar" },
+  { key: "whatwedo.02", group: "O que fazemos", label: "Intervir" },
+  { key: "whatwedo.03", group: "O que fazemos", label: "Preservar" },
+  { key: "criteria.0", group: "O que buscamos", label: "Valor histórico e artístico" },
+  { key: "criteria.1", group: "O que buscamos", label: "Camadas do tempo legíveis" },
+  { key: "criteria.2", group: "O que buscamos", label: "Uso que dá futuro" },
+  { key: "criteria.3", group: "O que buscamos", label: "Parceria de longo prazo" },
+  { key: "brazil.SP", group: "Mapa do Brasil", label: "São Paulo" },
+  { key: "brazil.MG", group: "Mapa do Brasil", label: "Minas Gerais" },
+  { key: "brazil.GO", group: "Mapa do Brasil", label: "Goiás" },
+  { key: "pagehero.projetos", group: "Topo das páginas", label: "Projetos" },
+  { key: "pagehero.blog", group: "Topo das páginas", label: "Blog" },
+  { key: "pagehero.sobre", group: "Topo das páginas", label: "Sobre o Estúdio" },
+  { key: "pagehero.servicos", group: "Topo das páginas", label: "Serviços" },
+  { key: "pagehero.contato", group: "Topo das páginas", label: "Contato" },
+  { key: "pagehero.trabalhe", group: "Topo das páginas", label: "Trabalhe conosco" },
+];
+
+export async function getSectionImages(): Promise<Record<string, string>> {
+  return getSetting("sections");
+}
 
 export async function getSetting(
   key: string,

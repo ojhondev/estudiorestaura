@@ -6,15 +6,16 @@ import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
 import { ImageBox } from "@/components/ImageBox";
 import { TextArrow } from "@/components/ui";
-import { getProjects, getSetting } from "@/lib/cms";
+import { getProjects, getSectionImages, getSetting } from "@/lib/cms";
 import { photo } from "@/lib/photos";
 
 export default async function HomePage() {
-  const [hero, statement, mediaBand, projects] = await Promise.all([
+  const [hero, statement, mediaBand, projects, sections] = await Promise.all([
     getSetting("home.hero"),
     getSetting("home.statement"),
     getSetting("home.mediaBand"),
     getProjects(),
+    getSectionImages(),
   ]);
 
   const feed = projects.slice(0, 4).map((p) => ({
@@ -30,6 +31,7 @@ export default async function HomePage() {
       <Hero intro={hero.intro} imageUrl={hero.imageUrl || undefined} feed={feed} />
 
       <div className="page-flow">
+        <span id="header-logo-anchor" aria-hidden className="block" />
         {/* Brand statement */}
         <section className="shell grid gap-10 py-[clamp(5rem,12vw,9rem)] lg:grid-cols-[0.4fr_1fr]">
           <p data-reveal="fade" className="label">
@@ -43,9 +45,9 @@ export default async function HomePage() {
           </p>
         </section>
 
-        <WhatWeDo />
-        <BrazilMap />
-        <Criteria />
+        <WhatWeDo images={sections} />
+        <BrazilMap images={sections} />
+        <Criteria images={sections} />
         <WorkCards media={mediaBand} />
         <Numbers />
 
@@ -58,7 +60,7 @@ export default async function HomePage() {
             <ImageBox
               fill
               variant="bleed"
-              src={photo("home:conheca-os-projetos")}
+              src={sections["home.conhecaProjetos"] || photo("home:conheca-os-projetos")}
               alt="Projetos do Estúdio Restaura"
               label="Espaço para imagem"
             />
@@ -81,7 +83,7 @@ export default async function HomePage() {
             <ImageBox
               fill
               variant="bleed"
-              src={photo("home:quem-esta-por-tras")}
+              src={sections["home.quemPorTras"] || photo("home:quem-esta-por-tras")}
               alt="Equipe do Estúdio Restaura"
               label="Espaço para imagem"
             />

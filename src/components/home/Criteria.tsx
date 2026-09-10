@@ -5,7 +5,7 @@ import { ImageBox } from "@/components/ImageBox";
 import { criteria } from "@/lib/content";
 import { photo } from "@/lib/photos";
 
-export function Criteria() {
+export function Criteria({ images = {} }: { images?: Record<string, string> }) {
   const [open, setOpen] = useState(0);
 
   return (
@@ -38,7 +38,7 @@ export function Criteria() {
             >
               <ImageBox
                 fill
-                src={photo(`criteria:${c.title}`)}
+                src={images[`criteria.${i}`] || photo(`criteria:${c.title}`)}
                 alt={c.title}
                 label={`Espaço para imagem — ${c.title.toLowerCase()}`}
               />

@@ -7,7 +7,7 @@ import { Arrow } from "@/components/ui";
 import { doList } from "@/lib/content";
 import { photo } from "@/lib/photos";
 
-export function WhatWeDo() {
+export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -88,7 +88,7 @@ export function WhatWeDo() {
             >
               <ImageBox
                 fill
-                src={photo(`whatwedo:${s.number}`)}
+                src={images[`whatwedo.${s.number}`] || photo(`whatwedo:${s.number}`)}
                 alt={s.title}
                 label={`Espaço para imagem — ${s.title.toLowerCase()}`}
               />

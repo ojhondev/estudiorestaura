@@ -3,6 +3,7 @@ import { PageHero } from "@/components/PageHero";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { TextArrow } from "@/components/ui";
 import { services } from "@/lib/content";
+import { getSectionImages } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Serviços",
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
     "Intervenção arquitetônica, conservação preventiva, restauro de bens integrados, laudos técnicos, projetos de arquitetura e consultoria de patrimônio.",
 };
 
-export default function ServicosPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ServicosPage() {
+  const sections = await getSectionImages();
   return (
     <>
       <PageHero
@@ -18,6 +22,7 @@ export default function ServicosPage() {
         title="Serviços"
         intro="Do diagnóstico técnico ao acompanhamento de obra. Trabalhamos com intervenção mínima, reversibilidade e documentação rigorosa de cada etapa."
         imageLabel="Espaço para imagem — canteiro de obra"
+        imageUrl={sections["pagehero.servicos"] || undefined}
       />
 
       <div className="shell py-[clamp(3rem,7vw,5rem)]">

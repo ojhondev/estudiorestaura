@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deletePost, savePost } from "../../../actions";
-import { Area, Field, Toggle, Uploader } from "../../../ui";
+import { Area, Field, ImageField, Toggle } from "../../../ui";
 import { getPostRow } from "../../../data";
 
 export default async function BlogEditor({
@@ -50,16 +50,11 @@ export default async function BlogEditor({
           hint="Separe os parágrafos com uma linha em branco."
         />
 
-        <div>
-          <Field
-            label="Imagem de capa (URL)"
-            name="coverUrl"
-            defaultValue={row?.coverUrl ?? ""}
-          />
-          <div className="mt-2">
-            <Uploader targetName="coverUrl" />
-          </div>
-        </div>
+        <ImageField
+          label="Imagem de capa"
+          name="coverUrl"
+          defaultValue={row?.coverUrl ?? ""}
+        />
 
         <Toggle
           label="Publicado"

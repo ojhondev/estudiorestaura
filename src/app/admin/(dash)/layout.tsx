@@ -14,6 +14,7 @@ const links = [
   { href: "/admin/projetos", label: "Projetos" },
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/vagas", label: "Vagas" },
+  { href: "/admin/secoes", label: "Seções" },
   { href: "/admin/conteudo", label: "Conteúdo" },
 ];
 

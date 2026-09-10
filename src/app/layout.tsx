@@ -9,6 +9,7 @@ import { CookieBar } from "@/components/CookieBar";
 import { AdminGate } from "@/components/AdminGate";
 import { QuotePopup } from "@/components/QuotePopup";
 import { BackToTop } from "@/components/BackToTop";
+import { HeaderLogo } from "@/components/HeaderLogo";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <AdminGate>
           <SiteNav />
+          <HeaderLogo />
         </AdminGate>
         <main className="flex-1">{children}</main>
         <AdminGate>

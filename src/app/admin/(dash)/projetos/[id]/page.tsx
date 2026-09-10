@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteProject, saveProject } from "../../../actions";
-import { Area, Field, Select, Toggle, Uploader } from "../../../ui";
+import { Area, Field, GalleryField, ImageField, Select, Toggle } from "../../../ui";
 import { getProjectRow } from "../../../data";
 
 const CATEGORIES = ["Arquitetura", "Conservação", "Restauro", "Interiores"];
@@ -62,28 +62,18 @@ export default async function ProjetoEditor({
           hint="Separe os parágrafos com uma linha em branco."
         />
 
-        <div>
-          <Field
-            label="Imagem de capa (URL)"
-            name="coverUrl"
-            defaultValue={row?.coverUrl ?? ""}
-          />
-          <div className="mt-2">
-            <Uploader targetName="coverUrl" />
-          </div>
-        </div>
+        <ImageField
+          label="Imagem de capa"
+          name="coverUrl"
+          defaultValue={row?.coverUrl ?? ""}
+        />
 
-        <div>
-          <Area
-            label="Galeria (uma URL por linha)"
-            name="gallery"
-            rows={4}
-            defaultValue={(row?.gallery ?? []).join("\n")}
-          />
-          <div className="mt-2">
-            <Uploader targetName="gallery" />
-          </div>
-        </div>
+        <GalleryField
+          label="Galeria do projeto"
+          name="gallery"
+          defaultValue={(row?.gallery ?? []).join("\n")}
+          hint="Passe o mouse sobre uma imagem para reordenar ou remover."
+        />
 
         <div className="flex flex-wrap items-center gap-6">
           <Toggle

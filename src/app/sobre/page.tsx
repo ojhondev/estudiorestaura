@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { getSectionImages } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Sobre o Estúdio",
@@ -8,10 +9,12 @@ export const metadata: Metadata = {
     "O Estúdio Restaura reúne arquitetos, conservadores e restauradores dedicados ao patrimônio histórico e cultural.",
 };
 
+export const dynamic = "force-dynamic";
+
 const NUMBERS = [
-  ["18", "anos de atuação"],
-  ["120+", "edifícios estudados"],
-  ["9", "estados"],
+  ["8", "anos de atuação"],
+  ["20+", "projetos de restauro"],
+  ["3", "estados de atuação"],
   ["4", "áreas integradas"],
 ];
 
@@ -41,13 +44,15 @@ const TEAM = [
   ["Tomás Rocha", "Engenheiro de estruturas históricas"],
 ];
 
-export default function SobrePage() {
+export default async function SobrePage() {
+  const sections = await getSectionImages();
   return (
     <>
       <PageHero
         label="Quem somos"
         title="Sobre o Estúdio"
         imageLabel="Espaço para imagem — equipe / atelier"
+        imageUrl={sections["pagehero.sobre"] || undefined}
       />
 
       <section className="shell grid gap-10 py-[clamp(4rem,9vw,6rem)] md:grid-cols-[0.9fr_1.1fr] md:gap-16">

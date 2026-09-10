@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { ImageBox } from "@/components/ImageBox";
-import { getPosts } from "@/lib/cms";
+import { getPosts, getSectionImages } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -20,7 +20,7 @@ const fmt = (d: string) =>
   });
 
 export default async function BlogPage() {
-  const posts = await getPosts();
+  const [posts, sections] = await Promise.all([getPosts(), getSectionImages()]);
 
   return (
     <>
@@ -29,6 +29,7 @@ export default async function BlogPage() {
         title="Blog"
         intro="Notas sobre o ofício: método, decisões técnicas e a ética de intervir no que já existe."
         imageLabel="Espaço para imagem — editorial"
+        imageUrl={sections["pagehero.blog"] || undefined}
       />
 
       <section className="shell grid gap-x-6 gap-y-14 py-[clamp(3rem,7vw,5rem)] sm:grid-cols-2 lg:grid-cols-3">

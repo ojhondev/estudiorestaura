@@ -1,12 +1,11 @@
 import { saveSetting } from "../../actions";
-import { Area, Field, Uploader } from "../../ui";
+import { Area, Field, ImageField } from "../../ui";
 import { getSetting } from "@/lib/cms";
 
 type FieldDef = {
   name: string;
   label: string;
-  type?: "text" | "area";
-  upload?: boolean;
+  type?: "text" | "area" | "image";
   hint?: string;
 };
 
@@ -18,7 +17,7 @@ const GROUPS: { key: string; title: string; desc: string; fields: FieldDef[] }[]
       desc: "Texto e imagem da primeira dobra da home.",
       fields: [
         { name: "intro", label: "Texto de introdução", type: "area" },
-        { name: "imageUrl", label: "Imagem de fundo (URL)", upload: true },
+        { name: "imageUrl", label: "Imagem de fundo", type: "image" },
       ],
     },
     {
@@ -32,8 +31,12 @@ const GROUPS: { key: string; title: string; desc: string; fields: FieldDef[] }[]
       title: "Início — faixa de vídeo",
       desc: "Vídeo em reprodução automática e a chamada exibida ao passar o mouse.",
       fields: [
-        { name: "videoUrl", label: "Vídeo (URL .mp4)", upload: true },
-        { name: "posterUrl", label: "Imagem de pôster (URL)", upload: true },
+        {
+          name: "videoUrl",
+          label: "Vídeo (URL .mp4)",
+          hint: "Cole a URL de um .mp4 (ex.: do Vercel Blob). Vídeos não passam por upload aqui.",
+        },
+        { name: "posterUrl", label: "Imagem de pôster", type: "image" },
         { name: "title", label: "Título do hover" },
         { name: "caption", label: "Chamada do hover", type: "area" },
       ],
@@ -58,8 +61,11 @@ export default async function ConteudoAdmin({
     <div className="max-w-3xl">
       <h1 className="text-[24px] font-light tracking-tight">Conteúdo das seções</h1>
       <p className="mt-1 text-[14px] text-pewter">
-        Edite os textos e as imagens fixas do site. Projetos, blog e vagas têm
-        áreas próprias.
+        Textos e mídia fixa do site. As imagens de cada seção ficam em{" "}
+        <a href="/admin/secoes" className="text-ember underline">
+          Seções
+        </a>
+        .
       </p>
 
       {ok && (
@@ -80,31 +86,39 @@ export default async function ConteudoAdmin({
             <p className="mt-0.5 text-[12px] text-smoke">{g.desc}</p>
 
             <div className="mt-4 space-y-4">
-              {g.fields.map((f) => (
-                <div key={f.name}>
-                  {f.type === "area" ? (
+              {g.fields.map((f) => {
+                const value = values[gi][f.name] ?? "";
+                if (f.type === "image")
+                  return (
+                    <ImageField
+                      key={f.name}
+                      label={f.label}
+                      name={f.name}
+                      defaultValue={value}
+                      hint={f.hint}
+                    />
+                  );
+                if (f.type === "area")
+                  return (
                     <Area
+                      key={f.name}
                       label={f.label}
                       name={f.name}
                       rows={3}
-                      defaultValue={values[gi][f.name] ?? ""}
+                      defaultValue={value}
                       hint={f.hint}
                     />
-                  ) : (
-                    <Field
-                      label={f.label}
-                      name={f.name}
-                      defaultValue={values[gi][f.name] ?? ""}
-                      hint={f.hint}
-                    />
-                  )}
-                  {f.upload && (
-                    <div className="mt-2">
-                      <Uploader targetName={f.name} />
-                    </div>
-                  )}
-                </div>
-              ))}
+                  );
+                return (
+                  <Field
+                    key={f.name}
+                    label={f.label}
+                    name={f.name}
+                    defaultValue={value}
+                    hint={f.hint}
+                  />
+                );
+              })}
             </div>
 
             <button className="mt-5 rounded-[80px] bg-char px-5 py-2.5 text-[13px] font-medium text-paper">
