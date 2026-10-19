@@ -24,7 +24,7 @@ export function Reveal() {
     );
     const reduce = reducedMotion();
 
-    if (items.length && (reduce || !("IntersectionObserver" in window))) {
+    if (items.length && !("IntersectionObserver" in window)) {
       items.forEach((el) => el.classList.add("in"));
     } else if (items.length) {
       const io = new IntersectionObserver(

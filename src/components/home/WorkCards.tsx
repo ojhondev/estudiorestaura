@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger, reducedMotion, useIso } from "@/lib/anim";
-import { Arrow } from "@/components/ui";
 import { MediaBand, type MediaBandData } from "@/components/home/MediaBand";
 import { workAreas } from "@/lib/content";
 
@@ -114,7 +113,8 @@ export function WorkCards({ media }: { media?: MediaBandData }) {
             <article
               key={w.index}
               data-reveal
-              className={`card-dark ${isOpen ? "is-open" : ""} flex flex-col ${toneClass[w.tone]}`}
+              data-open={isOpen ? "true" : "false"}
+              className={`card-dark flex flex-col ${toneClass[w.tone]}`}
             >
               <span className="w-fit rounded-[80px] bg-white/12 px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em]">
                 {w.index}
@@ -129,16 +129,18 @@ export function WorkCards({ media }: { media?: MediaBandData }) {
                 {w.body}
               </p>
 
-              {isOpen && (
-                <ul className="mt-5 space-y-2.5 border-t border-white/15 pt-5 text-[14px] text-paper/80">
-                  {w.details.map((d) => (
-                    <li key={d} className="flex gap-3">
-                      <span className="mt-2.5 h-px w-4 shrink-0 bg-paper/50" />
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <div className="acc-content" aria-hidden={!isOpen}>
+                <div>
+                  <ul className="mt-5 space-y-2.5 border-t border-white/20 pt-5 text-[15px] text-paper/90">
+                    {w.details.map((d) => (
+                      <li key={d} className="flex gap-3">
+                        <span className="mt-3 h-px w-4 shrink-0 bg-paper/60" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
               <div className="mt-6 flex items-end justify-between gap-4">
                 <button

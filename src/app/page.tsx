@@ -5,7 +5,8 @@ import { Criteria } from "@/components/home/Criteria";
 import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
 import { ImageBox } from "@/components/ImageBox";
-import { TextArrow } from "@/components/ui";
+import Link from "next/link";
+import { Arrow } from "@/components/ui";
 import { getProjects, getSectionImages, getSetting } from "@/lib/cms";
 import { photo } from "@/lib/photos";
 
@@ -45,59 +46,55 @@ export default async function HomePage() {
           </p>
         </section>
 
+        {/* Faixa em movimento */}
+        <div aria-hidden className="ticker py-5">
+          <div className="ticker-track">
+            {[0, 1].map((k) => (
+              <span key={k} className="display flex shrink-0 items-center gap-8 pr-8 text-[clamp(1.5rem,3.4vw,2.6rem)] text-ink/85">
+                {["Restauro", "Conservação", "Patrimônio histórico", "Arquitetura", "Laudos técnicos", "Douramento", "Pintura mural", "Projetos"].map((t) => (
+                  <span key={t} className="flex items-center gap-8">
+                    {t}
+                    <span className="size-2 rounded-full bg-ember" />
+                  </span>
+                ))}
+              </span>
+            ))}
+          </div>
+        </div>
+
         <WhatWeDo images={sections} />
         <BrazilMap images={sections} />
         <Criteria images={sections} />
         <WorkCards media={mediaBand} />
         <Numbers />
 
-        {/* Feature cards — square */}
+        {/* Cartões grandes: o cartão inteiro é o link */}
         <section className="shell grid gap-4 py-[clamp(4.5rem,10vw,8rem)] lg:grid-cols-2">
-          <div
-            data-reveal
-            className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
-          >
-            <ImageBox
-              fill
-              variant="bleed"
-              src={sections["home.conhecaProjetos"] || photo("home:conheca-os-projetos")}
-              alt="Projetos do Estúdio Restaura"
-              label="Espaço para imagem"
-            />
-            <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
-            <div className="relative">
-              <p className="label">Acervo</p>
-              <h3 className="h mt-4 text-[clamp(2rem,4vw,3rem)]">
-                Conheça os projetos
-              </h3>
-            </div>
-            <TextArrow href="/projetos" className="relative">
-              Ver projetos
-            </TextArrow>
-          </div>
-
-          <div
-            data-reveal
-            className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper md:p-12"
-          >
-            <ImageBox
-              fill
-              variant="bleed"
-              src={sections["home.quemPorTras"] || photo("home:quem-esta-por-tras")}
-              alt="Equipe do Estúdio Restaura"
-              label="Espaço para imagem"
-            />
-            <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45" />
-            <div className="relative">
-              <p className="label">O estúdio</p>
-              <h3 className="h mt-4 text-[clamp(2rem,4vw,3rem)]">
-                Quem está por trás
-              </h3>
-            </div>
-            <TextArrow href="/sobre" className="relative">
-              Sobre o estúdio
-            </TextArrow>
-          </div>
+          {[
+            { href: "/projetos", kicker: "Acervo", title: "Conheça os projetos", cta: "Ver projetos", src: sections["home.conhecaProjetos"] || photo("home:conheca-os-projetos"), alt: "Projetos do Estúdio Restaura" },
+            { href: "/sobre", kicker: "O estúdio", title: "Quem está por trás", cta: "Sobre o estúdio", src: sections["home.quemPorTras"] || photo("home:quem-esta-por-tras"), alt: "Equipe do Estúdio Restaura" },
+          ].map((c) => (
+            <Link
+              key={c.href}
+              href={c.href}
+              data-reveal
+              aria-label={`${c.kicker}: ${c.title}`}
+              className="feature-card group relative flex aspect-square flex-col justify-between overflow-hidden rounded-[8px] p-9 text-paper outline-offset-4 md:p-12"
+            >
+              <span className="feature-card-img absolute inset-0 block">
+                <ImageBox fill variant="bleed" src={c.src} alt={c.alt} label="Espaço para imagem" />
+              </span>
+              <span aria-hidden className="pointer-events-none absolute inset-0 bg-midnight/45 transition-colors duration-500 group-hover:bg-midnight/25" />
+              <div className="relative">
+                <p className="label">{c.kicker}</p>
+                <h3 className="h mt-4 text-[clamp(2rem,4vw,3rem)]">{c.title}</h3>
+              </div>
+              <span className="text-arrow relative">
+                {c.cta}
+                <Arrow />
+              </span>
+            </Link>
+          ))}
         </section>
       </div>
     </>

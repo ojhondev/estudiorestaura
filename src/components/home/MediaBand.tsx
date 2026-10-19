@@ -10,7 +10,7 @@ export type MediaBandData = {
 };
 
 export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData) {
-  // `hover` = mouse over / tapped → video clears and the text hides.
+  // `hover` = mouse sobre o vídeo / toque → o texto some e o vídeo fica livre.
   const [hover, setHover] = useState(false);
 
   return (
@@ -19,11 +19,11 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() => setHover((v) => !v)}
-      className="group relative mt-14 flex aspect-[16/10] cursor-pointer items-center justify-center overflow-hidden rounded-[8px] bg-mist text-ink sm:aspect-[16/8] lg:aspect-[16/7]"
+      className="group relative mt-14 flex aspect-[4/5] cursor-pointer items-end overflow-hidden rounded-[8px] bg-mist text-ink sm:aspect-[16/9] lg:aspect-[16/7]"
     >
       {videoUrl ? (
         <video
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.03]"
           src={videoUrl}
           poster={posterUrl || undefined}
           autoPlay
@@ -38,25 +38,33 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
         </span>
       )}
 
-      {/* Default: darkened with the caption. On hover/tap it clears. */}
+      {/* Degradê só na base: a imagem continua visível e o texto tem fundo escuro firme */}
       <div
-        style={{
-          opacity: hover ? 0 : 1,
-          background: hover ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.55)",
-        }}
-        className="absolute inset-0 flex flex-col justify-end p-6 text-paper transition-opacity duration-500 md:p-10"
-      >
-        {title && (
-          <p className="text-[12px] font-medium uppercase tracking-[0.2em] text-paper/75">
-            {title}
+        aria-hidden
+        style={{ opacity: hover ? 0 : 1 }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black/90 via-black/60 to-transparent transition-opacity duration-500"
+      />
+
+      {(title || caption) && (
+        <div
+          style={{ opacity: hover ? 0 : 1, transform: hover ? "translateY(8px)" : "none" }}
+          className="relative z-10 w-full p-6 text-paper transition-[opacity,transform] duration-500 md:p-10 lg:max-w-[52%]"
+        >
+          {title && (
+            <p className="inline-block rounded-[80px] bg-ember px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper">
+              {title}
+            </p>
+          )}
+          {caption && (
+            <p className="mt-4 text-[clamp(1.25rem,2.4vw,2rem)] font-normal leading-snug text-paper [text-shadow:0_1px_14px_rgba(0,0,0,0.55)]">
+              {caption}
+            </p>
+          )}
+          <p className="mt-4 text-[12px] uppercase tracking-[0.16em] text-paper/80">
+            Passe o mouse ou toque para ver o vídeo
           </p>
-        )}
-        {caption && (
-          <p className="mt-2 max-w-[46ch] text-[clamp(1.1rem,2.2vw,1.75rem)] font-light leading-snug">
-            {caption}
-          </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -195,12 +195,12 @@ body {
   clip-path: inset(-30% 0 -30% 0);
 }
 
+/* Reduzir movimento: sem deslocamento, só um fade curto */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
-    opacity: 1 !important;
-    clip-path: none !important;
     transform: none !important;
-    transition: none !important;
+    clip-path: none !important;
+    transition: opacity 0.6s ease !important;
   }
 }
 
@@ -260,7 +260,43 @@ body {
   overflow: hidden;
 }
 .acc-item.is-open .acc-content,
+.card-dark[data-open="true"] .acc-content,
 .card-dark.is-open .acc-content {
   grid-template-rows: 1fr;
 }
 
+
+/* Cartões grandes da home: o cartão todo é clicável; imagem aproxima e a seta avança no hover */
+.feature-card { cursor: pointer; transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
+.feature-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.45); }
+.feature-card-img { transition: transform 1.2s var(--ease); }
+.feature-card:hover .feature-card-img { transform: scale(1.06); }
+.feature-card .text-arrow svg { transition: transform 0.4s var(--ease); }
+.feature-card:hover .text-arrow svg { transform: translateX(8px); }
+@media (prefers-reduced-motion: reduce) {
+  .feature-card:hover, .feature-card:hover .feature-card-img { transform: none; }
+}
+
+/* Faixa em movimento entre seções (home mais viva) */
+.ticker { overflow: hidden; border-block: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent); }
+.ticker-track { display: inline-flex; white-space: nowrap; animation: marquee 48s linear infinite; }
+.ticker:hover .ticker-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation-duration: 160s; } }
+
+/* Microinterações globais */
+.btn-fill { transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+.btn-fill:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.5); }
+.btn-fill:active { transform: translateY(0); }
+
+/* Imagens em links de lista: aproximação suave no hover */
+a.group img { transition: transform 1.1s var(--ease); }
+a.group:hover img { transform: scale(1.05); }
+a.group > :first-child { overflow: hidden; }
+
+/* Transição suave entre páginas */
+@keyframes page-in { from { opacity: 0; } to { opacity: 1; } }
+.page-enter { animation: page-in 0.5s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-fill:hover, a.group:hover img { transform: none; }
+}
