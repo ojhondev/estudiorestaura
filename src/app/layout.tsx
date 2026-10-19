@@ -26,7 +26,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://estudiorestaura.vercel.app"),
+  metadataBase: new URL("https://estudiorestaura.com.br"),
   title: {
     default: "Estúdio Restaura — arquitetura, conservação e restauro",
     template: "%s · Estúdio Restaura",

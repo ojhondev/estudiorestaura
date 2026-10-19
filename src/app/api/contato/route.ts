@@ -35,12 +35,36 @@ export async function POST(request: Request) {
     );
   }
 
-  // Mock: sem banco/e-mail ainda. Trocar por integração real depois.
-  console.info("[contato] nova mensagem", {
-    nome,
-    email,
-    assunto: body.assunto ?? "",
-  });
+  // Encaminha o lead ao CRM do estúdio (restaura-app). Sem as variáveis
+  // (ex.: desenvolvimento local) apenas registra no log.
+  const crmUrl = process.env.CRM_LEADS_URL;
+  const crmKey = process.env.LEADS_API_KEY;
+  if (crmUrl && crmKey) {
+    try {
+      const res = await fetch(crmUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${crmKey}` },
+        body: JSON.stringify({
+          nome,
+          email,
+          telefone: (body.telefone ?? "").trim(),
+          assunto: (body.assunto ?? "").trim(),
+          mensagem,
+          origem: "Site",
+        }),
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) throw new Error(`CRM respondeu ${res.status}`);
+    } catch (err) {
+      console.error("[contato] falha ao enviar ao CRM", err, { nome, email });
+      return NextResponse.json(
+        { error: "Não conseguimos enviar agora. Tente novamente em instantes ou fale conosco por e-mail." },
+        { status: 502 },
+      );
+    }
+  } else {
+    console.info("[contato] CRM não configurado; mensagem apenas registrada", { nome, email });
+  }
 
   return NextResponse.json({ ok: true });
 }
