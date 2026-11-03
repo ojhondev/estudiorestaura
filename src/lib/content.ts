@@ -252,7 +252,7 @@ export type WorkArea = {
   title: string;
   tags: readonly string[];
   body: string;
-  tone: "pine" | "tide" | "ember";
+  tone: "terra" | "preto" | "claro";
   /** Opcional: quando vazio, o cartão não mostra "Mais detalhes". */
   details?: readonly string[];
 };
@@ -264,21 +264,21 @@ export const workAreas: readonly WorkArea[] = [
     title: "Diagnóstico",
     tags: ["Pesquisa histórica", "Levantamento arquitetônico", "Laudos técnicos"],
     body: "Investigação e análise das características históricas, arquitetônicas e artísticas do bem, identificando seus materiais, técnicas construtivas, estado de conservação e necessidades de intervenção.",
-    tone: "pine",
+    tone: "terra",
   },
   {
     index: "02",
     title: "Projetos",
     tags: ["Arquitetura", "Conservação e restauro", "Pinturas ornamentais"],
     body: "Desenvolvimento de projetos fundamentados na compreensão de cada espaço, conciliando preservação dos valores históricos, necessidades contemporâneas e integração entre arquitetura e expressão artística.",
-    tone: "tide",
+    tone: "preto",
   },
   {
     index: "03",
     title: "Execução",
     tags: ["Restauro", "Adaptação de uso", "Manutenção e acompanhamento"],
     body: "Realização de intervenções em bens arquitetônicos e artísticos, reunindo conhecimento técnico, domínio dos ofícios tradicionais e sensibilidade no tratamento dos materiais e das superfícies.",
-    tone: "ember",
+    tone: "claro",
   },
 ];
 

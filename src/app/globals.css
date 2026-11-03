@@ -11,8 +11,8 @@
   --color-mist: #e5e4e4;
   --color-smoke: #6a6a6a;
   --color-pewter: #474747;
-  --color-ember: #b75928;
-  --color-ember-bright: #d0692f;
+  --color-ember: #c7452d; /* terracota exato da logo */
+  --color-ember-bright: #d8583e;
   --color-pine: #193f32;
   --color-tide: #002934;
   --color-driftwood: #537179;
@@ -240,7 +240,6 @@ body {
 .card-dark {
   border-radius: var(--radius-lg);
   padding: clamp(1.75rem, 3.5vw, 3.25rem);
-  color: var(--color-paper);
   overflow: hidden;
 }
 .card-dark .card-mark {
