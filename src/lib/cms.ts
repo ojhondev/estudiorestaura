@@ -195,7 +195,7 @@ export async function getJob(slug: string) {
 export const settingDefaults: Record<string, Record<string, string>> = {
   "home.hero": {
     intro:
-      "Laudo com Mapa de Danos com IA assistida. Entregamos quantitativos, orçamento do tratamento e laudo com prioridades, prontos para decidir, aprovar e começar a obra.",
+      "Cada patrimônio carrega histórias, técnicas e expressões artísticas que merecem ser compreendidas e preservadas. O Estúdio Restaura dedica-se à arquitetura, à conservação e ao restauro de bens históricos e culturais, unindo conhecimento técnico, pesquisa e sensibilidade no cuidado com a matéria e com a memória construída.",
     imageUrl: "",
   },
   "home.statement": {
