@@ -46,9 +46,6 @@ export const NAV_FOTOS: Record<string, string> = {
 export const SERVICOS_FOTOS = ["B015", "A110", "D035", "A075", "C002", "D088"].map(f);
 export const SERVICOS_CTA_FOTO = f("D060");
 
-/** Foto da equipe (página Sobre). */
-export const EQUIPE_FOTO = f("D064");
-
 /** Capa e galeria dos projetos já cadastrados (script `npm run db:photos`). */
 export const PROJETOS_FOTOS: Record<string, { cover: string; gallery: string[] }> = {
   "resident-project-oma": { cover: f("C005"), gallery: ["C001", "C003", "C025", "C036", "C026"].map(f) },

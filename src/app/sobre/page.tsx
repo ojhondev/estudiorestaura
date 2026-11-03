@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ImageBox } from "@/components/ImageBox";
 import { getSectionImages } from "@/lib/cms";
-import { EQUIPE_FOTO } from "@/lib/photos";
 
 export const metadata: Metadata = {
   title: "Sobre o Estúdio",
@@ -39,13 +38,13 @@ const VALUES = [
 ];
 
 const TEAM = [
-  ["Paula Albuquerque", "Sócia e arquiteta restauradora"],
-  ["Diego Gonçalves", "Sócio e mestre de ofício restaurador conservador"],
-  ["Silvana Borges", "Arquiteta restauradora"],
-  ["Eduardo Santos", "Mestre de ofício"],
-  ["Cláudia Rangel", "Conservadora restauradora"],
-  ["Letícia Carvalho", "Arquiteta"],
-  ["Jhonatan Ribeiro", "Tecnologia e assessoria de mídia"],
+  ["Paula Albuquerque", "Sócia e arquiteta restauradora", "paula"],
+  ["Diego Gonçalves", "Sócio e mestre de ofício restaurador conservador", "diego"],
+  ["Silvana Borges", "Arquiteta restauradora", "silvana"],
+  ["Eduardo Santos", "Mestre de ofício", "eduardo"],
+  ["Cláudia Rangel", "Conservadora restauradora", "claudia"],
+  ["Letícia Carvalho", "Arquiteta", "leticia"],
+  ["Jhonatan Ribeiro", "Tecnologia e assessoria de mídia", "jhonatan"],
 ];
 
 export default async function SobrePage() {
@@ -102,27 +101,20 @@ export default async function SobrePage() {
         <h2 data-reveal className="h text-[clamp(1.75rem,3.5vw,2.5rem)]">
           Equipe
         </h2>
-        <div className="mt-10 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <div data-reveal className="lg:sticky lg:top-24 lg:self-start">
-            <ImageBox
-              src={EQUIPE_FOTO}
-              alt="Equipe do Estúdio Restaura"
-              ratio="4 / 5"
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              position="50% 30%"
-            />
-          </div>
-          <ul className="divide-y divide-mist border-y border-mist">
-            {TEAM.map(([name, role], i) => (
-              <li key={name} data-reveal className="grid grid-cols-[2.5rem_1fr] items-baseline gap-3 py-6">
-                <span className="text-[13px] text-ember">{String(i + 1).padStart(2, "0")}</span>
-                <div>
-                  <p className="text-[clamp(1.15rem,2vw,1.5rem)] font-light">{name}</p>
-                  <p className="mt-1 text-[14px] text-pewter">{role}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+        <div className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {TEAM.map(([name, role, foto]) => (
+            <div key={name} data-reveal>
+              <ImageBox
+                src={`/fotos/equipe/${foto}.jpg`}
+                alt={name}
+                ratio="3 / 4"
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                position="50% 20%"
+              />
+              <p className="mt-4 text-[15px]">{name}</p>
+              <p className="text-[13px] text-smoke">{role}</p>
+            </div>
+          ))}
         </div>
       </section>
     </>
