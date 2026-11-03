@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { ImagePlaceholder } from "@/components/ImagePlaceholder";
+import { ImageBox } from "@/components/ImageBox";
 import { TextArrow } from "@/components/ui";
 import { services } from "@/lib/content";
 import { getSectionImages } from "@/lib/cms";
+import { SERVICOS_CTA_FOTO, SERVICOS_FOTOS } from "@/lib/photos";
 
 export const metadata: Metadata = {
   title: "Serviços",
@@ -18,6 +19,7 @@ export default async function ServicosPage() {
   return (
     <>
       <PageHero
+        slot="servicos"
         label="O que fazemos"
         title="Serviços"
         intro="Do diagnóstico técnico ao acompanhamento de obra. Trabalhamos com intervenção mínima, reversibilidade e documentação rigorosa de cada etapa."
@@ -50,14 +52,14 @@ export default async function ServicosPage() {
             </div>
 
             <div className={i % 2 === 1 ? "md:pt-8" : ""}>
-              <ImagePlaceholder ratio="4 / 3" />
+              <ImageBox src={SERVICOS_FOTOS[i]} alt={s.title} ratio="4 / 3" sizes="(min-width: 768px) 40vw, 100vw" />
             </div>
           </article>
         ))}
       </div>
 
       <section className="bleed relative flex min-h-[60vh] items-center overflow-hidden">
-        <ImagePlaceholder fill variant="bleed" label="Espaço para imagem" />
+        <ImageBox fill variant="bleed" src={SERVICOS_CTA_FOTO} alt="" sizes="100vw" />
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-midnight/55"

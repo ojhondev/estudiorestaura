@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ImageBox } from "@/components/ImageBox";
-import { photo } from "@/lib/photos";
+import { PAGEHERO_FOTOS } from "@/lib/photos";
 
 export function PageHero({
   label,
@@ -8,19 +8,25 @@ export function PageHero({
   intro,
   imageLabel = "Espaço para imagem",
   imageUrl,
+  slot,
+  position,
 }: {
   label: string;
   title: string;
   intro?: ReactNode;
   imageLabel?: string;
   imageUrl?: string;
+  /** Chave em PAGEHERO_FOTOS (foto padrão do topo da página). */
+  slot?: string;
+  position?: string;
 }) {
   return (
     <section className="bleed relative flex min-h-[72vh] items-end overflow-hidden">
       <ImageBox
         fill
         variant="bleed"
-        src={imageUrl ?? photo(`pagehero:${title}`)}
+        src={imageUrl ?? (slot ? PAGEHERO_FOTOS[slot] : undefined)}
+        position={position}
         alt=""
         label={imageLabel}
         sizes="100vw"

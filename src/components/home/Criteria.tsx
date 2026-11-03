@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ImageBox } from "@/components/ImageBox";
 import { criteria } from "@/lib/content";
-import { photo } from "@/lib/photos";
+import { CRITERIA_FOTOS } from "@/lib/photos";
 
 export function Criteria({ images = {} }: { images?: Record<string, string> }) {
   const [open, setOpen] = useState(0);
@@ -38,7 +38,7 @@ export function Criteria({ images = {} }: { images?: Record<string, string> }) {
             >
               <ImageBox
                 fill
-                src={images[`criteria.${i}`] || photo(`criteria:${c.title}`)}
+                src={images[`criteria.${i}`] || CRITERIA_FOTOS[i]}
                 alt={c.title}
                 label={`Espaço para imagem — ${c.title.toLowerCase()}`}
               />

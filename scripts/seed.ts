@@ -39,40 +39,6 @@ const posts = [
   },
 ];
 
-const jobs = [
-  {
-    slug: "arquiteto-de-patrimonio",
-    title: "Arquiteto(a) de patrimônio",
-    area: "Projetos",
-    type: "Efetivo",
-    location: "São Paulo · SP",
-    body: "Você vai conduzir projetos de restauro do estudo preliminar ao executivo, em diálogo com órgãos de preservação e equipes de obra.\n\nBuscamos alguém com repertório em cartas patrimoniais, desenho técnico rigoroso e sensibilidade para a preexistência.",
-    requirements: [
-      "Graduação em Arquitetura e Urbanismo",
-      "3+ anos com patrimônio edificado",
-      "Domínio de AutoCAD/Revit e ferramentas de levantamento",
-      "Experiência com aprovação em órgãos de preservação (desejável)",
-    ],
-    published: true,
-    sort: 0,
-  },
-  {
-    slug: "conservador-restaurador",
-    title: "Conservador(a)-restaurador(a)",
-    area: "Conservação",
-    type: "Efetivo",
-    location: "São Paulo · SP · campo",
-    body: "Atuação em bens integrados — forros pintados, cantaria, retábulos — com diagnóstico, consolidação e reintegração cromática.",
-    requirements: [
-      "Formação em Conservação e Restauro",
-      "Experiência de campo com bens integrados",
-      "Disponibilidade para viagens a obras",
-    ],
-    published: true,
-    sort: 1,
-  },
-];
-
 async function count(table: string) {
   const r = await db.execute(sql.raw(`select count(*)::int as n from ${table}`));
   // neon-http returns { rows: [...] }
@@ -110,12 +76,7 @@ async function main() {
     console.log("· artigos já existem, pulando");
   }
 
-  if ((await count("jobs")) === 0) {
-    await db.insert(schema.jobs).values(jobs);
-    console.log(`✓ ${jobs.length} vagas inseridas`);
-  } else {
-    console.log("· vagas já existem, pulando");
-  }
+  // Vagas: sem seed — só o que for publicado no CMS.
 
   console.log("Seed concluído.");
 }

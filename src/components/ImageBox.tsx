@@ -11,6 +11,9 @@ type Props = {
   variant?: "card" | "bleed";
   sizes?: string;
   priority?: boolean;
+  /** object-position (ex.: "50% 25%") para não cortar rostos. */
+  position?: string;
+  quality?: number;
   "data-reveal"?: string;
   "data-parallax"?: string;
 };
@@ -29,6 +32,8 @@ export function ImageBox({
   variant = "card",
   sizes = "100vw",
   priority,
+  position,
+  quality = 85,
   ...rest
 }: Props) {
   if (!src) {
@@ -52,7 +57,16 @@ export function ImageBox({
         {...rest}
         className={`absolute inset-0 block overflow-hidden ${radius} ${className}`}
       >
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          quality={quality}
+          style={position ? { objectPosition: position } : undefined}
+          className="object-cover"
+        />
       </span>
     );
   }
@@ -63,7 +77,16 @@ export function ImageBox({
       className={`relative block overflow-hidden ${radius} ${className}`}
       style={{ aspectRatio: ratio }}
     >
-      <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+      <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          quality={quality}
+          style={position ? { objectPosition: position } : undefined}
+          className="object-cover"
+        />
     </span>
   );
 }

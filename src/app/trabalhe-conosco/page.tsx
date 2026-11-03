@@ -22,6 +22,7 @@ export default async function TrabalheConoscoPage() {
   return (
     <>
       <PageHero
+        slot="trabalhe"
         label="Pessoas"
         title="Trabalhe conosco"
         intro={careers.text}

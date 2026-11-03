@@ -7,7 +7,7 @@ import { Logo } from "@/components/Logo";
 import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
 import { nav } from "@/lib/content";
-import { photo } from "@/lib/photos";
+import { NAV_FOTOS } from "@/lib/photos";
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -77,7 +77,7 @@ export function SiteNav() {
               >
                 <div className="w-2/5 shrink-0 overflow-hidden rounded-[6px]">
                   <ImageBox
-                    src={photo(`nav:${item.href}`)}
+                    src={NAV_FOTOS[item.href]}
                     alt=""
                     ratio="4 / 3"
                     className="h-full"

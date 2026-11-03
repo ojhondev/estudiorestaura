@@ -20,6 +20,7 @@ export default async function ProjetosPage() {
   return (
     <>
       <PageHero
+        slot="projetos"
         label="Acervo"
         title="Projetos"
         intro="Intervenções de restauro, planos de conservação preventiva e arquitetura nova que dialoga com a preexistência."

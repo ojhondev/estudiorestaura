@@ -14,8 +14,6 @@ export const dynamic = "force-dynamic";
 const INFO = [
   ["E-mail", "contato@estudiorestaura.com.br", "mailto:contato@estudiorestaura.com.br"],
   ["Telefone", "+55 11 4000-0000", "tel:+551140000000"],
-  ["Estúdio", "Rua do Patrimônio, 100 — Vila Buarque, São Paulo · SP", null],
-  ["Atendimento", "Segunda a sexta, 9h às 18h", null],
 ] as const;
 
 export default async function ContatoPage() {
@@ -23,6 +21,7 @@ export default async function ContatoPage() {
   return (
     <>
       <PageHero
+        slot="contato"
         label="Vamos conversar"
         title="Contato"
         intro="Conte sobre o edifício, o acervo ou o projeto. Respondemos em até dois dias úteis."

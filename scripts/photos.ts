@@ -1,13 +1,16 @@
 /**
- * Distribui as fotos do estúdio (src/lib/photos.ts) nos registros do banco:
- * capa + galeria dos projetos e capa dos artigos que ainda não têm imagem.
+ * Aplica as fotos profissionais (src/lib/photos.ts) nos registros do banco:
+ * capa + galeria dos projetos e capa dos artigos do blog.
+ * Só mexe em registros cuja imagem ainda é uma das fotos padrão do site
+ * (/fotos/...) ou está vazia — imagens enviadas pelo CMS (Blob) são preservadas.
+ * Também remove as vagas de exemplo do seed original.
  * Uso: npm run db:photos
  */
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
 import * as schema from "../src/lib/db/schema";
-import { photo, photos } from "../src/lib/photos";
+import { POSTS_FOTOS, PROJETOS_FOTOS } from "../src/lib/photos";
 
 const url = (process.env.DATABASE_URL || "").replace(/^"|"$/g, "");
 if (!url) {
@@ -16,39 +19,45 @@ if (!url) {
 }
 const db = drizzle(neon(url), { schema });
 
-async function main() {
-  // Sobrescreve as imagens que apontam para /fotos ou estão vazias
-  // (não mexe em imagens enviadas manualmente pelo CMS via /api/upload).
-  const keep = (url: string | null) =>
-    Boolean(url && !url.startsWith("/fotos/") && !url.includes("i.ibb.co"));
+// true = imagem própria do cliente (não é foto padrão do site)
+const custom = (u: string | null | undefined) =>
+  Boolean(u && !u.startsWith("/fotos/") && !u.includes("i.ibb.co"));
 
-  const projects = await db.select().from(schema.projects);
-  for (const p of projects) {
-    const gallery = (p.gallery ?? []).some(keep)
-      ? p.gallery
-      : photos(`project:${p.slug}`, 5);
+async function main() {
+  for (const p of await db.select().from(schema.projects)) {
+    const set = PROJETOS_FOTOS[p.slug];
+    if (!set) continue;
     await db
       .update(schema.projects)
       .set({
-        coverUrl: keep(p.coverUrl) ? p.coverUrl : photo(`cover:${p.slug}`),
-        gallery,
+        coverUrl: custom(p.coverUrl) ? p.coverUrl : set.cover,
+        gallery: (p.gallery ?? []).some(custom) ? p.gallery : set.gallery,
         updatedAt: new Date(),
       })
       .where(eq(schema.projects.id, p.id));
     console.log(`✓ projeto ${p.slug}`);
   }
 
-  const posts = await db.select().from(schema.posts);
-  for (const post of posts) {
-    if (keep(post.coverUrl)) continue;
+  for (const post of await db.select().from(schema.posts)) {
+    const cover = POSTS_FOTOS[post.slug];
+    if (!cover || custom(post.coverUrl)) continue;
     await db
       .update(schema.posts)
-      .set({ coverUrl: photo(`post:${post.slug}`), updatedAt: new Date() })
+      .set({ coverUrl: cover, updatedAt: new Date() })
       .where(eq(schema.posts.id, post.id));
     console.log(`✓ artigo ${post.slug}`);
   }
 
-  console.log("Fotos distribuídas.");
+  let removidas = 0;
+  for (const slug of ["arquiteto-de-patrimonio", "conservador-restaurador"]) {
+    const r = await db
+      .delete(schema.jobs)
+      .where(eq(schema.jobs.slug, slug))
+      .returning({ slug: schema.jobs.slug });
+    removidas += r.length;
+  }
+  console.log(`✓ vagas de exemplo removidas: ${removidas}`);
+  console.log("Concluído.");
 }
 
 main().catch((e) => {

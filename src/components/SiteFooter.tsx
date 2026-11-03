@@ -49,11 +49,6 @@ export function SiteFooter() {
           <a href="tel:+551140000000" className="hover:text-midnight">
             +55 11 4000-0000
           </a>
-          <p className="text-paper/65">
-            Rua do Patrimônio, 100
-            <br />
-            São Paulo · SP
-          </p>
         </div>
       </div>
 

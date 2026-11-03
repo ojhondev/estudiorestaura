@@ -36,6 +36,7 @@ export default function PrivacidadePage() {
       <PageHero
         label="Transparência"
         title="Política de Privacidade"
+        slot="privacidade"
         intro="Última atualização em setembro de 2026. Este texto explica, em linguagem simples, o que fazemos com os seus dados."
         imageLabel="Espaço para imagem"
       />

@@ -8,7 +8,7 @@ import { ImageBox } from "@/components/ImageBox";
 import Link from "next/link";
 import { Arrow } from "@/components/ui";
 import { getProjects, getSectionImages, getSetting } from "@/lib/cms";
-import { photo } from "@/lib/photos";
+import { FEATURE_FOTOS } from "@/lib/photos";
 
 export default async function HomePage() {
   const [hero, statement, mediaBand, projects, sections] = await Promise.all([
@@ -79,8 +79,8 @@ export default async function HomePage() {
         {/* Cartões grandes: o cartão inteiro é o link */}
         <section className="shell grid gap-4 py-[clamp(4.5rem,10vw,8rem)] lg:grid-cols-2">
           {[
-            { href: "/projetos", kicker: "Acervo", title: "Conheça os projetos", cta: "Ver projetos", src: sections["home.conhecaProjetos"] || photo("home:conheca-os-projetos"), alt: "Projetos do Estúdio Restaura" },
-            { href: "/sobre", kicker: "O estúdio", title: "Quem está por trás", cta: "Sobre o estúdio", src: sections["home.quemPorTras"] || photo("home:quem-esta-por-tras"), alt: "Equipe do Estúdio Restaura" },
+            { href: "/projetos", kicker: "Acervo", title: "Conheça os projetos", cta: "Ver projetos", src: sections["home.conhecaProjetos"] || FEATURE_FOTOS.conheca, alt: "Projetos do Estúdio Restaura" },
+            { href: "/sobre", kicker: "O estúdio", title: "Quem está por trás", cta: "Sobre o estúdio", src: sections["home.quemPorTras"] || FEATURE_FOTOS.quem, alt: "Equipe do Estúdio Restaura" },
           ].map((c) => (
             <Link
               key={c.href}

@@ -194,6 +194,7 @@ export const doList = [
     title: "Investigar",
     body: "Pesquisa histórica, levantamentos arquitetônicos, prospecções estratigráficas e estudos dos materiais para compreender a trajetória e as características de cada bem.",
     image: "/fotos/metodo/investigar.jpg",
+    position: "50% 30%",
   },
   {
     number: "02",
@@ -218,6 +219,7 @@ export const doList = [
     title: "Preservar",
     body: "Planos de conservação preventiva, monitoramento e documentação para acompanhar a trajetória dos bens e prolongar os resultados das intervenções.",
     image: "/fotos/metodo/preservar.jpg",
+    position: "50% 22%",
   },
 ] as const;
 

@@ -25,6 +25,7 @@ export default async function BlogPage() {
   return (
     <>
       <PageHero
+        slot="blog"
         label="Jornal"
         title="Blog"
         intro="Notas sobre o ofício: método, decisões técnicas e a ética de intervir no que já existe."

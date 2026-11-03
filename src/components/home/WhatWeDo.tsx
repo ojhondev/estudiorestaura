@@ -88,6 +88,7 @@ export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
               <ImageBox
                 fill
                 src={images[`whatwedo.${s.number}`] || s.image}
+                position={"position" in s ? s.position : undefined}
                 alt={s.title}
                 label={`Espaço para imagem — ${s.title.toLowerCase()}`}
               />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { metrics } from "@/lib/content";
-import { photos } from "@/lib/photos";
+import { NUMBERS_FOTOS } from "@/lib/photos";
 
 const align = ["items-start", "items-center", "items-end"];
 
@@ -87,7 +87,7 @@ export function Numbers() {
 
       <div className="mt-16 flex flex-col gap-12 md:mt-24 md:gap-0">
         {metrics.map(([value, label], i) => {
-          const imgs = photos(`numbers:${label}`, 3);
+          const imgs = NUMBERS_FOTOS[label] ?? [];
           const on = active === i;
           return (
             <div

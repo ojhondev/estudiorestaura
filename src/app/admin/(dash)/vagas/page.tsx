@@ -19,7 +19,7 @@ export default async function VagasAdmin() {
       <div className="mt-6 divide-y divide-mist rounded-[8px] border border-mist bg-paper">
         {rows.length === 0 && (
           <p className="px-4 py-6 text-[14px] text-pewter">
-            Nenhuma vaga cadastrada. O site está usando as vagas padrão.
+            Nenhuma vaga cadastrada. A página Trabalhe conosco mostra “nenhuma vaga aberta”.
           </p>
         )}
         {rows.map((j) => (
