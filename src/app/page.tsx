@@ -40,7 +40,7 @@ export default async function HomePage() {
           </p>
           <p
             data-reveal
-            className="lora measure text-[clamp(1.3rem,2.4vw,2rem)] leading-[1.5] text-ink"
+            className="lora measure hyphens-auto text-justify text-[clamp(1.3rem,2.4vw,2rem)] leading-[1.5] text-ink"
           >
             {statement.text}
           </p>
@@ -51,7 +51,7 @@ export default async function HomePage() {
           <div className="ticker-track">
             {[0, 1].map((k) => (
               <span key={k} className="display flex shrink-0 items-center gap-8 pr-8 text-[clamp(1.5rem,3.4vw,2.6rem)] text-ink/85">
-                {["Restauro", "Conservação", "Patrimônio histórico", "Arquitetura", "Laudos técnicos", "Douramento", "Pintura mural", "Projetos"].map((t) => (
+                {["Restauro", "Conservação", "Patrimônio histórico", "Arquitetura", "Laudos técnicos", "Douração", "Pintura mural", "Projetos"].map((t) => (
                   <span key={t} className="flex items-center gap-8">
                     {t}
                     <span className="size-2 rounded-full bg-ember" />
@@ -63,7 +63,15 @@ export default async function HomePage() {
         </div>
 
         <WhatWeDo images={sections} />
-        <BrazilMap images={sections} />
+        <BrazilMap
+          images={sections}
+          projects={projects.slice(0, 2).map((x) => ({
+            slug: x.slug,
+            title: x.title,
+            category: x.category,
+            coverUrl: x.coverUrl,
+          }))}
+        />
         <Criteria images={sections} />
         <WorkCards media={mediaBand} />
         <Numbers />

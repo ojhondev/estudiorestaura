@@ -44,7 +44,7 @@ export function Hero({
         <p
           data-reveal
           data-reveal-delay="0.15"
-          className="measure-sm text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-paper"
+          className="max-w-[56ch] hyphens-auto text-justify text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-paper"
         >
           {intro}
         </p>

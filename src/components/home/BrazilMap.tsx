@@ -1,22 +1,53 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { gsap, reducedMotion, useIso } from "@/lib/anim";
 import { ImageBox } from "@/components/ImageBox";
 import { BR_STATES, BR_VIEWBOX } from "@/lib/brazil-map";
 import { mapLocations } from "@/lib/content";
-import { photo } from "@/lib/photos";
+import { ESTADO_FOTOS } from "@/lib/estados";
+import { Arrow } from "@/components/ui";
 
 const NAMES: Record<string, string> = Object.fromEntries(
   BR_STATES.map((s) => [s.uf, s.name]),
 );
 
-export function BrazilMap({ images = {} }: { images?: Record<string, string> }) {
+type MapProject = {
+  slug: string;
+  title: string;
+  category: string;
+  coverUrl?: string | null;
+};
+
+export function BrazilMap({
+  images = {},
+  projects = [],
+}: {
+  images?: Record<string, string>;
+  projects?: MapProject[];
+}) {
   const activeUFs = useMemo(() => Object.keys(mapLocations), []);
   const [hover, setHover] = useState<string | null>(null);
   const [pinned, setPinned] = useState(activeUFs[0]);
+  const [clicked, setClicked] = useState<string | null>(null);
+  const [slide, setSlide] = useState(0);
+  const bg = hover ?? clicked;
   const current = hover ?? pinned;
   const loc = mapLocations[current];
+
+  // Passa as fotos do estado em foco (a cada ~3,6 s).
+  useEffect(() => {
+    setSlide(0);
+    if (!bg || reducedMotion()) return;
+    const id = window.setInterval(() => setSlide((n) => n + 1), 3600);
+    return () => window.clearInterval(id);
+  }, [bg]);
+
+  function pick(uf: string) {
+    setPinned(uf);
+    setClicked((c) => (c === uf ? null : uf));
+  }
 
   const section = useRef<HTMLElement>(null);
   const mapWrap = useRef<HTMLDivElement>(null);
@@ -55,30 +86,33 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
       }}
       className="bleed relative overflow-hidden bg-[#7c2011] text-paper"
     >
-      {/* Per-state photo backgrounds */}
-      {activeUFs.map((uf) => (
-        <div
-          key={uf}
-          aria-hidden
-          className="absolute inset-0 transition-opacity duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{ opacity: hover === uf ? 1 : 0 }}
-        >
-          <ImageBox
-            fill
-            variant="bleed"
-            src={images[`brazil.${uf}`] || photo(`brazil:${uf}`)}
-            alt={`Obras em ${NAMES[uf] ?? uf}`}
-            className="bg-iron"
-            label={`Espaço para imagem — obras em ${NAMES[uf] ?? uf}`}
-          />
-        </div>
-      ))}
+      {/* Fotos do estado em foco, passando em fade */}
+      {activeUFs.map((uf) => {
+        const fotos = ESTADO_FOTOS[uf]?.fotos ?? [];
+        return fotos.map((src, i) => (
+          <div
+            key={uf + i}
+            aria-hidden
+            className="absolute inset-0 transition-opacity duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{ opacity: bg === uf && slide % fotos.length === i ? 1 : 0 }}
+          >
+            <ImageBox
+              fill
+              variant="bleed"
+              src={images[`brazil.${uf}.${i}`] || src}
+              alt={`Obras em ${ESTADO_FOTOS[uf]?.city ?? NAMES[uf] ?? uf}`}
+              className="bg-iron"
+              label={`Espaço para imagem — obras em ${NAMES[uf] ?? uf}`}
+            />
+          </div>
+        ));
+      })}
       {/* Contrast overlay (not too dark) */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 transition-colors duration-500"
         style={{
-          background: hover ? "rgba(40,10,4,0.7)" : "rgba(124,32,17,1)",
+          background: bg ? "rgba(40,10,4,0.62)" : "rgba(124,32,17,1)",
         }}
       />
 
@@ -128,7 +162,7 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
                         : "transition-[fill] duration-300"
                     }
                     onMouseEnter={() => state && setHover(s.uf)}
-                    onClick={() => state && setPinned(s.uf)}
+                    onClick={() => state && pick(s.uf)}
                   />
                 );
               })}
@@ -143,6 +177,11 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
               <p className="mt-2 text-[clamp(1.25rem,2.4vw,1.75rem)] font-light">
                 {NAMES[current] ?? current}
               </p>
+              {ESTADO_FOTOS[current] && (
+                <p className="mt-1 text-[14px] text-paper/70">
+                  Obras em {ESTADO_FOTOS[current].city}
+                </p>
+              )}
               <p className="mt-5 text-[13px] uppercase tracking-[0.18em] text-paper/60">
                 {loc.status === "atuacao"
                   ? "Atuação em andamento"
@@ -152,7 +191,7 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
                 {loc.note}
               </p>
               <p className="mt-4 text-[13px] text-paper/45">
-                Passe o mouse pelos estados para ver as obras.
+                Passe o mouse ou toque nos estados para ver as obras.
               </p>
             </div>
 
@@ -163,7 +202,7 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
                   type="button"
                   onMouseEnter={() => setHover(code)}
                   onFocus={() => setHover(code)}
-                  onClick={() => setPinned(code)}
+                  onClick={() => pick(code)}
                   className={`rounded-[80px] px-3.5 py-1.5 text-[13px] transition-colors ${
                     code === current
                       ? "bg-paper text-ink"
@@ -174,6 +213,42 @@ export function BrazilMap({ images = {} }: { images?: Record<string, string> }) 
                 </button>
               ))}
             </div>
+
+            {projects.length > 0 && (
+              <div className="rounded-[8px] bg-white/10 p-4 backdrop-blur-sm">
+                <p className="label">Projetos recentes</p>
+                <ul className="mt-3 space-y-3">
+                  {projects.map((p) => (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/projetos/${p.slug}`}
+                        className="group flex items-center gap-3"
+                      >
+                        <span className="block w-20 shrink-0">
+                          <ImageBox
+                            src={p.coverUrl}
+                            alt={p.title}
+                            ratio="4 / 3"
+                            label="Projeto"
+                          />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block text-[11px] uppercase tracking-[0.16em] text-paper/60">
+                            {p.category}
+                          </span>
+                          <span className="block truncate text-[15px] group-hover:underline">
+                            {p.title}
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/projetos" className="text-arrow mt-4 text-[13px]">
+                  Ver todos os projetos <Arrow />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const NUMBERS = [
-  ["8", "anos de atuação"],
-  ["20+", "projetos de restauro"],
+  ["15", "anos de atuação"],
+  ["16", "projetos"],
   ["3", "estados de atuação"],
   ["4", "áreas integradas"],
 ];

@@ -187,22 +187,37 @@ export const services: Service[] = [
   },
 ];
 
-/** "O que fazemos" — three areas, each with a paired image. */
+/** "O que fazemos" — cinco frentes, cada uma com a sua foto. */
 export const doList = [
   {
     number: "01",
     title: "Investigar",
-    body: "Leitura histórica, prospecções e diagnóstico de patologias. Antes de qualquer intervenção, entender o que já existe e por quê.",
+    body: "Pesquisa histórica, levantamentos arquitetônicos, prospecções estratigráficas e estudos dos materiais para compreender a trajetória e as características de cada bem.",
+    image: "/fotos/metodo/investigar.jpg",
   },
   {
     number: "02",
-    title: "Intervir",
-    body: "Restauro, consolidação e adaptação de uso — com intervenção mínima, reversibilidade e a distinção clara entre o antigo e o novo.",
+    title: "Projetar",
+    body: "Projetos de arquitetura, conservação e restauro, decoração artística e iluminação, concebidos a partir da identidade, da história e das particularidades de cada espaço.",
+    image: "/fotos/metodo/projetar.jpg",
   },
   {
     number: "03",
+    title: "Compor",
+    body: "Execução de decorações artísticas, pinturas ornamentais, estamparias e projetos de iluminação que valorizam a arquitetura e conferem identidade aos espaços.",
+    image: "/fotos/metodo/compor.jpg",
+  },
+  {
+    number: "04",
+    title: "Intervir",
+    body: "Conservação e restauro de bens arquitetônicos e artísticos, com atenção às técnicas tradicionais, à autenticidade dos materiais e ao respeito pelas marcas do tempo.",
+    image: "/fotos/metodo/intervir.jpg",
+  },
+  {
+    number: "05",
     title: "Preservar",
-    body: "Planos de conservação preventiva, monitoramento e documentação que mantêm o edifício vivo depois que a obra termina.",
+    body: "Planos de conservação preventiva, monitoramento e documentação para acompanhar a trajetória dos bens e prolongar os resultados das intervenções.",
+    image: "/fotos/metodo/preservar.jpg",
   },
 ] as const;
 
@@ -210,69 +225,65 @@ export const doList = [
 export const criteria = [
   {
     title: "Valor histórico e artístico",
-    body: "Edifícios e acervos cuja preservação importa para a memória de uma cidade, de uma instituição ou de uma comunidade.",
+    body: "Reconhecer e valorizar a história, a expressão artística e os significados culturais presentes em cada bem.",
   },
   {
-    title: "Camadas do tempo legíveis",
-    body: "Preexistências onde as diferentes épocas ainda podem ser lidas — e onde a intervenção pode reforçar essa leitura em vez de apagá-la.",
+    title: "Respeito à autenticidade",
+    body: "Preservar as características originais, as técnicas construtivas e as diferentes camadas que constituem a identidade do patrimônio.",
   },
   {
-    title: "Uso que dá futuro",
-    body: "Projetos com um programa que garante manutenção e presença: um uso contemporâneo que sustenta o bem a longo prazo.",
+    title: "Equilíbrio entre passado e presente",
+    body: "Conciliar a preservação dos valores históricos com as necessidades contemporâneas de uso, funcionalidade e permanência.",
   },
   {
-    title: "Parceria de longo prazo",
-    body: "Clientes e órgãos dispostos a documentar, monitorar e conservar — não só a executar uma obra pontual.",
+    title: "Sensibilidade e rigor técnico",
+    body: "Aliar conhecimento, pesquisa e domínio dos ofícios a uma abordagem cuidadosa, consciente e fundamentada.",
+  },
+  {
+    title: "Continuidade e permanência",
+    body: "Contribuir para que edifícios, obras e espaços culturais permaneçam vivos, significativos e acessíveis às futuras gerações.",
   },
 ] as const;
 
-/** "Nosso trabalho" — three fronts. */
-export const workAreas = [
+export type WorkArea = {
+  index: string;
+  title: string;
+  tags: readonly string[];
+  body: string;
+  tone: "pine" | "tide" | "ember";
+  /** Opcional: quando vazio, o cartão não mostra "Mais detalhes". */
+  details?: readonly string[];
+};
+
+/** "Nosso trabalho" — três etapas. */
+export const workAreas: readonly WorkArea[] = [
   {
     index: "01",
-    title: "Arquitetura",
-    tags: ["Restauro", "Adaptação de uso", "Ampliações"],
-    body: "Intervenção arquitetônica em patrimônio e novas construções que dialogam com a preexistência.",
-    tone: "pine" as const,
-    details: [
-      "Leitura histórica, prospecções e projeto executivo de restauro",
-      "Estruturas autônomas e reversíveis para ampliações contemporâneas",
-      "Compatibilização com acessibilidade e segurança contra incêndio",
-      "Aprovação em órgãos de preservação",
-    ],
+    title: "Diagnóstico",
+    tags: ["Pesquisa histórica", "Levantamento arquitetônico", "Laudos técnicos"],
+    body: "Investigação e análise das características históricas, arquitetônicas e artísticas do bem, identificando seus materiais, técnicas construtivas, estado de conservação e necessidades de intervenção.",
+    tone: "pine",
   },
   {
     index: "02",
-    title: "Conservação",
-    tags: ["Planos preventivos", "Monitoramento", "Manutenção"],
-    body: "Antecipar a deterioração com inspeções, sensores e protocolos que reduzem grandes intervenções.",
-    tone: "tide" as const,
-    details: [
-      "Monitoramento de temperatura, umidade e movimentação",
-      "Calendário de inspeções e plano de manutenção por elemento",
-      "Treinamento de equipes locais",
-      "Gestão de acervos edificados",
-    ],
+    title: "Projetos",
+    tags: ["Arquitetura", "Conservação e restauro", "Pinturas ornamentais"],
+    body: "Desenvolvimento de projetos fundamentados na compreensão de cada espaço, conciliando preservação dos valores históricos, necessidades contemporâneas e integração entre arquitetura e expressão artística.",
+    tone: "tide",
   },
   {
     index: "03",
-    title: "Restauro & laudos",
-    tags: ["Bens integrados", "Diagnóstico", "Documentação"],
-    body: "Consolidação, limpeza controlada e reintegração cromática — sempre com registro por elemento.",
-    tone: "ember" as const,
-    details: [
-      "Mapa de danos georreferenciado e ensaios de caracterização",
-      "Consolidação, fixação e limpeza controlada",
-      "Reintegração cromática identificável e reversível",
-      "Ficha por elemento como arquivo de manutenção futura",
-    ],
+    title: "Execução",
+    tags: ["Restauro", "Adaptação de uso", "Manutenção e acompanhamento"],
+    body: "Realização de intervenções em bens arquitetônicos e artísticos, reunindo conhecimento técnico, domínio dos ofícios tradicionais e sensibilidade no tratamento dos materiais e das superfícies.",
+    tone: "ember",
   },
-] as const;
+];
 
 /** "Em números" */
 export const metrics = [
-  ["8", "anos de atuação"],
-  ["20+", "projetos de restauro"],
+  ["15", "anos de atuação"],
+  ["16", "projetos"],
   ["3", "estados de atuação"],
 ] as const;
 

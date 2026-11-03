@@ -129,35 +129,42 @@ export function WorkCards({ media }: { media?: MediaBandData }) {
                 {w.body}
               </p>
 
-              <div className="acc-content" aria-hidden={!isOpen}>
-                <div>
-                  <ul className="mt-5 space-y-2.5 border-t border-white/20 pt-5 text-[15px] text-paper/90">
-                    {w.details.map((d) => (
-                      <li key={d} className="flex gap-3">
-                        <span className="mt-3 h-px w-4 shrink-0 bg-paper/60" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
+              {w.details?.length ? (
+                <div className="acc-content" aria-hidden={!isOpen}>
+                  <div>
+                    <ul className="mt-5 space-y-2.5 border-t border-white/20 pt-5 text-[15px] text-paper/90">
+                      {w.details.map((d) => (
+                        <li key={d} className="flex gap-3">
+                          <span className="mt-3 h-px w-4 shrink-0 bg-paper/60" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+  
+                ) : null}
 
               <div className="mt-6 flex items-end justify-between gap-4">
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  className="text-arrow text-[14px]"
-                >
-                  {isOpen ? "Menos detalhes" : "Mais detalhes"}
-                  <span
-                    className={`text-[20px] leading-none transition-transform duration-300 ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
+                {w.details?.length ? (
+                  <button
+                    type="button"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="text-arrow text-[14px]"
                   >
-                    +
-                  </span>
-                </button>
+                    {isOpen ? "Menos detalhes" : "Mais detalhes"}
+                    <span
+                      className={`text-[20px] leading-none transition-transform duration-300 ${
+                        isOpen ? "rotate-45" : ""
+                      }`}
+                    >
+                      +
+                    </span>
+                  </button>
+                ) : (
+                  <span />
+                )}
                 <Mark variant={w.tone} />
               </div>
 
