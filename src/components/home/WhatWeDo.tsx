@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
 import { doList } from "@/lib/content";
+import { useAutoplay } from "@/lib/autoplay";
 
 export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
   const [active, setActive] = useState(0);
+  const [auto, setAuto] = useState(true); // abre sozinho até o usuário clicar
+  const root = useRef<HTMLElement>(null);
+  useAutoplay(root, () => setActive((a) => (a + 1) % doList.length), { ms: 3000, active: auto });
 
   return (
-    <section className="shell py-[clamp(4.5rem,10vw,8rem)]">
+    <section ref={root} className="shell py-[clamp(4.5rem,10vw,8rem)]">
       <div className="flex items-start gap-6">
         <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-ink/25" />
         <div>
@@ -31,7 +35,10 @@ export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
               <button
                 key={s.number}
                 type="button"
-                onClick={() => setActive(idx)}
+                onClick={() => {
+                  setAuto(false);
+                  setActive(idx);
+                }}
                 aria-pressed={on}
                 className="grid w-full grid-cols-[3.5rem_1fr] items-start gap-3 border-t border-mist py-8 text-left transition-colors"
               >

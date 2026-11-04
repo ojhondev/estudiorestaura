@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, reducedMotion, useIso } from "@/lib/anim";
+import { useAutoplay } from "@/lib/autoplay";
 import { ImageBox } from "@/components/ImageBox";
 import { BR_STATES, BR_VIEWBOX } from "@/lib/brazil-map";
 import { mapLocations } from "@/lib/content";
@@ -32,6 +33,7 @@ export function BrazilMap({
   const [pinned, setPinned] = useState(activeUFs[0]);
   const [clicked, setClicked] = useState<string | null>(null);
   const [slide, setSlide] = useState(0);
+  const [auto, setAuto] = useState(true); // alterna sozinho até o usuário interagir
   const bg = hover ?? clicked;
   const current = hover ?? pinned;
   const loc = mapLocations[current];
@@ -45,11 +47,31 @@ export function BrazilMap({
   }, [bg]);
 
   function pick(uf: string) {
+    setAuto(false);
     setPinned(uf);
     setClicked((c) => (c === uf ? null : uf));
   }
 
   const section = useRef<HTMLElement>(null);
+
+  // Começa em São Paulo e passa pelos estados a cada 3 s enquanto o mapa está na tela.
+  useEffect(() => {
+    if (auto && !clicked && !hover) {
+      setPinned(activeUFs[0]);
+      setClicked(activeUFs[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useAutoplay(
+    section,
+    () => {
+      const next =
+        activeUFs[(activeUFs.indexOf(clicked ?? activeUFs[0]) + 1) % activeUFs.length];
+      setPinned(next);
+      setClicked(next);
+    },
+    { ms: 3000, active: auto },
+  );
   const mapWrap = useRef<HTMLDivElement>(null);
   const moveX = useRef<((v: number) => void) | null>(null);
   const moveY = useRef<((v: number) => void) | null>(null);
@@ -164,7 +186,12 @@ export function BrazilMap({
                         ? "cursor-pointer transition-[fill] duration-300"
                         : "transition-[fill] duration-300"
                     }
-                    onMouseEnter={() => state && setHover(s.uf)}
+                    onMouseEnter={() => {
+                      if (state) {
+                        setAuto(false);
+                        setHover(s.uf);
+                      }
+                    }}
                     onClick={() => state && pick(s.uf)}
                   />
                 );
@@ -203,7 +230,10 @@ export function BrazilMap({
                 <button
                   key={code}
                   type="button"
-                  onMouseEnter={() => setHover(code)}
+                  onMouseEnter={() => {
+                    setAuto(false);
+                    setHover(code);
+                  }}
                   onFocus={() => setHover(code)}
                   onClick={() => pick(code)}
                   className={`rounded-[80px] px-3.5 py-1.5 text-[13px] transition-colors ${

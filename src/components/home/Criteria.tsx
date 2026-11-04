@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ImageBox } from "@/components/ImageBox";
 import { criteria } from "@/lib/content";
+import { useAutoplay } from "@/lib/autoplay";
 import { CRITERIA_FOTOS } from "@/lib/photos";
 
 export function Criteria({ images = {} }: { images?: Record<string, string> }) {
   const [open, setOpen] = useState(0);
+  const [auto, setAuto] = useState(true); // abre sozinho até o usuário clicar
+  const root = useRef<HTMLElement>(null);
+  useAutoplay(root, () => setOpen((o) => (o + 1) % criteria.length), { ms: 3000, active: auto });
 
   return (
-    <section className="shell py-[clamp(4.5rem,10vw,8rem)]">
+    <section ref={root} className="shell py-[clamp(4.5rem,10vw,8rem)]">
       <div className="flex items-start gap-6">
         <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-ink/25" />
         <div>
@@ -54,7 +58,10 @@ export function Criteria({ images = {} }: { images?: Record<string, string> }) {
             >
               <button
                 type="button"
-                onClick={() => setOpen(i)}
+                onClick={() => {
+                  setAuto(false);
+                  setOpen(i);
+                }}
                 aria-expanded={i === open}
                 className="flex w-full items-center justify-between gap-5 py-7 text-left"
               >
