@@ -10,6 +10,7 @@ import { AdminGate } from "@/components/AdminGate";
 import { QuotePopup } from "@/components/QuotePopup";
 import { BackToTop } from "@/components/BackToTop";
 import { HeaderLogo } from "@/components/HeaderLogo";
+import { ImageGuard } from "@/components/ImageGuard";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <CookieBar />
           <QuotePopup />
           <BackToTop />
+          <ImageGuard />
         </AdminGate>
         <Reveal />
       </body>

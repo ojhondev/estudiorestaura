@@ -299,3 +299,32 @@ a.group > :first-child { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .btn-fill:hover, a.group:hover img { transform: none; }
 }
+
+
+/* ---------- Proteção das fotos (ver ImageGuard) ---------- */
+img,
+video,
+canvas {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+html.er-shield img,
+html.er-shield video,
+html.er-shield canvas {
+  visibility: hidden !important;
+}
+@media print {
+  img,
+  video,
+  canvas,
+  picture {
+    display: none !important;
+  }
+  body::before {
+    content: "Conteúdo protegido — © Estúdio Restaura";
+    display: block;
+    padding: 2rem;
+    font-size: 14px;
+  }
+}
