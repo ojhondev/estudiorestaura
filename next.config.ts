@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // Next 16 só aceita as qualidades listadas aqui (padrão: só 75). 90 preserva o detalhe das fotos.
+    qualities: [90],
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],

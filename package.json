@@ -12,7 +12,7 @@
     "db:seed": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seed.ts",
     "db:photos": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/photos.ts",
     "db:projetos": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/projetos.ts",
-    "fotos:marca": "node node_modules/tsx/dist/cli.mjs scripts/watermark-fotos.ts"
+    "fotos:dims": "node node_modules/tsx/dist/cli.mjs scripts/photo-dims.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

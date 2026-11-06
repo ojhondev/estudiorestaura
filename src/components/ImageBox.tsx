@@ -33,7 +33,7 @@ export function ImageBox({
   sizes = "100vw",
   priority,
   position,
-  quality = 85,
+  quality = 90,
   ...rest
 }: Props) {
   if (!src) {

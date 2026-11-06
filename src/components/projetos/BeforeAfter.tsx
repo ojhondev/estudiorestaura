@@ -4,13 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 type Pair = { before: string; after: string; caption: string };
+type Dims = Record<string, { w: number; h: number }>;
 
 /**
  * Comparador antes/depois. Funciona clicando, **segurando e arrastando** (mouse e
  * toque) e pelo teclado (setas). O arraste usa ouvintes na janela, então
  * continua mesmo que o ponteiro saia da imagem.
  */
-function Compare({ pair }: { pair: Pair }) {
+function Compare({ pair, ratio }: { pair: Pair; ratio: number }) {
   const [pos, setPos] = useState(50);
   const [dragging, setDragging] = useState(false);
   const box = useRef<HTMLDivElement>(null);
@@ -48,8 +49,8 @@ function Compare({ pair }: { pair: Pair }) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(pos)}
-        className={`relative aspect-[4/3] w-full select-none overflow-hidden rounded-[8px] bg-mist ${dragging ? "cursor-grabbing" : "cursor-ew-resize"}`}
-        style={{ touchAction: "pan-y" }}
+        className={`relative mx-auto w-full select-none overflow-hidden rounded-[8px] bg-mist ${dragging ? "cursor-grabbing" : "cursor-ew-resize"}`}
+        style={{ touchAction: "pan-y", aspectRatio: String(ratio), maxWidth: `min(100%, calc(80vh * ${ratio}))` }}
         onPointerDown={(e) => {
           if (e.pointerType === "mouse" && e.button !== 0) return;
           e.preventDefault();
@@ -68,7 +69,6 @@ function Compare({ pair }: { pair: Pair }) {
           fill
           draggable={false}
           sizes="(min-width: 1024px) 50vw, 100vw"
-          quality={85}
           className="pointer-events-none object-cover"
         />
         <div className="pointer-events-none absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
@@ -78,7 +78,6 @@ function Compare({ pair }: { pair: Pair }) {
             fill
             draggable={false}
             sizes="(min-width: 1024px) 50vw, 100vw"
-            quality={85}
             className="pointer-events-none object-cover"
           />
         </div>
@@ -104,7 +103,14 @@ function Compare({ pair }: { pair: Pair }) {
   );
 }
 
-export function BeforeAfter({ pairs }: { pairs: Pair[] }) {
+/** Proporção da foto (a do "depois"), limitada para não ficar muito alta nem muito baixa. */
+function ratioOf(p: Pair, dims: Dims) {
+  const d = dims[p.after] ?? dims[p.before];
+  const r = d ? d.w / d.h : 4 / 3;
+  return Math.min(1.8, Math.max(0.8, r));
+}
+
+export function BeforeAfter({ pairs, dims = {} }: { pairs: Pair[]; dims?: Dims }) {
   if (!pairs.length) return null;
   return (
     <section className="shell pb-[clamp(3rem,7vw,5rem)]">
@@ -116,7 +122,7 @@ export function BeforeAfter({ pairs }: { pairs: Pair[] }) {
       </h2>
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         {pairs.map((p, i) => (
-          <Compare key={i} pair={p} />
+          <Compare key={i} pair={p} ratio={ratioOf(p, dims)} />
         ))}
       </div>
     </section>

@@ -13,7 +13,7 @@ import { useEffect } from "react";
  *
  * Importante: nenhum navegador consegue impedir 100% prints ou o download por quem
  * tem conhecimento técnico (ferramentas do desenvolvedor, captura por hardware, câmera).
- * Isto é dissuasão; proteção de verdade vem de fotos em resolução reduzida e marca d'água.
+ * Isto é dissuasão; proteção de verdade exige fotos em resolução reduzida.
  */
 const MEDIA = "img,video,canvas,picture";
 

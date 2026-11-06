@@ -123,7 +123,7 @@ export function BrazilMap({
               variant="bleed"
               src={images[`brazil.${uf}.${i}`] || src}
               alt={`Obras em ${ESTADO_FOTOS[uf]?.city ?? NAMES[uf] ?? uf}`}
-              quality={92}
+              quality={90}
               sizes="100vw"
               position="50% 40%"
               className="bg-iron"
