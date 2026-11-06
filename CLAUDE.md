@@ -15,7 +15,7 @@ horizontal travado na seção de destaques).
 | Fontes | Archivo (display) + Inter (texto) via `next/font/google` |
 | Deploy | Vercel + GitHub (`github.com/ojhondev/estudiorestaura`) |
 
-- Porta de dev: **3011** (config compartilhada em `A:/Velo/.claude/launch.json`).
+- Porta de dev: **3011** (config compartilhada em `A:/Claude Code/Velo/.claude/launch.json`).
 - **Next.js 16**: leia `node_modules/next/dist/docs/` antes de mexer em APIs do framework.
 - Layout **fluido / full-width**: o conteúdo ocupa toda a largura da tela, com
   respiro lateral via `.shell` (padding em `clamp`), sem container centralizado

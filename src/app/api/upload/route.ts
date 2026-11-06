@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import sharp from "sharp";
 import { isAuthed } from "@/lib/auth";
+import { applyWatermark } from "@/lib/watermark";
 
 export const runtime = "nodejs";
 
@@ -56,10 +57,12 @@ export async function POST(request: Request) {
       fit: "inside",
       withoutEnlargement: true,
     });
+    // marca d'água das fotos do estúdio antes de codificar
+    const resized = await pipeline.png().toBuffer();
     if (meta.hasAlpha) {
-      output = await pipeline.webp({ quality: 80 }).toBuffer();
+      output = await applyWatermark(resized, "webp");
     } else {
-      output = await pipeline.jpeg({ quality: 80, mozjpeg: true }).toBuffer();
+      output = await applyWatermark(resized, "jpeg");
       contentType = "image/jpeg";
       ext = "jpg";
     }
