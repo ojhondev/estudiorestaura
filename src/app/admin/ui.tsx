@@ -356,6 +356,98 @@ export function GalleryField({
   );
 }
 
+type BA = { before: string; after: string; caption: string };
+
+async function uploadOne(file: File): Promise<string | null> {
+  try {
+    const res = await fetch(`/api/upload?name=${encodeURIComponent(file.name)}`, { method: "POST", body: file });
+    const json = await res.json();
+    return json.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Pares de fotos antes/depois por upload. Guarda um JSON no hidden `name`. */
+export function BeforeAfterField({
+  label,
+  name,
+  defaultValue = [],
+  hint,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: BA[];
+  hint?: string;
+}) {
+  const [pairs, setPairs] = useState<BA[]>(defaultValue);
+  const [busy, setBusy] = useState("");
+
+  const set = (i: number, patch: Partial<BA>) =>
+    setPairs((p) => p.map((x, k) => (k === i ? { ...x, ...patch } : x)));
+
+  async function pick(i: number, side: "before" | "after", file?: File) {
+    if (!file) return;
+    setBusy(`${i}-${side}`);
+    const url = await uploadOne(file);
+    if (url) set(i, { [side]: url } as Partial<BA>);
+    setBusy("");
+  }
+
+  const slot = (i: number, side: "before" | "after", title: string) => (
+    <label className="block cursor-pointer">
+      <span className="text-[11px] uppercase tracking-[0.12em] text-smoke">{title}</span>
+      <span className="mt-1 grid h-24 w-36 place-items-center overflow-hidden rounded-[6px] border border-dashed border-mist bg-mist text-[12px] text-smoke">
+        {busy === `${i}-${side}` ? (
+          "enviando…"
+        ) : pairs[i][side] ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={pairs[i][side]} alt="" className="h-full w-full object-cover" />
+        ) : (
+          "+ foto"
+        )}
+      </span>
+      <input type="file" accept="image/*" hidden onChange={(e) => pick(i, side, e.target.files?.[0])} />
+    </label>
+  );
+
+  return (
+    <div>
+      <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-smoke">{label}</span>
+      <input type="hidden" name={name} value={JSON.stringify(pairs)} readOnly />
+      <div className="mt-2 space-y-3">
+        {pairs.map((p, i) => (
+          <div key={i} className="flex flex-wrap items-end gap-3 rounded-[8px] border border-mist p-3">
+            {slot(i, "before", "Antes")}
+            {slot(i, "after", "Depois")}
+            <input
+              value={p.caption}
+              onChange={(e) => set(i, { caption: e.target.value })}
+              placeholder="Legenda (opcional)"
+              className="min-w-[12rem] flex-1 rounded-[6px] border border-mist px-3 py-2 text-[13px] outline-none focus:border-ember"
+            />
+            <button
+              type="button"
+              onClick={() => setPairs((x) => x.filter((_, k) => k !== i))}
+              className="text-[12px] text-coral hover:underline"
+            >
+              remover
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => setPairs((x) => [...x, { before: "", after: "", caption: "" }])}
+          className="rounded-[6px] border border-mist px-3 py-1.5 text-[13px] hover:bg-mist"
+        >
+          + Adicionar par antes/depois
+        </button>
+      </div>
+      {hint && <span className="mt-1 block text-[12px] text-smoke">{hint}</span>}
+    </div>
+  );
+}
+
 export function Card({ children }: { children: ReactNode }) {
   return (
     <div className="rounded-[8px] border border-mist bg-paper p-5 md:p-7">

@@ -19,6 +19,13 @@ export default async function HomePage() {
     getSectionImages(),
   ]);
 
+  // Projetos agrupados por estado (UF) para o mapa da home
+  const byState: Record<string, { slug: string; title: string; category: string; coverUrl: string | null }[]> = {};
+  for (const p of projects) {
+    if (!p.state) continue;
+    (byState[p.state] ??= []).push({ slug: p.slug, title: p.title, category: p.category, coverUrl: p.coverUrl });
+  }
+
   const feed = projects.slice(0, 4).map((p) => ({
     slug: p.slug,
     title: p.title,
@@ -65,12 +72,7 @@ export default async function HomePage() {
         <WhatWeDo images={sections} />
         <BrazilMap
           images={sections}
-          projects={projects.slice(0, 2).map((x) => ({
-            slug: x.slug,
-            title: x.title,
-            category: x.category,
-            coverUrl: x.coverUrl,
-          }))}
+          projectsByState={byState}
         />
         <Criteria images={sections} />
         <WorkCards media={mediaBand} />

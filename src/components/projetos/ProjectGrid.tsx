@@ -15,9 +15,11 @@ type Project = {
 
 const FILTERS = [
   "Todos",
-  "Arquitetura",
-  "Conservação",
   "Restauro",
+  "Conservação",
+  "Diagnóstico",
+  "Projeto",
+  "Arquitetura",
   "Interiores",
 ] as const;
 

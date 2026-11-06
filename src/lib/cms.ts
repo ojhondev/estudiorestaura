@@ -28,6 +28,11 @@ export type Project = {
   galleryUrls: string[];
   gallery: number;
   featured: boolean;
+  /** UF (SP, MG, GO…) — agrupa os projetos no mapa */
+  state: string;
+  city: string;
+  beforeAfter: { before: string; after: string; caption: string }[];
+  published: boolean;
 };
 
 export type Post = {
@@ -66,8 +71,33 @@ const seedProjects = (): Project[] =>
     galleryUrls: [],
     gallery: p.gallery,
     featured: seed.projects.indexOf(p) < 3,
+    state: "",
+    city: "",
+    beforeAfter: [],
+    published: true,
   }));
 
+type ProjectRow = typeof schema.projects.$inferSelect;
+const toProject = (r: ProjectRow): Project => ({
+  slug: r.slug,
+  title: r.title,
+  category: r.category,
+  location: r.location,
+  year: r.year,
+  area: r.area,
+  summary: r.summary,
+  description: splitParas(r.body),
+  coverUrl: r.coverUrl,
+  galleryUrls: r.gallery ?? [],
+  gallery: (r.gallery ?? []).length || 4,
+  featured: r.featured,
+  state: r.state ?? "",
+  city: r.city ?? "",
+  beforeAfter: r.beforeAfter ?? [],
+  published: r.published,
+});
+
+/** Projetos publicados. Os de exemplo só aparecem se o banco não estiver acessível. */
 export async function getProjects(): Promise<Project[]> {
   if (!db) return seedProjects();
   try {
@@ -76,27 +106,26 @@ export async function getProjects(): Promise<Project[]> {
       .from(schema.projects)
       .where(eq(schema.projects.published, true))
       .orderBy(asc(schema.projects.sort), desc(schema.projects.createdAt));
-    if (!rows.length) return seedProjects();
-    return rows.map((r) => ({
-      slug: r.slug,
-      title: r.title,
-      category: r.category,
-      location: r.location,
-      year: r.year,
-      area: r.area,
-      summary: r.summary,
-      description: splitParas(r.body),
-      coverUrl: r.coverUrl,
-      galleryUrls: r.gallery ?? [],
-      gallery: (r.gallery ?? []).length || 4,
-      featured: r.featured,
-    }));
+    return rows.map(toProject);
   } catch {
     return seedProjects();
   }
 }
 
-export async function getProject(slug: string) {
+/** Um projeto; com `drafts` (admin logado) também devolve rascunhos. */
+export async function getProject(slug: string, opts: { drafts?: boolean } = {}) {
+  if (opts.drafts && db) {
+    try {
+      const rows = await db
+        .select()
+        .from(schema.projects)
+        .where(eq(schema.projects.slug, slug))
+        .limit(1);
+      if (rows.length) return toProject(rows[0]);
+    } catch {
+      /* cai no caminho normal */
+    }
+  }
   return (await getProjects()).find((p) => p.slug === slug) ?? null;
 }
 

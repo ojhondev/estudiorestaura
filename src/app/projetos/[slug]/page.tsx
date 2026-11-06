@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ImageBox } from "@/components/ImageBox";
 import { ProjectGallery } from "@/components/projetos/ProjectGallery";
+import { BeforeAfter } from "@/components/projetos/BeforeAfter";
+import { isAuthed } from "@/lib/auth";
 import { Arrow } from "@/components/ui";
 import { getProject, getProjects } from "@/lib/cms";
 
@@ -14,9 +16,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = await getProject(slug);
+  const project = await getProject(slug, { drafts: await isAuthed() });
   if (!project) return {};
-  return { title: project.title, description: project.summary };
+  return {
+    title: project.title,
+    description: project.summary,
+    robots: project.published ? undefined : { index: false, follow: false },
+  };
 }
 
 export default async function ProjetoPage({
@@ -25,22 +31,28 @@ export default async function ProjetoPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = await getProject(slug);
+  const admin = await isAuthed();
+  const project = await getProject(slug, { drafts: admin });
   if (!project) notFound();
 
   const projects = await getProjects();
   const index = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(index + 1) % projects.length];
+  const next = index >= 0 ? projects[(index + 1) % projects.length] : projects[0];
 
   const meta = [
-    ["Local", project.location],
+    ["Local", project.location || [project.city, project.state].filter(Boolean).join(" · ")],
     ["Ano", project.year],
     ["Categoria", project.category],
     ["Área", project.area],
-  ];
+  ].filter(([, v]) => v);
 
   return (
     <article>
+      {!project.published && (
+        <div className="fixed inset-x-0 top-0 z-[90] bg-ember px-4 py-2 text-center text-[12px] font-medium uppercase tracking-[0.16em] text-paper">
+          Rascunho — só você (logado) está vendo esta página
+        </div>
+      )}
       <section className="bleed relative flex min-h-[78vh] items-end overflow-hidden">
         <ImageBox
           src={project.coverUrl}
@@ -95,13 +107,16 @@ export default async function ProjetoPage({
         </div>
       </div>
 
+      <BeforeAfter pairs={project.beforeAfter} />
+
       <ProjectGallery
         count={project.gallery}
         images={project.galleryUrls}
         title={project.title}
       />
 
-      <section className="bleed border-t border-mist">
+      {next && next.slug !== project.slug && (
+        <section className="bleed border-t border-mist">
         <div className="shell flex flex-col gap-3 py-14">
           <p className="label">Próximo projeto</p>
           <Link
@@ -115,6 +130,8 @@ export default async function ProjetoPage({
           </Link>
         </div>
       </section>
+    
+      )}
     </article>
   );
 }

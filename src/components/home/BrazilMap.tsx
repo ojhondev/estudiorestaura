@@ -23,10 +23,10 @@ type MapProject = {
 
 export function BrazilMap({
   images = {},
-  projects = [],
+  projectsByState = {},
 }: {
   images?: Record<string, string>;
-  projects?: MapProject[];
+  projectsByState?: Record<string, MapProject[]>;
 }) {
   const activeUFs = useMemo(() => Object.keys(mapLocations), []);
   const [hover, setHover] = useState<string | null>(null);
@@ -247,11 +247,13 @@ export function BrazilMap({
               ))}
             </div>
 
-            {projects.length > 0 && (
+            {(projectsByState[current]?.length ?? 0) > 0 && (
               <div className="rounded-[8px] bg-white/10 p-4 backdrop-blur-sm">
-                <p className="label">Projetos recentes</p>
+                <p className="label">
+                  Projetos em {NAMES[current] ?? current}
+                </p>
                 <ul className="mt-3 space-y-3">
-                  {projects.map((p) => (
+                  {(projectsByState[current] ?? []).slice(0, 4).map((p) => (
                     <li key={p.slug}>
                       <Link
                         href={`/projetos/${p.slug}`}

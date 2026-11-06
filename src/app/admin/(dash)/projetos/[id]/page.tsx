@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteProject, saveProject } from "../../../actions";
-import { Area, Field, GalleryField, ImageField, Select, Toggle } from "../../../ui";
+import { Area, BeforeAfterField, Field, GalleryField, ImageField, Select, Toggle } from "../../../ui";
 import { getProjectRow } from "../../../data";
 
-const CATEGORIES = ["Arquitetura", "Conservação", "Restauro", "Interiores"];
+const CATEGORIES = ["Restauro", "Conservação", "Diagnóstico", "Projeto", "Arquitetura", "Interiores"];
+const UFS = ["", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
 export default async function ProjetoEditor({
   params,
@@ -42,7 +43,9 @@ export default async function ProjetoEditor({
             options={CATEGORIES}
             defaultValue={row?.category ?? "Restauro"}
           />
-          <Field label="Local" name="location" defaultValue={row?.location} />
+          <Field label="Local (texto exibido)" name="location" defaultValue={row?.location} hint="Ex.: Santo André · SP" />
+          <Field label="Cidade" name="city" defaultValue={row?.city} />
+          <Select label="Estado (UF) — define o lugar no mapa da home" name="state" options={UFS} defaultValue={row?.state ?? ""} />
           <Field label="Ano" name="year" defaultValue={row?.year} />
           <Field label="Área" name="area" defaultValue={row?.area} />
         </div>
@@ -66,6 +69,13 @@ export default async function ProjetoEditor({
           label="Imagem de capa"
           name="coverUrl"
           defaultValue={row?.coverUrl ?? ""}
+        />
+
+        <BeforeAfterField
+          label="Antes e depois"
+          name="beforeAfter"
+          defaultValue={row?.beforeAfter ?? []}
+          hint="Cada par vira um comparador (arrastar) na página do projeto."
         />
 
         <GalleryField

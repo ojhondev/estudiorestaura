@@ -32,6 +32,22 @@ const lines = (v: FormDataEntryValue | null) =>
     .map((s) => s.trim())
     .filter(Boolean);
 
+function parseBeforeAfter(v: FormDataEntryValue | null) {
+  try {
+    const arr = JSON.parse(String(v ?? "[]"));
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .map((x) => ({
+        before: String(x?.before ?? ""),
+        after: String(x?.after ?? ""),
+        caption: String(x?.caption ?? ""),
+      }))
+      .filter((x) => x.before && x.after);
+  } catch {
+    return [];
+  }
+}
+
 // ---------- auth ----------
 
 export async function login(_prev: unknown, form: FormData) {
@@ -65,6 +81,9 @@ export async function saveProject(form: FormData) {
     body: String(form.get("body") ?? ""),
     coverUrl: String(form.get("coverUrl") ?? "") || null,
     gallery: lines(form.get("gallery")),
+    state: String(form.get("state") ?? "").toUpperCase().slice(0, 2),
+    city: String(form.get("city") ?? ""),
+    beforeAfter: parseBeforeAfter(form.get("beforeAfter")),
     published: form.get("published") === "on",
     featured: form.get("featured") === "on",
     sort: Number(form.get("sort")) || 0,
