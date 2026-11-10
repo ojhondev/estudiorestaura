@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { metrics } from "@/lib/content";
 import { NUMBERS_FOTOS } from "@/lib/photos";
+import { useAutoplay } from "@/lib/autoplay";
 
 const align = ["items-start", "items-center", "items-end"];
 
@@ -67,12 +68,17 @@ function CountUp({ value }: { value: string }) {
 }
 
 export function Numbers() {
-  // linha em destaque (hover no computador, toque no celular)
+  // computador: linha em destaque com o mouse (imagens seguem o cursor)
   const [active, setActive] = useState<number | null>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  // celular: sem toque — as imagens aparecem sozinhas, indicador por indicador, e somem entre um e outro
+  const root = useRef<HTMLElement>(null);
+  const [step, setStep] = useState(0);
+  useAutoplay(root, () => setStep((n) => n + 1), { ms: 2200 });
+  const autoIdx = step % 2 === 1 ? ((step - 1) / 2) % metrics.length : null;
 
   return (
-    <section className="shell py-[clamp(4.5rem,10vw,8rem)]">
+    <section ref={root} className="shell py-[clamp(4.5rem,10vw,8rem)]">
       <div className="flex items-start gap-6">
         <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-ink/25" />
         <div>
@@ -99,18 +105,14 @@ export function Numbers() {
                 const r = e.currentTarget.getBoundingClientRect();
                 setPos({ x: e.clientX - r.left, y: e.clientY - r.top });
               }}
-              onClick={() => setActive(on ? null : i)}
             >
-              <div data-reveal className="relative cursor-pointer">
+              <div data-reveal className="relative">
                 <span
                   className={`display block text-[clamp(4.5rem,22vw,16rem)] leading-[0.8] tabular-nums transition-colors duration-500 ${on ? "text-ember" : ""}`}
                 >
                   <CountUp value={value} />
                 </span>
                 <span className="mt-3 block text-[15px] text-smoke">{label}</span>
-                <span className="mt-1 block text-[12px] uppercase tracking-[0.16em] text-ember md:hidden">
-                  {on ? "Toque para fechar" : "Toque para ver imagens"}
-                </span>
 
                 {/* Computador: imagens que acompanham o mouse */}
                 <div
@@ -140,15 +142,28 @@ export function Numbers() {
                   </div>
                 </div>
 
-                {/* Celular: faixa de imagens abaixo do número */}
-                <div
-                  className={`grid grid-cols-3 gap-2 overflow-hidden transition-all duration-500 md:hidden ${on ? "mt-4 max-h-40 opacity-100" : "max-h-0 opacity-0"}`}
-                >
-                  {imgs.map((src) => (
-                    <span key={src} className="relative block aspect-[3/4] overflow-hidden rounded-[8px] bg-mist">
-                      <Image src={src} alt="" fill sizes="30vw" className="object-cover" />
-                    </span>
-                  ))}
+                {/* Celular: as imagens surgem sozinhas sobre o indicador da vez (sem mudar o layout) */}
+                <div aria-hidden className="pointer-events-none absolute inset-0 z-20 md:hidden">
+                  <div className="absolute left-1/2 top-1/2 h-[15rem] w-[17rem] -translate-x-1/2 -translate-y-1/2">
+                    {imgs.map((src, k) => (
+                      <span
+                        key={src}
+                        className="absolute overflow-hidden rounded-[8px] bg-mist shadow-xl transition-all duration-700 ease-out"
+                        style={{
+                          width: k === 0 ? "8.5rem" : "7rem",
+                          height: k === 0 ? "11.5rem" : "9rem",
+                          left: k === 0 ? "4.25rem" : k === 1 ? "0rem" : "10rem",
+                          top: k === 0 ? "1.75rem" : k === 1 ? "5.5rem" : "0rem",
+                          opacity: autoIdx === i ? 1 : 0,
+                          transform: autoIdx === i ? `rotate(${[-3, 5, -6][k]}deg) scale(1)` : "rotate(0deg) scale(0.75)",
+                          transitionDelay: autoIdx === i ? `${k * 120}ms` : "0ms",
+                          zIndex: 3 - k,
+                        }}
+                      >
+                        <Image src={src} alt="" fill sizes="140px" loading="eager" className="object-cover" />
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

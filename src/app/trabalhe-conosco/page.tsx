@@ -67,17 +67,19 @@ export default async function TrabalheConoscoPage() {
         </div>
 
         <div className="mt-14 rounded-[8px] bg-mist p-8 md:p-12">
-          <p className="label">Candidatura espontânea</p>
+          <p className="label">Banco de Talentos</p>
+          <h3 className="h mt-3 text-[clamp(1.5rem,3vw,2.25rem)]">Não encontrou uma vaga para você?</h3>
           <p className="mt-4 max-w-[52ch] text-[16px] leading-relaxed text-ink/80">
-            Não encontrou uma vaga que combine com você? Envie seu portfólio e uma
-            carta contando o que te aproxima do patrimônio.
+            Cadastre seu perfil e currículo no nosso Banco de Talentos. Quando surgir um projeto ou uma vaga compatível, chamamos você.
           </p>
-          <a
-            href="mailto:contato@estudiorestaura.com.br?subject=Candidatura%20espont%C3%A2nea"
-            className="text-arrow mt-6 inline-flex text-[14px]"
-          >
-            Enviar por e-mail <Arrow />
-          </a>
+          <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Link href="/banco-de-talentos" className="btn-fill">
+              Entrar no Banco de Talentos <Arrow className="h-4 w-4" />
+            </Link>
+            <a href="mailto:contato@estudiorestaura.com.br?subject=Candidatura%20espont%C3%A2nea" className="text-arrow text-[14px]">
+              Ou envie por e-mail <Arrow />
+            </a>
+          </div>
         </div>
       </section>
     </>

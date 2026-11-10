@@ -72,12 +72,13 @@ export default async function SobrePage() {
         </p>
       </section>
 
+      {/* mesmo modelo dos "Indicadores" da home: números enormes, alternando esquerda/centro/direita */}
       <section className="bleed border-y border-mist">
-        <div className="shell grid gap-8 py-14 sm:grid-cols-2 lg:grid-cols-4">
-          {NUMBERS.map(([n, label]) => (
-            <div key={label} data-reveal>
-              <p className="display text-[clamp(2.5rem,6vw,4.5rem)]">{n}</p>
-              <p className="mt-2 text-[13px] text-smoke">{label}</p>
+        <div className="shell flex flex-col gap-12 py-[clamp(3.5rem,8vw,6rem)] md:gap-6">
+          {NUMBERS.map(([n, label], i) => (
+            <div key={label} data-reveal className={`flex flex-col ${["items-start", "items-center", "items-end", "items-center"][i % 4]}`}>
+              <span className="display block text-[clamp(4.5rem,18vw,12rem)] leading-[0.85] tabular-nums">{n}</span>
+              <span className="mt-3 block text-[15px] text-smoke">{label}</span>
             </div>
           ))}
         </div>

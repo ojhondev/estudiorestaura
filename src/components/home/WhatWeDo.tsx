@@ -71,6 +71,17 @@ export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
                       <span className="measure block text-[15px] text-pewter">
                         {s.body}
                       </span>
+                      {/* celular: a imagem abre junto, dentro do mesmo bloco */}
+                      <span className="mt-5 block lg:hidden">
+                        <ImageBox
+                          src={images[`whatwedo.${s.number}`] || s.image}
+                          position={"position" in s ? s.position : undefined}
+                          alt={s.title}
+                          ratio="4 / 3"
+                          sizes="(min-width: 640px) 80vw, 100vw"
+                          label={`Espaço para imagem — ${s.title.toLowerCase()}`}
+                        />
+                      </span>
                     </span>
                   </span>
                 </span>
@@ -82,7 +93,7 @@ export function WhatWeDo({ images = {} }: { images?: Record<string, string> }) {
           </Link>
         </div>
 
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[8px] lg:sticky lg:top-24 lg:aspect-auto lg:h-[clamp(24rem,44vw,38rem)]">
+        <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[8px] lg:sticky lg:top-24 lg:block lg:aspect-auto lg:h-[clamp(24rem,44vw,38rem)]">
           {doList.map((s, idx) => (
             <div
               key={s.number}

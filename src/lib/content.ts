@@ -335,3 +335,11 @@ export const nav: {
     desc: "Conte sobre o edifício, o acervo ou o projeto.",
   },
 ];
+
+/** WhatsApp do estúdio (botão "Fale conosco", contato e rodapé). */
+export const WHATSAPP = {
+  digits: "5511963500918",
+  display: "+55 11 96350-0918",
+  message: "Olá! Vim pelo site do Estúdio Restaura e gostaria de conversar.",
+  href: `https://wa.me/5511963500918?text=${encodeURIComponent("Olá! Vim pelo site do Estúdio Restaura e gostaria de conversar.")}`,
+};

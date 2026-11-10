@@ -11,7 +11,13 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function ProjetosPage() {
+export default async function ProjetosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const sp = await searchParams;
+  const ufParam = typeof sp.uf === "string" ? sp.uf.toUpperCase().slice(0, 2) : "";
   const [projects, sections] = await Promise.all([
     getProjects(),
     getSectionImages(),
@@ -27,7 +33,7 @@ export default async function ProjetosPage() {
         imageLabel="Espaço para imagem — projeto em destaque"
         imageUrl={sections["pagehero.projetos"] || undefined}
       />
-      <ProjectGrid projects={projects} />
+      <ProjectGrid projects={projects} uf={/^[A-Z]{2}$/.test(ufParam) ? ufParam : ""} />
     </>
   );
 }

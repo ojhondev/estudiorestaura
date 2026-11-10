@@ -26,10 +26,10 @@ export function Criteria({ images = {} }: { images?: Record<string, string> }) {
         </div>
       </div>
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-20">
+      <div className="mt-12 grid gap-0 lg:mt-16 lg:grid-cols-2 lg:gap-20">
         <div
           data-reveal
-          className="relative aspect-[4/5] overflow-hidden rounded-[8px] lg:sticky lg:top-24 lg:aspect-auto lg:h-[clamp(28rem,44vw,42rem)]"
+          className="relative hidden aspect-[4/5] overflow-hidden rounded-[8px] lg:sticky lg:top-24 lg:block lg:aspect-auto lg:h-[clamp(28rem,44vw,42rem)]"
         >
           {criteria.map((c, i) => (
             <div
@@ -82,9 +82,19 @@ export function Criteria({ images = {} }: { images?: Record<string, string> }) {
               </button>
               <div className="acc-content">
                 <div>
-                  <p className="measure pb-7 text-[16px] leading-relaxed text-pewter">
+                  <p className="measure pb-5 text-[16px] leading-relaxed text-pewter lg:pb-7">
                     {c.body}
                   </p>
+                  {/* celular: a imagem abre junto, dentro do mesmo bloco */}
+                  <div className="pb-7 lg:hidden">
+                    <ImageBox
+                      src={images[`criteria.${i}`] || CRITERIA_FOTOS[i]}
+                      alt={c.title}
+                      ratio="4 / 3"
+                      sizes="(min-width: 640px) 80vw, 100vw"
+                      label={`Espaço para imagem — ${c.title.toLowerCase()}`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

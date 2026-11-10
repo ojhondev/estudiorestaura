@@ -5,6 +5,7 @@ import Link from "next/link";
 import { gsap, reducedMotion, useIso } from "@/lib/anim";
 import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
+import { WHATSAPP } from "@/lib/content";
 
 export type FeedItem = {
   slug: string;
@@ -79,12 +80,14 @@ export function HeroFeed({ items }: { items: FeedItem[] }) {
         >
           Sobre o estúdio
         </Link>
-        <Link
-          href="/contato"
+        <a
+          href={WHATSAPP.href}
+          target="_blank"
+          rel="noreferrer"
           className="flex-1 rounded-[80px] bg-ember px-4 py-2.5 text-center text-[13px] font-medium text-paper transition-opacity hover:opacity-90"
         >
-          Contato
-        </Link>
+          Fale conosco
+        </a>
       </div>
     </div>
   );

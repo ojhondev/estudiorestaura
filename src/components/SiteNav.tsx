@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
-import { nav } from "@/lib/content";
+import { nav, WHATSAPP } from "@/lib/content";
 import { NAV_FOTOS } from "@/lib/photos";
 
 export function SiteNav() {
@@ -35,7 +35,7 @@ export function SiteNav() {
         className="fixed right-[clamp(1rem,4vw,2rem)] top-[clamp(1rem,4vw,1.75rem)] z-[60] flex items-center gap-3 rounded-[1584px] border border-mist bg-paper px-4 py-2.5 text-ink shadow-[0_12px_36px_-12px_rgba(0,0,0,0.28)]"
       >
         <span className="text-[11px] font-medium uppercase tracking-[0.22em]">
-          {open ? "Fechar" : "Estúdio Restaura"}
+          {open ? "Fechar" : "Menu"}
         </span>
         <span className="relative block h-[9px] w-4">
           <span
@@ -105,8 +105,8 @@ export function SiteNav() {
               >
                 contato@estudiorestaura.com.br
               </a>
-              <a href="tel:+551140000000" className="hover:text-ember">
-                +55 11 4000-0000
+              <a href={WHATSAPP.href} target="_blank" rel="noreferrer" className="hover:text-ember">
+                {WHATSAPP.display}
               </a>
               <span>São Paulo · Brasil</span>
             </div>

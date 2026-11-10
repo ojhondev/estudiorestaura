@@ -29,17 +29,18 @@ export const PAGEHERO_FOTOS: Record<string, string> = {
   servicos: f("A069"),
   contato: f("D059"),
   trabalhe: f("B013"),
+  talentos: f("A096"),
   privacidade: f("A041"),
 };
 
 /** Miniaturas do menu. */
 export const NAV_FOTOS: Record<string, string> = {
   "/projetos": f("C030"),
-  "/servicos": f("A121"),
-  "/sobre": f("D006"),
-  "/blog": f("A042"),
-  "/trabalhe-conosco": f("A123"),
-  "/contato": f("A001"),
+  "/servicos": f("A105"),
+  "/sobre": f("D001"),
+  "/blog": f("A080"),
+  "/trabalhe-conosco": f("A143"),
+  "/contato": f("A041"),
 };
 
 /** Página Serviços: uma foto por serviço (mesma ordem de `services`) + faixa final. */

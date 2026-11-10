@@ -10,6 +10,7 @@ type Project = {
   category: string;
   location: string;
   year: string;
+  state?: string;
   coverUrl?: string | null;
 };
 
@@ -23,19 +24,27 @@ const FILTERS = [
   "Interiores",
 ] as const;
 
-export function ProjectGrid({ projects }: { projects: Project[] }) {
+export function ProjectGrid({ projects, uf = "" }: { projects: Project[]; uf?: string }) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Todos");
 
   const list = useMemo(
     () =>
-      filter === "Todos"
-        ? projects
-        : projects.filter((p) => p.category === filter),
-    [filter, projects],
+      projects
+        .filter((p) => !uf || p.state === uf)
+        .filter((p) => filter === "Todos" || p.category === filter),
+    [filter, projects, uf],
   );
 
   return (
     <section className="shell py-[clamp(3rem,7vw,5rem)]">
+      {uf && (
+        <p className="mb-6 flex flex-wrap items-center gap-3 text-[14px] text-pewter">
+          Mostrando projetos em <strong className="font-medium text-ink">{uf}</strong>
+          <Link href="/projetos" className="text-arrow text-[13px]">
+            Ver todos os estados
+          </Link>
+        </p>
+      )}
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button

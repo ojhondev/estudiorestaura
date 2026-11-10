@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/components/contato/ContactForm";
 import { getSectionImages } from "@/lib/cms";
+import { WHATSAPP } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -13,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 const INFO = [
   ["E-mail", "contato@estudiorestaura.com.br", "mailto:contato@estudiorestaura.com.br"],
-  ["Telefone", "+55 11 4000-0000", "tel:+551140000000"],
+  ["Telefone / WhatsApp", WHATSAPP.display, WHATSAPP.href],
 ] as const;
 
 export default async function ContatoPage() {

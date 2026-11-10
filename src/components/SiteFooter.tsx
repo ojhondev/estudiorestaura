@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Arrow } from "@/components/ui";
-import { nav } from "@/lib/content";
+import { nav, WHATSAPP } from "@/lib/content";
 
 export function SiteFooter() {
   return (
@@ -46,8 +46,8 @@ export function SiteFooter() {
           <a href="mailto:contato@estudiorestaura.com.br" className="hover:text-midnight">
             contato@estudiorestaura.com.br
           </a>
-          <a href="tel:+551140000000" className="hover:text-midnight">
-            +55 11 4000-0000
+          <a href={WHATSAPP.href} target="_blank" rel="noreferrer" className="hover:text-midnight">
+            {WHATSAPP.display}
           </a>
         </div>
       </div>

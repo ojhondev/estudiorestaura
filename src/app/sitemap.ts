@@ -7,7 +7,7 @@ const BASE = "https://estudiorestaura.com.br";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projects, posts, jobs] = await Promise.all([getProjects(), getPosts(), getJobs()]);
-  const fixed = ["", "/projetos", "/servicos", "/sobre", "/contato", "/blog", "/trabalhe-conosco", "/privacidade"];
+  const fixed = ["", "/projetos", "/servicos", "/sobre", "/contato", "/blog", "/trabalhe-conosco", "/banco-de-talentos", "/privacidade"];
   return [
     ...fixed.map((p) => ({ url: `${BASE}${p}`, changeFrequency: "monthly" as const })),
     ...projects.map((p) => ({ url: `${BASE}/projetos/${p.slug}`, changeFrequency: "yearly" as const })),

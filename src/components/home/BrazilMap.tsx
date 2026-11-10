@@ -89,6 +89,7 @@ export function BrazilMap({
   }, []);
 
   function onMove(e: React.MouseEvent) {
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const r = section.current?.getBoundingClientRect();
     if (!r) return;
     const dx = (e.clientX - r.left) / r.width - 0.5;
@@ -108,7 +109,8 @@ export function BrazilMap({
       }}
       className="bleed relative overflow-hidden bg-[#7c2011] text-paper"
     >
-      {/* Fotos do estado em foco, passando em fade */}
+      {/* Fotos do estado em foco, passando em fade. No celular ocupam só uma faixa do topo (altura limitada) */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[44rem] overflow-hidden lg:inset-0 lg:h-auto">
       {activeUFs.map((uf) => {
         const fotos = ESTADO_FOTOS[uf]?.fotos ?? [];
         return fotos.map((src, i) => (
@@ -134,14 +136,15 @@ export function BrazilMap({
       })}
       {/* Contrast overlay (not too dark) */}
       <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 transition-colors duration-500"
+        className="absolute inset-0 transition-colors duration-500"
         style={{
           background: bg ? "rgba(40,10,4,0.62)" : "rgba(124,32,17,1)",
         }}
       />
+      <span className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#7c2011] lg:hidden" />
+      </div>
 
-      <div className="relative shell py-[clamp(4.5rem,10vw,8rem)]">
+      <div className="relative shell py-[clamp(3.5rem,10vw,8rem)]">
         <div className="flex items-start gap-6">
           <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-paper/25" />
           <div>
@@ -154,11 +157,11 @@ export function BrazilMap({
           </div>
         </div>
 
-        <div className="mt-16 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
-          <div ref={mapWrap} data-reveal className="will-change-transform">
+        <div className="mt-10 grid gap-8 md:mt-16 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
+          <div ref={mapWrap} data-reveal className="mx-auto w-full max-w-[21rem] min-w-0 will-change-transform sm:max-w-[30rem] lg:max-w-none">
             <svg
               viewBox={BR_VIEWBOX}
-              className="h-auto w-full max-w-[42rem] lg:max-w-none"
+              className="block h-auto w-full"
               role="img"
               aria-label="Mapa do Brasil com os estados de atuação"
             >
@@ -199,9 +202,9 @@ export function BrazilMap({
             </svg>
           </div>
 
-          <div data-reveal className="flex flex-col justify-between gap-8">
+          <div data-reveal className="flex min-w-0 flex-col justify-between gap-6 lg:gap-8">
             <div>
-              <span className="display block text-[clamp(4rem,12vw,9rem)] leading-none">
+              <span className="display block text-[clamp(3rem,10vw,9rem)] leading-none">
                 {current}
               </span>
               <p className="mt-2 text-[clamp(1.25rem,2.4vw,1.75rem)] font-light">
@@ -217,7 +220,7 @@ export function BrazilMap({
                   ? "Atuação em andamento"
                   : "Prospecção de novos projetos"}
               </p>
-              <p className="measure mt-3 text-[16px] leading-relaxed text-paper/85">
+              <p className="mt-3 max-w-[40ch] text-[15px] leading-relaxed break-words text-paper/85 sm:text-[16px]">
                 {loc.note}
               </p>
               <p className="mt-4 text-[13px] text-paper/45">
@@ -253,7 +256,7 @@ export function BrazilMap({
                   Projetos em {NAMES[current] ?? current}
                 </p>
                 <ul className="mt-3 space-y-3">
-                  {(projectsByState[current] ?? []).slice(0, 4).map((p) => (
+                  {(projectsByState[current] ?? []).slice(0, 1).map((p) => (
                     <li key={p.slug}>
                       <Link
                         href={`/projetos/${p.slug}`}
@@ -279,8 +282,8 @@ export function BrazilMap({
                     </li>
                   ))}
                 </ul>
-                <Link href="/projetos" className="text-arrow mt-4 text-[13px]">
-                  Ver todos os projetos <Arrow />
+                <Link href={`/projetos?uf=${current}`} className="text-arrow mt-4 text-[13px]">
+                  Ver mais projetos <Arrow />
                 </Link>
               </div>
             )}
