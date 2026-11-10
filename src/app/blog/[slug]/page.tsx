@@ -6,6 +6,7 @@ import { Arrow } from "@/components/ui";
 import { getPost, getPosts } from "@/lib/cms";
 import { isAuthed } from "@/lib/auth";
 import { WHATSAPP } from "@/lib/content";
+import { creditFor } from "@/lib/blog-credits";
 import { faqOf, parseBlocks, plain, RichBody, tocOf, wordCount } from "@/lib/richtext";
 
 export const dynamic = "force-dynamic";
@@ -105,6 +106,7 @@ export default async function PostPage({
       : []),
   ];
 
+  const credit = creditFor(post.coverUrl);
   const waShare = `https://wa.me/?text=${encodeURIComponent(`${post.title} — ${url}`)}`;
 
   return (
@@ -119,7 +121,7 @@ export default async function PostPage({
         </div>
       )}
 
-      <header className="shell max-w-[68rem] pt-[clamp(7rem,16vh,10rem)]">
+      <header className="shell mx-auto max-w-[68rem] pt-[clamp(7rem,16vh,10rem)]">
         <nav aria-label="Você está em" className="flex flex-wrap items-center gap-2 text-[13px] text-smoke">
           <Link href="/" className="hover:text-ember">
             Início
@@ -141,7 +143,7 @@ export default async function PostPage({
         <p className="mt-6 text-[13px] text-smoke">Por equipe técnica do Estúdio Restaura — arquitetura, conservação e restauro de patrimônio histórico.</p>
       </header>
 
-      <div className="shell mt-10 grid max-w-[68rem] gap-12 pb-[clamp(3rem,7vw,5rem)] lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-14">
+      <div className="shell mx-auto mt-10 grid max-w-[68rem] gap-12 pb-[clamp(3rem,7vw,5rem)] lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-14">
         <div className="min-w-0">
           {post.coverUrl && (
             <ImageBox
@@ -149,8 +151,18 @@ export default async function PostPage({
               alt={post.title}
               ratio="16 / 9"
               sizes="(min-width: 1024px) 720px, 100vw"
-              className="mb-10 max-h-[26rem]"
+              className="max-h-[26rem]"
             />
+          )}
+          {credit ? (
+            <p className="mb-10 mt-2 text-[12px] text-smoke">
+              Imagem: {credit.author} · {credit.license} ·{" "}
+              <a href={credit.page} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-ember">
+                Wikimedia Commons
+              </a>
+            </p>
+          ) : (
+            post.coverUrl && <span className="mb-10 block" />
           )}
 
           <RichBody blocks={blocks} />

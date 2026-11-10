@@ -61,7 +61,8 @@ async function main() {
       title: a.title,
       excerpt: a.excerpt,
       body: a.body,
-      coverUrl: a.cover,
+      // capas: imagens livres (domínio público/CC0) em public/blog/<slug>.jpg — veja src/lib/blog-credits.ts
+      coverUrl: `/blog/${a.slug}.jpg`,
       tag: a.tag,
       published: publish,
       publishedAt,

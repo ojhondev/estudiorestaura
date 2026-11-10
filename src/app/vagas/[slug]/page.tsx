@@ -32,7 +32,7 @@ export default async function VagaPage({
   const subject = encodeURIComponent(`Candidatura — ${job.title}`);
 
   return (
-    <article className="shell max-w-3xl pt-[clamp(7rem,16vh,11rem)]">
+    <article className="shell mx-auto max-w-3xl pt-[clamp(7rem,16vh,11rem)]">
       <Link href="/trabalhe-conosco" className="text-arrow text-[13px] text-smoke">
         <span className="rotate-180">
           <Arrow />

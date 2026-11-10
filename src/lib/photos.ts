@@ -36,7 +36,7 @@ export const HERO_FOTOS: { src: string; position?: string }[] = [
 /** Topo de cada página. */
 export const PAGEHERO_FOTOS: Record<string, string> = {
   projetos: f("B009"),
-  blog: f("A059"),
+  blog: "/blog/restauro-pintura-mural-igreja.jpg", // capa do blog: imagem livre (CC0), não foto do estúdio
   sobre: f("D001"),
   servicos: f("A069"),
   contato: f("D059"),
