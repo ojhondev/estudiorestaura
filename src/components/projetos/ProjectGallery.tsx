@@ -16,11 +16,17 @@ export function ProjectGallery({
   title,
   images = [],
   dims = {},
+  captions = [],
+  compact = false,
 }: {
   count: number;
   title: string;
   images?: string[];
   dims?: Dims;
+  /** legendas, na mesma ordem das imagens */
+  captions?: string[];
+  /** menos espaço embaixo (para blocos dentro da página do projeto) */
+  compact?: boolean;
 }) {
   const [open, setOpen] = useState<number | null>(null);
   count = images.length || count;
@@ -45,7 +51,7 @@ export function ProjectGallery({
 
   return (
     <>
-      <div className="shell pb-[clamp(3rem,7vw,5rem)]">
+      <div className={`shell ${compact ? "pb-10" : "pb-[clamp(3rem,7vw,5rem)]"}`}>
         <div className="columns-1 gap-4 sm:columns-2 md:gap-6 lg:columns-3">
           {items.map((_, i) => {
             const d = dim(i);
@@ -75,6 +81,7 @@ export function ProjectGallery({
                     <ImageBox ratio="4 / 3" label={`${title} — imagem ${i + 1}`} />
                   )}
                 </div>
+                {captions[i] && <span className="mt-2 block text-left text-[12.5px] leading-snug text-pewter">{captions[i]}</span>}
                 <span className="pointer-events-none absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-paper/0 text-ink opacity-0 transition-all duration-300 group-hover:bg-paper group-hover:opacity-100">
                   <Arrow className="h-4 w-4 -rotate-45" />
                 </span>
@@ -111,7 +118,7 @@ export function ProjectGallery({
               return (
                 <div
                   key={i}
-                  className="absolute inset-x-4 inset-y-0 flex items-center justify-center transition-opacity duration-500"
+                  className="absolute inset-x-4 inset-y-0 flex flex-col items-center justify-center gap-3 transition-opacity duration-500"
                   style={{ opacity: i === open ? 1 : 0, pointerEvents: i === open ? "auto" : "none" }}
                 >
                   {images[i] ? (
@@ -123,7 +130,7 @@ export function ProjectGallery({
                         width={d.w}
                         height={d.h}
                         sizes="100vw"
-                        className="h-auto max-h-[calc(100vh-11rem)] w-auto max-w-full rounded-[4px] object-contain"
+                        className="h-auto max-h-[calc(100vh-14rem)] w-auto max-w-full rounded-[4px] object-contain"
                         style={{ maxWidth: Math.round(d.w * 1.6) }}
                       />
                     ) : null
@@ -132,6 +139,7 @@ export function ProjectGallery({
                       <ImageBox ratio="16 / 10" variant="bleed" className="bg-iron" label={`${title} — imagem ${i + 1}`} />
                     </div>
                   )}
+                  {captions[i] && <p className="max-w-3xl text-center text-[13.5px] leading-snug text-paper/80">{captions[i]}</p>}
                 </div>
               );
             })}

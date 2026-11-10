@@ -30,6 +30,8 @@ type P = {
   body: string[];
   gallery: number; // quantidade de fotos-NN
   ba: string[]; // legendas dos pares antes/depois
+  /** blocos temáticos; imagens em <pasta do projeto>/<arquivo> (ex.: lum-01.jpg) */
+  sections?: { title: string; body: string[]; images: [file: string, caption: string][] }[];
   sort: number;
   featured?: boolean;
 };
@@ -218,47 +220,80 @@ const projetos: P[] = [
     sort: 8,
   },
   {
-    slug: "piracicaba-prospeccao-cromatica-palacete-monte-alegre",
-    title: "Prospecção cromática — Palacete Monte Alegre",
-    category: "Diagnóstico",
-    state: "SP",
-    city: "Piracicaba",
-    location: "Piracicaba · SP",
-    year: "2024",
-    summary:
-      "Participação no relatório de prospecção cromática da Casa dos Morganti, da Casa do Zelador e da Garagem, entregue ao CODEPAC.",
-    body: [
-      "O Palacete Monte Alegre reúne a residência da família Morganti, a casa do zelador e o edifício-garagem, na área patronal da antiga usina. O relatório técnico de prospecção cromática, de janeiro de 2024, foi elaborado para o Conselho de Defesa do Patrimônio Cultural (CODEPAC) no âmbito do pedido de intervenção em bem protegido, para a pintura das edificações.",
-      "O trabalho determinou os tons cromáticos originais dos edifícios e dos elementos arquitetônicos integrados por meio de prospecções — janelas de leitura das camadas de tinta em fachadas, paredes, esquadrias e portas, cada uma codificada e fotografada — e organizou as conclusões por edificação e por elemento.",
-      "O relatório foi elaborado pelo Grupo A+4 Arquitetura e Urbanismo, com a participação da arquiteta Paula Albuquerque, do Estúdio Restaura, como especialista da equipe técnica.",
-    ],
-    gallery: 6,
-    ba: [],
-    sort: 9,
-  },
-  {
     slug: "itajuba-projeto-luminotecnico-sao-jose-operario",
-    title: "Projeto luminotécnico e de vitrais — Igreja Matriz São José Operário",
+    title: "Projeto luminotécnico, de vitrais e de decoração — Igreja Matriz São José Operário",
     category: "Projeto",
     state: "MG",
     city: "Itajubá",
     location: "Itajubá · MG",
-    year: "2024",
+    year: "2024–2025",
     summary:
-      "Análise da iluminação existente, nova proposta luminotécnica e projeto de restauro dos vitrais da Igreja Matriz de São José Operário.",
+      "Três frentes de projeto para o interior da Igreja Matriz de São José Operário: nova iluminação, restauro dos vitrais e decoração com estamparias.",
     body: [
-      "Na Igreja Matriz da Paróquia São José Operário, em Itajubá, o estúdio desenvolveu o projeto luminotécnico do ambiente interno: da análise da iluminação existente, com levantamento em campo em janeiro de 2024, ao estudo preliminar (setembro de 2024), ao projeto executivo, ao memorial descritivo e ao relatório final.",
-      "A proposta de nova iluminação especifica os tipos de luminária, as quantidades por local e as temperaturas de cor, com soluções como perfis LED, lâmpadas dicroicas e fita LED, pensadas para valorizar a arquitetura do templo.",
-      "Em paralelo, o projeto de restauro dos vitrais cobriu os das naves laterais, do nártex e do coro alto, de tons predominantes de azul e roxo, que filtram a luz solar e dão serenidade ao espaço. O caderno de esquadrias identifica os problemas, descreve o estado de conservação, propõe procedimentos de restauro — incluindo a substituição de algumas peças para manter a harmonia e a simetria do conjunto — e estabelece diretrizes de conservação futura. O trabalho incluiu ainda um estudo preliminar de decoração, com moodboard.",
+      "Na Igreja Matriz da Paróquia São José Operário, em Itajubá (MG), o Estúdio Restaura desenvolveu três frentes de projeto para o interior do templo: a iluminação, os vitrais e a decoração. O ponto de partida foi a visita técnica de janeiro de 2024, com registro fotográfico, conversa com o pároco e levantamento das necessidades do espaço.",
+      "A igreja tem arcos ogivais que organizam a nave central, as naves laterais e o presbitério, forro de estuque e vitrais em tons de azul e roxo. É uma arquitetura que pede uma luz que desenhe os arcos e uma decoração que dialogue com os símbolos já presentes no templo.",
+      "Os projetos de iluminação e de restauro dos vitrais foram submetidos ao Conselho de Bens Culturais da Arquidiocese de Pouso Alegre, que deferiu o pedido da nova iluminação em outubro de 2024 e o da restauração dos vitrais em fevereiro de 2025.",
     ],
     gallery: 6,
     ba: [],
+    sections: [
+      {
+        title: "Projeto luminotécnico",
+        body: [
+          "A análise da iluminação existente mostrou luz geral suficiente em quantidade, mas feita de luminárias antigas e não originais: lâmpadas fluorescentes tubulares — várias queimadas —, pendentes e arandelas incorporados depois da concepção da igreja e refletores nos capitéis e nas capelas. O resultado era uma luz predominantemente fria, que não valorizava a arquitetura.",
+          "O projeto foi desenvolvido em estudo preliminar, com três propostas simuladas em modelo 3D às 12h e às 19h, e seguiu para projeto executivo, memorial descritivo, quantitativo de luminárias e relatório final. A proposta prevê:",
+          "- **Luz geral difusa** por luminárias circulares do tipo high bay LED no encontro dos arcos, no forro de estuque, com temperatura de cor neutra (4000K) e novos pontos de luz no presbitério;\n- **Luz quente de destaque** (2700/3000K) sobre as imagens sacras das capelas laterais e do altar-mor, com perfil LED flexível no arco que faz frente ao altar;\n- **Fita de LED nos capitéis**, que contorna cada peça, e novos pontos nas pilastras das naves laterais, formando dois corredores de luz;\n- **Painéis e perfis de LED de sobrepor** (4000K) no nártex, de pé-direito mais baixo;\n- **Uso da infraestrutura elétrica existente**, sem grandes modificações.",
+        ],
+        images: [
+          ["lum-01.jpg", "Estudo preliminar: a nave com a nova luz desenhando os arcos."],
+          ["lum-02.jpg", "Proposta do projeto executivo: luz geral homogênea e destaque quente no altar-mor."],
+          ["lum-03.jpg", "Simulação às 12h: luz natural e artificial combinadas."],
+          ["lum-04.jpg", "A mesma proposta às 19h, com a iluminação artificial conduzindo a leitura da arquitetura."],
+          ["lum-05.jpg", "Capela lateral: luz quente de destaque sobre as imagens sacras."],
+          ["lum-06.jpg", "Detalhe da luminária de embutir, integrada ao forro."],
+        ],
+      },
+      {
+        title: "Restauro dos vitrais",
+        body: [
+          "O caderno de esquadrias — doze pranchas — cobre os vitrais das naves laterais, do nártex e do coro alto. Em azul e roxo predominantes, eles filtram a luz do sol e dão serenidade ao espaço.",
+          "O diagnóstico encontrou, nas naves laterais e no coro alto, muitas peças trocadas em intervenções anteriores sem cuidado com as cores e a divisão geométrica originais, além da falta de uma peça no vitral central do coro. Já os vitrais circulares, os das portas laterais e os do nártex estão em bom estado e pedem apenas higienização.",
+          "O projeto define os procedimentos: testes progressivos de limpeza, prospecção estratigráfica nas esquadrias de madeira pintadas para recuperar a primeira camada de tinta, catalogação das peças removidas, réplicas e reintegração por mão de obra especializada, e um plano de manutenção com inspeções quinzenais, mensais e semestrais, conforme a dificuldade de acesso a cada vitral.",
+        ],
+        images: [
+          ["vit-01.jpg", "Caderno de esquadrias: planta e vistas das naves, do nártex e do coro alto."],
+          ["vit-02.jpg", "Vitral das naves laterais, com a tipologia das cores-padrão dos vidros."],
+          ["vit-03.jpg", "Vitrais circular e arqueado, acima das portas de acesso lateral."],
+          ["vit-04.jpg", "Os três vitrais do coro alto."],
+        ],
+      },
+      {
+        title: "Projeto de decoração",
+        body: [
+          "O estudo preliminar de decoração propõe estamparias inspiradas nos símbolos já presentes na igreja, ambiente por ambiente: fundo do altar-mor, paredes e teto do presbitério, parede frontal do presbitério, tetos e paredes das naves central e laterais, capela lateral, coro e nártex.",
+          "As estampas e as cores foram organizadas em um moodboard, com cada estamparia, a sua aplicação em cada superfície e uma paleta de cores de referência. A apresentação ao pároco mostra cada ambiente com a sua proposta, e as aplicações foram testadas em modelo, com e sem a iluminação do projeto luminotécnico — luz e cor foram pensadas juntas.",
+        ],
+        images: [
+          ["dec-01.jpg", "Fundo do altar-mor."],
+          ["dec-02.jpg", "Paredes do presbitério."],
+          ["dec-03.jpg", "Teto do presbitério."],
+          ["dec-04.jpg", "Teto da nave central."],
+          ["dec-05.jpg", "Parede da nave lateral."],
+          ["dec-06.jpg", "Capela lateral."],
+          ["dec-07.jpg", "Paredes do coro e do nártex."],
+          ["dec-08.jpg", "Moodboard do presbitério: estamparias, aplicação e paleta de cores."],
+          ["dec-09.jpg", "Moodboard da nave central."],
+        ],
+      },
+    ],
     sort: 10,
   },
 ];
 
 async function main() {
-  for (const p of projetos) {
+  // --only=slug1,slug2 grava só esses (não sobrescreve edições feitas no CRM nos demais)
+  const only = (process.argv.find((a) => a.startsWith("--only=")) ?? "").slice(7).split(",").filter(Boolean);
+  for (const p of projetos.filter((x) => !only.length || only.includes(x.slug))) {
     const b = base(p.slug);
     const data = {
       slug: p.slug,
@@ -278,15 +313,22 @@ async function main() {
         after: `${b}/depois-${i + 1}.jpg`,
         caption,
       })),
-      published: publish,
+      sections: (p.sections ?? []).map((s) => ({
+        title: s.title,
+        body: s.body.join("\n\n"),
+        images: s.images.map(([file, caption]) => ({ src: `${b}/${file}`, caption })),
+      })),
       featured: Boolean(p.featured),
       sort: p.sort,
       updatedAt: new Date(),
     };
     const ex = await db.select({ id: schema.projects.id }).from(schema.projects).where(eq(schema.projects.slug, p.slug)).limit(1);
-    if (ex.length) await db.update(schema.projects).set(data).where(eq(schema.projects.id, ex[0].id));
-    else await db.insert(schema.projects).values(data);
-    console.log(`✓ ${p.slug} (${publish ? "publicado" : "rascunho"})`);
+    // quem já está publicado continua publicado; só `--publish` publica os rascunhos
+    if (ex.length) {
+      const cur = await db.select({ published: schema.projects.published }).from(schema.projects).where(eq(schema.projects.id, ex[0].id));
+      await db.update(schema.projects).set({ ...data, published: publish || cur[0].published }).where(eq(schema.projects.id, ex[0].id));
+    } else await db.insert(schema.projects).values({ ...data, published: publish });
+    console.log(`✓ ${p.slug}`);
   }
 }
 

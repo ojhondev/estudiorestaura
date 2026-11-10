@@ -30,6 +30,11 @@ export const projects = pgTable("projects", {
     .$type<{ before: string; after: string; caption: string }[]>()
     .notNull()
     .default([]),
+  /** blocos temáticos do projeto (ex.: Projeto luminotécnico, Vitrais, Decoração) com texto e imagens legendadas */
+  sections: jsonb("sections")
+    .$type<{ title: string; body: string; images: { src: string; caption: string }[] }[]>()
+    .notNull()
+    .default([]),
   published: boolean("published").notNull().default(true),
   featured: boolean("featured").notNull().default(false),
   sort: integer("sort").notNull().default(0),

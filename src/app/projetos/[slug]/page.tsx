@@ -9,6 +9,7 @@ import { isAuthed } from "@/lib/auth";
 import { Arrow } from "@/components/ui";
 import { getProject, getProjects } from "@/lib/cms";
 import { imageDims } from "@/lib/imgdims";
+import { parseBlocks, RichBody } from "@/lib/richtext";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,7 @@ export default async function ProjetoPage({
     project.coverUrl,
     ...project.galleryUrls,
     ...project.beforeAfter.flatMap((p) => [p.before, p.after]),
+    ...project.sections.flatMap((s) => s.images.map((i) => i.src)),
   ]);
   const cd = project.coverUrl ? dims[project.coverUrl] : undefined;
   // capa em tela cheia só se tiver resolução para isso; senão, hero dividido (texto + foto)
@@ -149,6 +151,36 @@ export default async function ProjetoPage({
           </div>
         </div>
       </div>
+
+      {project.sections.map((s, i) => (
+        <section key={i} className="border-t border-mist">
+          <div className="shell mx-auto max-w-[68rem] pt-[clamp(2.5rem,6vw,4rem)]">
+            <p data-reveal="fade" className="label">
+              {String(i + 1).padStart(2, "0")}
+            </p>
+            <h2 data-reveal className="h mt-3 text-[clamp(1.6rem,3.4vw,2.5rem)]">
+              {s.title}
+            </h2>
+            {s.body.length > 0 && (
+              <div className="mt-6 max-w-[48rem]">
+                <RichBody blocks={parseBlocks(s.body)} />
+              </div>
+            )}
+          </div>
+          {s.images.length > 0 && (
+            <div className="mt-8">
+              <ProjectGallery
+                count={s.images.length}
+                images={s.images.map((x) => x.src)}
+                captions={s.images.map((x) => x.caption)}
+                title={`${project.title} — ${s.title}`}
+                dims={dims}
+                compact
+              />
+            </div>
+          )}
+        </section>
+      ))}
 
       <BeforeAfter pairs={project.beforeAfter} dims={dims} />
 
