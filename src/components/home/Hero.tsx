@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Logo } from "@/components/Logo";
 import { HeroFeed, type FeedItem } from "@/components/home/HeroFeed";
-import heroImg from "../../../public/hero.jpg";
+import { HeroSlides, type Slide } from "@/components/home/HeroSlides";
+import { HERO_FOTOS } from "@/lib/photos";
 
 export function Hero({
   intro,
@@ -12,29 +12,12 @@ export function Hero({
   imageUrl?: string;
   feed: FeedItem[];
 }) {
+  // foto escolhida no CMS (se houver) abre a sequência; depois vêm as fotos horizontais do estúdio
+  const slides: Slide[] = [...(imageUrl ? [{ src: imageUrl }] : []), ...HERO_FOTOS];
+
   return (
     <section className="hero-sticky bleed relative flex h-[100svh] flex-col overflow-hidden bg-midnight">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          data-parallax="0.1"
-          className="scale-[1.12] object-cover"
-        />
-      ) : (
-        <Image
-          src={heroImg}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          data-parallax="0.1"
-          className="scale-[1.12] object-cover"
-        />
-      )}
+      <HeroSlides slides={slides} />
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/92 via-midnight/35 to-midnight/60"

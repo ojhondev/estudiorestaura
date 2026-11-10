@@ -21,6 +21,18 @@ export const NUMBERS_FOTOS: Record<string, string[]> = {
   "estados de atuação": ["A022", "A130", "A132"].map(f),
 };
 
+/** Fotos que passam no topo da home — só paisagem (horizontais), com o ponto de foco de cada uma. */
+export const HERO_FOTOS: { src: string; position?: string }[] = [
+  { src: f("B001"), position: "50% 45%" },
+  { src: f("C019"), position: "50% 40%" },
+  { src: f("B009"), position: "50% 50%" },
+  { src: f("D059"), position: "50% 45%" },
+  { src: f("C015"), position: "50% 40%" },
+  { src: f("B008"), position: "50% 50%" },
+  { src: f("C021"), position: "50% 35%" },
+  { src: f("C030"), position: "50% 50%" },
+];
+
 /** Topo de cada página. */
 export const PAGEHERO_FOTOS: Record<string, string> = {
   projetos: f("B009"),

@@ -45,9 +45,9 @@ export default async function BlogEditor({
         <Area
           label="Texto"
           name="body"
-          rows={12}
+          rows={20}
           defaultValue={row?.body}
-          hint="Separe os parágrafos com uma linha em branco."
+          hint="Separe cada bloco com uma linha em branco. Dá para usar: ## Título de seção · ### Subtítulo ou pergunta · - item de lista (um por linha) · 1. lista numerada · > destaque · **negrito** · [texto](link). Para o bloco de dúvidas, crie a seção “## Perguntas frequentes” com cada pergunta em ### e a resposta logo abaixo."
         />
 
         <ImageField

@@ -12,7 +12,8 @@
     "db:seed": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seed.ts",
     "db:photos": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/photos.ts",
     "db:projetos": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/projetos.ts",
-    "fotos:dims": "node node_modules/tsx/dist/cli.mjs scripts/photo-dims.ts"
+    "fotos:dims": "node node_modules/tsx/dist/cli.mjs scripts/photo-dims.ts",
+    "db:artigos": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/artigos.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

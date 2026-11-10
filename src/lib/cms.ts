@@ -43,6 +43,7 @@ export type Post = {
   coverUrl: string | null;
   tag: string;
   publishedAt: string;
+  published?: boolean;
 };
 
 export type Job = {
@@ -177,14 +178,33 @@ export async function getPosts(): Promise<Post[]> {
       coverUrl: r.coverUrl,
       tag: r.tag,
       publishedAt: r.publishedAt.toISOString().slice(0, 10),
+      published: true,
     }));
   } catch {
     return seedPosts;
   }
 }
 
-export async function getPost(slug: string) {
-  return (await getPosts()).find((p) => p.slug === slug) ?? null;
+export async function getPost(slug: string, opts: { drafts?: boolean } = {}) {
+  const live = (await getPosts()).find((p) => p.slug === slug);
+  if (live || !opts.drafts || !db) return live ?? null;
+  // rascunho: só quem está logado no admin enxerga
+  try {
+    const [r] = await db.select().from(schema.posts).where(eq(schema.posts.slug, slug)).limit(1);
+    if (!r) return null;
+    return {
+      slug: r.slug,
+      title: r.title,
+      excerpt: r.excerpt,
+      body: splitParas(r.body),
+      coverUrl: r.coverUrl,
+      tag: r.tag,
+      publishedAt: r.publishedAt.toISOString().slice(0, 10),
+      published: r.published,
+    } satisfies Post;
+  } catch {
+    return null;
+  }
 }
 
 // ---------- jobs (vagas) ----------
