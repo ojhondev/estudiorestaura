@@ -184,12 +184,14 @@ export default async function ProjetoPage({
 
       <BeforeAfter pairs={project.beforeAfter} dims={dims} />
 
-      <ProjectGallery
-        count={project.gallery}
-        images={project.galleryUrls}
-        title={project.title}
-        dims={dims}
-      />
+      {project.galleryUrls.length > 0 && (
+        <ProjectGallery
+          count={project.gallery}
+          images={project.galleryUrls}
+          title={project.title}
+          dims={dims}
+        />
+      )}
 
       {next && next.slug !== project.slug && (
         <section className="bleed border-t border-mist">

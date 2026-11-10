@@ -142,22 +142,65 @@ const projetos: P[] = [
   },
   {
     slug: "sertaozinho-prospeccao-nossa-senhora-aparecida",
-    title: "Prospecções estratigráficas — Paróquia Nossa Senhora Aparecida",
-    category: "Diagnóstico",
+    title: "Prospecção, iluminação e decoração — Paróquia Nossa Senhora Aparecida",
+    category: "Projeto",
     state: "SP",
     city: "Sertãozinho",
     location: "Sertãozinho · SP",
     year: "2025",
     summary:
-      "Sondagens em paredes, teto, colunas e ornamentos revelaram que a igreja tinha uma ambientação cromática original bem mais intensa que a atual.",
+      "Sondagens revelaram a ambientação cromática original da igreja; para a Capela do Santíssimo, o estúdio desenvolveu ainda projetos de iluminação e de decoração.",
     body: [
       "A Paróquia Nossa Senhora Aparecida, da Arquidiocese de Ribeirão Preto, tem organização característica das igrejas católicas de influência eclética: planta longitudinal, composição simétrica, nave central ampla, corredores laterais, presbitério elevado e coro sobre a entrada. Colunas com capitéis ornamentados sustentam arcos plenos que conduzem o olhar ao altar.",
       "O estudo, concluído em janeiro de 2026, fez sondagens pontuais em áreas estratégicas — paredes, teto, colunas e elementos decorativos — com registro fotográfico de todas as etapas e descrição das camadas de acabamento encontradas, para subsidiar o diagnóstico e um futuro projeto de decoração.",
       "Os resultados mostram múltiplas camadas de pintura. Nos ornamentos (medalhões, molduras, cimalhas e capitéis), a cor original é um laranja claro; nas superfícies lisas (arcos, paredes e tetos das naves) predominam tons de azul. No altar de Nossa Senhora das Graças foi encontrada decoração original em laranja escuro e marrom avermelhado.",
       "A conclusão é que o conjunto foi concebido com uma ambientação cromática mais intensa e variada do que a visível hoje: o tom neutro atual corresponde apenas à última manutenção. O relatório recomenda remover as sobrepinturas e elaborar um projeto de pintura e decoração que siga a estética inicial do espaço.",
+      "Para a Capela do Santíssimo Sacramento, o estúdio desenvolveu em paralelo dois estudos preliminares: um projeto luminotécnico, que organiza a luz geral e a luz de destaque sobre quadros, imagem sacra e sacrário, e um projeto de decoração com estamparias e paleta de cores, apresentado em moodboard.",
     ],
     gallery: 8,
-    ba: [],
+    ba: ["Capela do Santíssimo: o ambiente atual e a simulação da proposta de decoração com estamparias nas paredes."],
+    sections: [
+      {
+        title: "Projeto luminotécnico — Capela do Santíssimo",
+        body: [
+          "O estudo preliminar parte da planta existente da capela e propõe uma iluminação em dois níveis: luz geral difusa e luz de destaque. A proposta prevê:",
+          "- **Painel de LED circular** central (4000K) para a iluminação geral;\n- **Arandelas** (4000K) no lugar dos refletores atuais;\n- **Luminárias de parede** (2700K) para destacar os quadros;\n- **Spot de sobrepor** (2700K) sobre a imagem sacra;\n- **Fita de LED** (2700K) embutida no mobiliário do sacrário, em luz indireta.",
+          "As simulações mostram a capela com a nova luz, e uma planilha de modelos de luminárias especifica o fluxo luminoso e o facho de cada ponto.",
+        ],
+        images: [
+          ["lum-01.jpg", "Simulação: luz de destaque sobre o altar e o sacrário."],
+          ["lum-02.jpg", "Simulação: luminárias de parede sobre os quadros."],
+          ["lum-03.jpg", "Simulação: o conjunto de quadros e a parede lateral."],
+          ["lum-04.jpg", "Spot de destaque sobre a imagem sacra e os vitrais."],
+          ["lum-05.jpg", "Prancha do projeto: planta de iluminação proposta, com a legenda das luminárias."],
+        ],
+      },
+      {
+        title: "Vitrais da capela",
+        body: [
+          "Os vitrais da capela foram estudados em detalhe — o vitral direito, o esquerdo e os da porta — para que a nova iluminação respeite as suas cores e o seu desenho.",
+        ],
+        images: [
+          ["vit-01.jpg", "Os dois vitrais da parede lateral."],
+          ["vit-02.jpg", "Vitral direito, em detalhe."],
+          ["vit-03.jpg", "Vitral esquerdo, em detalhe."],
+        ],
+      },
+      {
+        title: "Projeto de decoração — Capela do Santíssimo",
+        body: [
+          "A proposta de decoração aplica estamparias e uma paleta de cores às paredes e ao teto da capela. O moodboard organiza, superfície por superfície — parede frontal, paredes laterais, parede posterior e teto —, as estampas escolhidas, a sua aplicação e a paleta de referência.",
+        ],
+        images: [
+          ["dec-01.jpg", "Parede frontal."],
+          ["dec-02.jpg", "Parede lateral direita."],
+          ["dec-03.jpg", "Parede lateral esquerda."],
+          ["dec-04.jpg", "Parede posterior."],
+          ["dec-05.jpg", "Teto: estamparias 01 e 02."],
+          ["dec-06.jpg", "Teto: estamparias 03 e 04."],
+        ],
+      },
+    ],
     sort: 5,
   },
   {
@@ -287,6 +330,55 @@ const projetos: P[] = [
       },
     ],
     sort: 10,
+  },
+  {
+    slug: "santa-rita-de-caldas-decoracao-santa-rita-de-cassia",
+    title: "Projeto de decoração — Paróquia Santa Rita de Cássia",
+    category: "Projeto",
+    state: "MG",
+    city: "Santa Rita de Caldas",
+    location: "Santa Rita de Caldas · MG",
+    year: "2025–2026",
+    summary:
+      "Estudo preliminar de decoração com estamparias e paleta de cores para o santuário: do presbitério ao vestíbulo, passando pelas naves e pelas capelas.",
+    body: [
+      "Em Santa Rita de Caldas (MG), o Estúdio Restaura desenvolveu o estudo preliminar de decoração do interior do santuário da Paróquia Santa Rita de Cássia: uma proposta de estamparias e de cores para o presbitério, a nave central, as naves laterais, o coro, o vestíbulo e as capelas do Santíssimo e de Monsenhor Alderigi.",
+      "O trabalho começou na visita técnica de agosto de 2025, com o registro do santuário como ele é hoje — colunas rosadas de aspecto marmorizado, vitrais coloridos, molduras e forros — e a consulta a fotografias históricas do templo, que serviram de referência.",
+      "A proposta foi organizada em um moodboard e em modelos de cada ambiente, e apresentada à paróquia em vídeos que percorrem o presbitério, a nave central, as naves laterais e as capelas.",
+    ],
+    gallery: 0,
+    ba: [],
+    sections: [
+      {
+        title: "O santuário hoje",
+        body: ["Imagens da visita técnica: a nave e o presbitério, a fachada e os vitrais que o projeto de decoração precisa respeitar."],
+        images: [
+          ["hoje-01.jpg", "A nave central, vista da entrada."],
+          ["hoje-02.jpg", "O coro e a entrada do santuário."],
+          ["hoje-03.jpg", "A fachada de duas torres."],
+          ["hoje-04.jpg", "Vitral da nave."],
+          ["hoje-05.jpg", "Vitral das espigas."],
+          ["hoje-06.jpg", "A nave lateral, com os vitrais e as molduras."],
+        ],
+      },
+      {
+        title: "Projeto de decoração",
+        body: [
+          "O moodboard organiza, ambiente por ambiente, as estampas e a sua aplicação, com uma paleta de cores de referência. Cada superfície — parede, teto, barrado — recebe uma estamparia pensada para dialogar com a arquitetura existente e com as imagens e os símbolos do templo.",
+        ],
+        images: [
+          ["dec-01.jpg", "Presbitério: estamparias e aplicação."],
+          ["dec-02.jpg", "Presbitério em perspectiva (modelo de estudo)."],
+          ["dec-03.jpg", "Presbitério: o teto e as suas estamparias."],
+          ["dec-04.jpg", "Nave central."],
+          ["dec-05.jpg", "Naves laterais."],
+          ["dec-06.jpg", "Coro."],
+          ["dec-07.jpg", "Capela do Santíssimo."],
+          ["dec-08.jpg", "Capela de Monsenhor Alderigi."],
+        ],
+      },
+    ],
+    sort: 11,
   },
 ];
 
