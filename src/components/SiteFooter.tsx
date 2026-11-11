@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Arrow } from "@/components/ui";
 import { nav, WHATSAPP } from "@/lib/content";
+import { Credito } from "@/components/Credito";
+import "@/components/credito.css";
 
 export function SiteFooter() {
   return (
@@ -67,12 +69,13 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="shell flex flex-col gap-2 border-t border-white/15 py-6 text-[12px] text-paper/60 sm:flex-row sm:justify-between">
+      <div className="shell flex flex-col gap-4 border-t border-white/15 py-6 text-[12px] text-paper/60 sm:flex-row sm:items-center sm:justify-between">
         <p>
           © {new Date().getFullYear()} Estúdio Restaura. Todos os direitos
           reservados.
         </p>
         <p>Arquitetura · Conservação · Restauro</p>
+        <Credito site="Estúdio Restaura" />
       </div>
     </footer>
   );
