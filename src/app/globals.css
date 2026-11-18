@@ -57,6 +57,12 @@
   .pop-backdrop, .pop-card, .pop-check { animation: none; }
 }
 
+/* Slide do Instagram: barrinha de tempo de cada post (estilo story) */
+@keyframes story-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body {

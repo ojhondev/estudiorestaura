@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Lora, IBM_Plex_Mono } from "next/font/google";
+import { Montserrat, Lora, IBM_Plex_Mono, Caveat } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -32,6 +32,14 @@ const plex = IBM_Plex_Mono({
   display: "swap",
 });
 
+/** Letra de rascunho: anotações à mão da seção "O escritório". */
+const hand = Caveat({
+  variable: "--font-hand",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://estudiorestaura.com.br"),
   title: {
@@ -53,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${montserrat.variable} ${lora.variable} ${plex.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${lora.variable} ${plex.variable} ${hand.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-paper text-ink">
         <noscript>

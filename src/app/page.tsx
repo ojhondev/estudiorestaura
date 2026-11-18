@@ -5,6 +5,7 @@ import { Criteria } from "@/components/home/Criteria";
 import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
 import { InstagramFeed } from "@/components/home/InstagramFeed";
+import { OfficeScroll } from "@/components/home/OfficeScroll";
 import { ImageBox } from "@/components/ImageBox";
 import Link from "next/link";
 import { Arrow } from "@/components/ui";
@@ -40,18 +41,8 @@ export default async function HomePage() {
       <Hero intro={hero.intro} imageUrl={hero.imageUrl || undefined} feed={feed} />
 
       <div className="page-flow">
-        {/* Brand statement */}
-        <section className="shell grid gap-10 py-[clamp(5rem,12vw,9rem)] lg:grid-cols-[0.4fr_1fr]">
-          <p data-reveal="fade" className="label">
-            O escritório
-          </p>
-          <p
-            data-reveal
-            className="lora measure hyphens-auto text-justify text-[clamp(1.3rem,2.4vw,2rem)] leading-[1.5] text-ink"
-          >
-            {statement.text}
-          </p>
-        </section>
+        {/* Brand statement: tela presa, texto que se revela e catedral desenhada à mão */}
+        <OfficeScroll text={statement.text} label="O escritório" />
 
         {/* Faixa em movimento */}
         <div aria-hidden className="ticker py-5">
