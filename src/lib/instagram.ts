@@ -4,9 +4,9 @@
  * Duas fontes, nesta ordem:
  *  1. Feed JSON do Behold (serviço autorizado pelo Instagram) — se INSTAGRAM_FEED_URL estiver definida
  *     (ex.: https://feeds.behold.so/XXXX). Atualiza sozinho: o Next só relê o feed a cada hora.
- *  2. Lista local abaixo: imagens dos posts já salvas em /public/instagram (WebP leve, ~25–75 KB cada).
+ *  2. Lista local abaixo (só reels): capas já salvas em /public/instagram (WebP leve, ~25–75 KB cada).
  *     Carrega na hora, sem iframes nem scripts do Instagram. É estática: posts novos entram quando forem
- *     acrescentados aqui (imagem 540 px de largura em /public/instagram/<código>.webp + miniatura
+ *     acrescentados aqui (capa 540 px de largura em /public/instagram/<código>.webp + miniatura
  *     <código>-bg.webp de 14 px usada como fundo desfocado).
  */
 
@@ -20,28 +20,29 @@ export type IgPost = {
   kind?: "image" | "video" | "carousel";
 };
 
-const P = "https://www.instagram.com/p/";
-const local = (code: string, kind: IgPost["kind"], parent?: string): IgPost => ({
+const local = (code: string): IgPost => ({
   id: code,
-  href: `${P}${parent ?? code}/`,
+  href: `https://www.instagram.com/reel/${code}/`,
   image: `/instagram/${code}.webp`,
   bg: `/instagram/${code}-bg.webp`,
-  kind,
+  kind: "video",
 });
 
-/** Mais novo primeiro. Os "Dfawe…" são slides do mesmo carrossel (DfawnTVFsza). */
+/** Só reels, na ordem da aba Reels do perfil (mais novo primeiro). */
 export const IG_LOCAL: IgPost[] = [
-  local("DfnCp-fBs-x", "video"),
-  local("DfawnTVFsza", "carousel"),
-  local("Dfawe0phsUc", "carousel", "DfawnTVFsza"),
-  local("Dfawe0zBWwC", "carousel", "DfawnTVFsza"),
-  local("Dfawe0OBLkP", "carousel", "DfawnTVFsza"),
-  local("Dfawe2NB_V6", "carousel", "DfawnTVFsza"),
-  local("DfKrZpkB_7H", "video"),
-  local("DfDEUSKB_oY", "video"),
-  local("De-s73gBkLO", "video"),
-  local("De4yiQwBWG2", "video"),
-];
+  "DfnCp-fBs-x",
+  "DfSEKl1BvdN",
+  "DfKrZpkB_7H",
+  "DfDEUSKB_oY",
+  "De-s73gBkLO",
+  "De4yiQwBWG2",
+  "De4S59IBqEs",
+  "DezGso7heIV",
+  "DekeFqdBC9n",
+  "DefPPRXBTa9",
+  "DeckHfDB1vz",
+  "DeSscijB0aL",
+].map(local);
 
 type BeholdPost = {
   id?: string;
@@ -62,6 +63,7 @@ export async function getInstagramPosts(): Promise<IgPost[]> {
       if (res.ok) {
         const json = (await res.json()) as { posts?: BeholdPost[] };
         const posts = (json.posts ?? [])
+          .filter((p) => p.mediaType === "VIDEO") // só reels
           .map((p): IgPost | null => {
             const image = p.sizes?.medium?.mediaUrl ?? p.sizes?.large?.mediaUrl ?? p.thumbnailUrl ?? (p.mediaType === "IMAGE" ? p.mediaUrl : undefined);
             if (!image || !p.permalink) return null;
@@ -70,7 +72,7 @@ export async function getInstagramPosts(): Promise<IgPost[]> {
               href: p.permalink,
               image,
               caption: p.prunedCaption ?? p.caption,
-              kind: p.mediaType === "VIDEO" ? "video" : p.mediaType === "CAROUSEL_ALBUM" ? "carousel" : "image",
+              kind: "video",
             };
           })
           .filter((p): p is IgPost => !!p)
