@@ -34,7 +34,7 @@
 
 :root {
   color-scheme: light;
-  --nav-h: 4rem; /* altura da barra de menu fixa */
+  --nav-h: 4.5rem; /* altura da barra de menu fixa */
 }
 
 /* Popup de orçamento: entrada suave */

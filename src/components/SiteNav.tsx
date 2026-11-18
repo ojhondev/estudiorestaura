@@ -50,7 +50,7 @@ export function SiteNav() {
       >
         <div className="shell flex h-[var(--nav-h)] items-center justify-between gap-6">
           <Link href="/" aria-label="Início — Estúdio Restaura" className="flex shrink-0 items-center">
-            <Logo priority className="h-[15px] w-auto sm:h-[18px]" />
+            <Logo priority className="h-[26px] w-auto sm:h-[32px]" />
           </Link>
 
           <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
