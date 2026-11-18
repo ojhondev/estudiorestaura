@@ -4,6 +4,7 @@ import { BrazilMap } from "@/components/home/BrazilMap";
 import { Criteria } from "@/components/home/Criteria";
 import { WorkCards } from "@/components/home/WorkCards";
 import { Numbers } from "@/components/home/Numbers";
+import { InstagramFeed } from "@/components/home/InstagramFeed";
 import { ImageBox } from "@/components/ImageBox";
 import Link from "next/link";
 import { Arrow } from "@/components/ui";
@@ -39,7 +40,6 @@ export default async function HomePage() {
       <Hero intro={hero.intro} imageUrl={hero.imageUrl || undefined} feed={feed} />
 
       <div className="page-flow">
-        <span id="header-logo-anchor" aria-hidden className="block" />
         {/* Brand statement */}
         <section className="shell grid gap-10 py-[clamp(5rem,12vw,9rem)] lg:grid-cols-[0.4fr_1fr]">
           <p data-reveal="fade" className="label">
@@ -77,6 +77,7 @@ export default async function HomePage() {
         <Criteria images={sections} />
         <WorkCards media={mediaBand} />
         <Numbers />
+        <InstagramFeed />
 
         {/* Cartões grandes: o cartão inteiro é o link */}
         <section className="shell grid gap-4 py-[clamp(4.5rem,10vw,8rem)] lg:grid-cols-2">

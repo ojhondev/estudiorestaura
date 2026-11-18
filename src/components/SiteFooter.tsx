@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Arrow } from "@/components/ui";
-import { nav, WHATSAPP } from "@/lib/content";
+import { INSTAGRAM, nav, WHATSAPP } from "@/lib/content";
+import { InstagramIcon } from "@/components/InstagramIcon";
 import { Credito } from "@/components/Credito";
 import "@/components/credito.css";
 
@@ -50,6 +51,14 @@ export function SiteFooter() {
           </a>
           <a href={WHATSAPP.href} target="_blank" rel="noreferrer" className="hover:text-midnight">
             {WHATSAPP.display}
+          </a>
+          <a
+            href={INSTAGRAM.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 hover:text-midnight"
+          >
+            <InstagramIcon className="h-4 w-4" /> @{INSTAGRAM.handle}
           </a>
         </div>
       </div>

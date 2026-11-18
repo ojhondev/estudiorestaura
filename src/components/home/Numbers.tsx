@@ -78,7 +78,7 @@ export function Numbers() {
   const autoIdx = step % 2 === 1 ? ((step - 1) / 2) % metrics.length : null;
 
   return (
-    <section ref={root} className="shell py-[clamp(4.5rem,10vw,8rem)]">
+    <section ref={root} style={{ overflowX: "clip" }} className="shell py-[clamp(4.5rem,10vw,8rem)]">
       <div className="flex items-start gap-6">
         <span aria-hidden className="mt-4 h-px w-16 shrink-0 bg-ink/25" />
         <div>

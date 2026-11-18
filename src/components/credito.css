@@ -132,3 +132,10 @@
   .credito-cta,
   .credito-foto { animation: none !important; }
 }
+
+/* celulares: o selo longo quebra em duas linhas em vez de estourar a largura da tela */
+@media (max-width: 520px) {
+  .credito { max-width: 100%; }
+  .credito-troca { min-width: 0; }
+  .credito-cta { white-space: normal; line-height: 1.35; }
+}

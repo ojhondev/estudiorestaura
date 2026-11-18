@@ -336,6 +336,14 @@ export const nav: {
   },
 ];
 
+/** Instagram do estúdio (barra de menu, rodapé e seção "Instagram" da home). */
+export const INSTAGRAM = {
+  handle: "estudiorestaura",
+  url: "https://www.instagram.com/estudiorestaura/",
+  /** Embed oficial do perfil: lista os últimos posts sozinho, sem token, cron nem servidor. */
+  embed: "https://www.instagram.com/estudiorestaura/embed/",
+};
+
 /** WhatsApp do estúdio (botão "Fale conosco", contato e rodapé). */
 export const WHATSAPP = {
   digits: "5511963500918",
