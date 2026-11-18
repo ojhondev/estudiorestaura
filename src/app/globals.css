@@ -57,6 +57,14 @@
   .pop-backdrop, .pop-card, .pop-check { animation: none; }
 }
 
+/* Aviso "role para baixo" da seção O escritório */
+@keyframes hint-bounce {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(3px); }
+}
+.hint-bounce { animation: hint-bounce 1.1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .hint-bounce { animation: none; } }
+
 /* Slide do Instagram: barrinha de tempo de cada post (estilo story) */
 @keyframes story-fill {
   from { width: 0%; }
