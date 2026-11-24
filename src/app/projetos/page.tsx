@@ -6,7 +6,7 @@ import { getProjects, getSectionImages } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Projetos",
   description:
-    "Restauro, conservação e arquitetura em patrimônio histórico e cultural — acervo de projetos do Estúdio Restaura.",
+    "Restauro, projetos, diagnósticos e laudos técnicos em patrimônio histórico e cultural — acervo de projetos do Estúdio Restaura.",
 };
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ export default async function ProjetosPage({
         slot="projetos"
         label="Acervo"
         title="Projetos"
-        intro="Intervenções de restauro, planos de conservação preventiva e arquitetura nova que dialoga com a preexistência."
+        intro="Intervenções de restauro, projetos de decoração e iluminação, diagnósticos e laudos técnicos em patrimônio histórico e cultural."
         imageLabel="Espaço para imagem — projeto em destaque"
         imageUrl={sections["pagehero.projetos"] || undefined}
       />

@@ -1,9 +1,13 @@
 /**
- * Cadastra/atualiza os projetos do Estúdio (texto baseado nos relatórios técnicos
- * e nas respostas à imprensa de cada obra). Entram como RASCUNHO (published=false):
- * revise em /admin/projetos e publique. Reexecutável (upsert por slug).
- * Uso: npm run db:projetos [-- --publish]
+ * Cadastra/atualiza os projetos do Estúdio a partir do documento NOTAS.docx (textos, ficha técnica,
+ * equipe, capas e imagens). Reexecutável (upsert por slug); as imagens ficam em public/fotos/projetos/<slug>/.
+ * Uso: npm run db:projetos [-- --publish] [-- --only=slug1,slug2]
+ *
+ * Convenções de arquivo: capa.jpg · foto-NN.jpg / cc-NN.jpg (galeria) · antes-N.jpg + depois-N.jpg (pares)
+ * · arquivos de seção citados abaixo (lum-01.jpg, vit-01.jpg, dec-01.jpg, hoje-01.jpg…).
  */
+import fs from "node:fs";
+import path from "node:path";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
@@ -17,73 +21,98 @@ if (!url) {
 const db = drizzle(neon(url), { schema });
 const publish = process.argv.includes("--publish");
 
+const D = "Diego Gonçalves de Souza — Mestre de Ofício";
+const PA = "Paula Franco Albuquerque — Arquiteta-Restauradora";
+const E = "Eduardo Henrique dos Santos — Mestre de Ofício";
+const L = "Leticia de Carvalho Santos — Arquiteta";
+const S = "Silvana Borges da Silva — Arquiteta-Restauradora";
+const G = "Gabriela de Resende Ferreira — Restauradora";
+const R = "Romolo Picoli Ronchetti — Artista Sacro";
+const C = "Cláudia Aparecida Rangel — Conservadora-Restauradora";
+const F = "Francisco Sergio Pimentel — Conservador-Restaurador";
+
+type Section = { title: string; body?: string[]; images: [file: string, caption: string][] };
 type P = {
   slug: string;
   title: string;
+  client: string;
   category: string;
   state: string;
   city: string;
-  location: string;
   year: string;
-  area?: string;
   summary: string;
   body: string[];
-  gallery: number; // quantidade de fotos-NN
-  ba: string[]; // legendas dos pares antes/depois
-  /** blocos temáticos; imagens em <pasta do projeto>/<arquivo> (ex.: lum-01.jpg) */
-  sections?: { title: string; body: string[]; images: [file: string, caption: string][] }[];
-  sort: number;
+  team: string[];
+  /** prefixos dos arquivos da galeria, na ordem em que aparecem (ex.: ["cc", "foto"]) */
+  gallery: string[];
+  /** legendas dos pares antes/depois (antes-N.jpg + depois-N.jpg) */
+  ba?: string[];
+  sections?: Section[];
+  status?: string;
+  credit?: string;
   featured?: boolean;
 };
 
-const base = (slug: string) => `/fotos/projetos/${slug}`;
-
 const projetos: P[] = [
   {
+    slug: "jatai-conjunto-mural-claudio-pastro-catedral",
+    title: "Restauro do Conjunto Mural de Claudio Pastro",
+    client: "Catedral Divino Espírito Santo",
+    category: "Restauro · Diagnóstico · Execução",
+    state: "GO",
+    city: "Jataí",
+    year: "2026",
+    summary:
+      "Conservação e restauro do conjunto mural de Claudio Pastro (1988), três grandes painéis no presbitério da Catedral Divino Espírito Santo, em Jataí (GO).",
+    body: [
+      "Em 2026, o Estúdio Restaura realizou a conservação e o restauro do conjunto mural de autoria de Claudio Pastro, executado em 1988 no presbitério da Catedral Divino Espírito Santo, em Jataí/GO. A obra é composta por três grandes painéis, representando os Arcanjos, o Cristo Pantocrator e Pentecostes, e os Querubins. O trabalho contemplou o levantamento do estado de conservação, ensaios e procedimentos de limpeza, remoção criteriosa de intervenções anteriores inadequadas, consolidação da camada pictórica, preenchimento e nivelamento de fissuras e lacunas, reintegração cromática pontual, recomposição das áreas douradas e aplicação de velaturas para harmonização das superfícies. Fundamentada nos princípios da mínima intervenção, compatibilidade e reversibilidade dos materiais, a intervenção buscou recuperar a estabilidade material e a unidade estética do conjunto, preservando as particularidades da técnica pictórica e a autenticidade da obra, além de valorizar sua expressividade artística e simbólica no espaço litúrgico.",
+    ],
+    team: [D, PA, S, R],
+    gallery: ["foto"],
+    ba: [
+      "Áreas douradas: antes e depois da recomposição.",
+      "Fissuras e lacunas: antes e depois do nivelamento e da reintegração cromática.",
+      "Base do painel: antes e depois do tratamento da superfície.",
+    ],
+    featured: true,
+  },
+  {
     slug: "sesc-santo-andre-mural-sacilotto",
-    title: "Mural de Luiz Sacilotto — SESC Santo André",
-    category: "Restauro",
+    title: "Restauro do Mural de Luiz Sacilotto",
+    client: "SESC Santo André",
+    category: "Restauro · Execução",
     state: "SP",
     city: "Santo André",
-    location: "Santo André · SP",
     year: "2025",
-    area: "≈ 92 m²",
     summary:
-      "Restauro aberto do painel mural “Sem Título”, de Luiz Sacilotto (2003): cerca de 92 m² nas quatro faces da caixa do elevador do SESC Santo André.",
+      "Conservação e restauro do painel mural “Sem Título”, de Luiz Sacilotto (2003): cerca de 92 m² de superfície pictórica nas três faces da estrutura do elevador do Sesc Santo André.",
     body: [
-      "O painel foi concebido e executado em 2003, especialmente para o SESC Santo André, em diálogo direto com a arquitetura do edifício. Com cerca de 7,5 m de largura por 10 m de altura, é um dos maiores murais da carreira de Luiz Sacilotto (1924–2003), referência da arte concreta brasileira. Suas composições geométricas e o cromatismo vibrante criam efeitos ópticos de movimento e volume sobre uma superfície plana.",
-      "O mapeamento de danos identificou sujidade impregnada, desprendimento da camada pictórica, fissuras, perdas localizadas, escorrimentos e manchas. A obra já havia sido repintada em intervenção anterior — parte da sua historicidade, mantida e tratada com reintegrações pontuais e correções cromáticas. Os danos não comprometiam a estabilidade estrutural.",
-      "O trabalho começou em 17 de junho de 2025, em formato de “canteiro aberto”: o público acompanhou o restauro de perto, com educação patrimonial em tempo real. As etapas foram levantamento de danos, testes progressivos de limpeza, limpeza mecânica a seco e química controlada, consolidação e nivelamento de fissuras e perdas, reintegração cromática pontual nas porções superiores e velaturas nas inferiores.",
-      "Os maiores desafios foram o acesso (92 m² a 10 m de altura, com uma face sobre a passarela que exigiu estrutura adicional) e a própria natureza da obra: cores chapadas em superfície lisa, onde qualquer alteração aparece de imediato. As primeiras reintegrações escureciam em poucos minutos, o que levou a uma bateria de testes de pigmentos, diluentes e técnicas até chegar a um resultado estável.",
-      "Equipe: Paula Albuquerque, Diego Gonçalves e Silvana Borges. Relatório técnico entregue em dezembro de 2025.",
+      "Em 2025, o Estúdio Restaura realizou a conservação e o restauro do painel mural Sem Título, de Luiz Sacilotto, concebido e executado em 2003 para o Sesc Santo André/SP. Com aproximadamente 92 m² de superfície pictórica, a obra ocupa três faces da estrutura que abriga o elevador da unidade, estabelecendo uma relação direta entre arte e arquitetura. O trabalho contemplou o diagnóstico do estado de conservação, estudos das superfícies pictóricas, higienização, consolidação e reintegração cromática, respeitando as particularidades materiais e estéticas da obra, especialmente o rigor geométrico e as relações cromáticas que caracterizam a produção do artista. A intervenção buscou recuperar a integridade material e a unidade visual do conjunto, contribuindo para a preservação do legado de Luiz Sacilotto, um dos principais expoentes da arte concreta brasileira, e para a permanência de sua obra em um espaço de convivência e difusão cultural.",
     ],
-    gallery: 10,
+    team: [D, PA, S, L],
+    gallery: ["cc", "foto"],
     ba: [
       "Base do painel: perda da argamassa antes e depois do nivelamento e da reintegração cromática.",
       "Remate superior: o trecho perdido e a recomposição da superfície.",
     ],
-    sort: 1,
+    credit: "Cauê Colodro (vistas gerais do mural); demais fotos: equipe do Estúdio Restaura",
     featured: true,
   },
   {
     slug: "botucatu-painel-mural-sagrado-coracao",
-    title: "Painel mural do presbitério — Paróquia Sagrado Coração de Jesus",
-    category: "Restauro",
+    title: "Restauro do Mural de Henrique B. Oswald",
+    client: "Paróquia Sagrado Coração de Jesus",
+    category: "Restauro · Diagnóstico · Execução",
     state: "SP",
     city: "Botucatu",
-    location: "Botucatu · SP",
     year: "2026",
     summary:
-      "Restauro do grande painel mural pintado por Henrique Bicalho Oswald em 1953, com consolidação integral da película, recuperação de douração original e recomposição das figuras inferiores.",
+      "Conservação e restauro do painel mural de Henrique B. Oswald (1953) no presbitério da Igreja Matriz Sagrado Coração de Jesus, em Botucatu (SP), concluído em junho de 2026.",
     body: [
-      "O projeto nasceu da preocupação da comunidade e do pároco, Padre Athila José Tintino, com o estado do painel do presbitério, pintado em 1953 por Henrique Bicalho Oswald (1918–1965). Ao longo de mais de setenta anos, a obra sofreu degradação intensa e intervenções que alteraram suas características originais.",
-      "O estado era crítico. A infiltração deixou manchas brancas de escorrimento e provocou craquelamento e desprendimento da pintura. Somou-se a isso a técnica: a tinta a óleo muito diluída em solvente perde coesão e se solta em escamas ao menor toque. Na faixa inferior foram identificadas ao menos quatro intervenções inadequadas — repintura integral em vermelho, nova camada em verde, remoção sem critério técnico e uma tentativa de recomposição das figuras sem conhecimento de restauro.",
-      "Como a pintura caía em escamas, a limpeza não podia ser a primeira etapa. O painel recebeu faceamento integral com papel neutro e solução consolidante, em aplicações sucessivas, até a camada pictórica voltar a aderir à parede. Só então vieram a limpeza a seco e química, o tratamento dos escorrimentos, o nivelamento de fissuras e lacunas e a reintegração das cores com têmpera guache e lápis aquarelável, materiais compatíveis com o original.",
-      "A limpeza revelou vestígios de douração original em diversos elementos decorativos, e esses acabamentos foram recuperados. As figuras de sacerdotes da faixa inferior foram recompostas a partir de fotografias históricas guardadas pela própria comunidade, com respeito à linguagem do artista e aos princípios contemporâneos da conservação. Restaurar não é deixar novo: é resgatar a unidade de leitura mantendo as marcas do tempo.",
-      "O restauro durou cerca de dois meses. A entrega, em 19 de junho de 2026, coincidiu com os 72 anos da dedicação da igreja — sem planejamento prévio — e emocionou fiéis que reencontraram a obra, inclusive pessoas que presenciaram a entrega original pelo próprio artista.",
-      "Equipe: Paula Albuquerque, Diego Gonçalves, Silvana Borges, Gabriela de Resende Ferreira e Leticia de Carvalho Santos.",
+      "Entre janeiro e junho de 2026, o Estúdio Restaura realizou a conservação e o restauro do painel mural de autoria de Henrique B. Oswald, executado em 1953 e localizado no Presbitério da Igreja Matriz Sagrado Coração de Jesus, em Botucatu/SP. De elevada complexidade técnica, o trabalho contemplou intervenções preliminares na cobertura e no forro de estuque, seguidas do tratamento da superfície pictórica, que apresentava fragilidade generalizada, desprendimentos, perdas e alterações decorrentes de intervenções anteriores. Os procedimentos abrangeram higienização, consolidação da camada pictórica, nivelamento de lacunas, reintegração cromática e douração de elementos específicos da composição. Destaca-se a releitura artística da porção inferior do painel, desenvolvida a partir de registros fotográficos históricos e fundamentada nos princípios da distinguibilidade e do respeito à autenticidade da obra. Concluído em junho de 2026, o restauro recuperou a integridade material e a leitura estética e simbólica do conjunto, contribuindo para a preservação de um importante testemunho da memória religiosa de Botucatu.",
     ],
-    gallery: 8,
+    team: [D, PA, E, S, G, L],
+    gallery: ["foto"],
     ba: [
       "O presbitério antes e depois do restauro do painel mural.",
       "Figura de sacerdote na faixa inferior, recomposta a partir de fotografias históricas.",
@@ -92,335 +121,449 @@ const projetos: P[] = [
       "A figura central de Jesus, antes e depois.",
       "Detalhe da mão: pintura a óleo diluída, craquelada e já consolidada.",
     ],
-    sort: 2,
     featured: true,
+  },
+  {
+    slug: "maria-da-fe-pinturas-nossa-senhora-de-lourdes",
+    title: "Restauro das Pinturas Artísticas e Elementos Ornamentais da Igreja Matriz",
+    client: "Paróquia Nossa Senhora de Lourdes",
+    category: "Restauro · Execução",
+    state: "MG",
+    city: "Maria da Fé",
+    year: "2024–2026",
+    summary:
+      "Conservação e restauro do conjunto pictórico de Pietro e Ulderico Gentilli (1940) na Igreja Matriz de Nossa Senhora de Lourdes, em Maria da Fé (MG).",
+    body: [
+      "O Estúdio Restaura realizou a conservação e o restauro das pinturas artísticas e dos elementos ornamentais da Igreja Matriz de Nossa Senhora de Lourdes, em Maria da Fé/MG, cuja construção teve início em 1928 e cujo conjunto pictórico foi executado por Pietro e Ulderico Gentilli, em 1940. De elevada complexidade técnica, o trabalho abrangeu pinturas parietais decorativas, painéis murais temáticos, imagens sacras, altares, púlpito, balaustradas e elementos ornamentais integrados à arquitetura. As intervenções contemplaram prospecções estratigráficas, higienização, consolidação da camada pictórica, remoção criteriosa de intervenções anteriores inadequadas, reintegração pictórica e reconstituição de elementos e motivos ornamentais, visando recuperar a integridade material e a leitura estética do conjunto. Iniciado em 2024 e concluído em outubro de 2026, o restauro contribuiu para a preservação de um importante testemunho da arte sacra e da história de Maria da Fé, reafirmando o valor artístico, cultural e religioso da edificação e sua representatividade na memória coletiva da comunidade.",
+    ],
+    team: [D, PA],
+    gallery: ["foto"],
+    ba: ["Capela do Santíssimo: antes e depois do restauro.", "Capela de Nossa Senhora do Rosário: antes e depois do restauro."],
   },
   {
     slug: "slg-mural-claudio-pastro-sao-paulo",
-    title: "Mural de Claudio Pastro — Paróquia São Luiz Gonzaga",
-    category: "Restauro",
+    title: "Restauro Pontual do Mural de Claudio Pastro e Marcio Motta",
+    client: "Paróquia São Luiz Gonzaga",
+    category: "Restauro · Execução",
     state: "SP",
     city: "São Paulo",
-    location: "São Paulo · SP",
     year: "2025",
     summary:
-      "Restauro do painel mural da abside, de Claudio Pastro com Marcio Motta (2003): consolidação dos desprendimentos que ameaçavam o Cordeiro Místico.",
+      "Conservação e restauro da porção superior do painel mural de Claudio Pastro e Marcio Motta (2003), onde está representado o Cordeiro Místico, na Paróquia São Luiz Gonzaga.",
     body: [
-      "O painel mural da abside da Paróquia São Luiz Gonzaga, na Vila Pereira Barreto, foi criado em 2003 por Claudio Pastro (1948–2016) — um dos mais importantes artistas sacros brasileiros contemporâneos — em colaboração com Marcio Motta, que o executou. Na porção superior, a cerca de 7 metros de altura, destaca-se o Cordeiro Místico; abaixo da faixa da videira, o Pantocrator e as tamareiras.",
-      "A iniciativa partiu do pároco, Cônego José Renato Ferreira, ao perceber o avanço da degradação da porção superior do painel, muito visível para os fiéis. O mural apresentava severos desprendimentos e craquelamentos decorrentes de infiltrações antigas, com camadas já endurecidas e danificadas.",
-      "O desafio técnico foi fixar amplos trechos de pintura soltos, inclusive na imagem do Cordeiro. O processo seguiu, por ordem: limpeza mecânica e química; hidratação e faceamento dos fragmentos em desprendimento com CMC e papel japonês; consolidação da superfície, com adesão da película pictórica; planificação da película com calor sobre adesivo termoplástico; nivelamento das lacunas com massa de preenchimento; consolidação fina e reintegração cromática pontual da figura temática, com velaturas no fundo liso. Tudo com mínima intervenção, preservando a autenticidade e o simbolismo da obra.",
-      "A comunidade acompanhou o trabalho com carinho. O pároco registrou os procedimentos diariamente e incentivou a divulgação pela Pastoral da Comunicação. O mural restaurado foi entregue em agosto de 2025.",
-      "Equipe: Paula Albuquerque, Diego Gonçalves e Silvana Borges.",
+      "Em 2025, o Estúdio Restaura realizou a conservação e o restauro do painel mural de autoria de Claudio Pastro, com colaboração de Marcio Motta, executado em 2003 na Paróquia São Luiz Gonzaga, em São Paulo/SP. A intervenção concentrou-se na porção superior da obra, onde está representado o Cordeiro Místico, cuja camada pictórica apresentava extensos desprendimentos, craquelamentos e perdas decorrentes de infiltrações anteriores. O trabalho exigiu um criterioso processo de fixação e consolidação das áreas comprometidas, seguido de nivelamento e reintegração cromática pontual, respeitando os princípios da mínima intervenção e da preservação da autenticidade material e estética da pintura. O restauro possibilitou recuperar a integridade visual e a leitura simbólica da composição, contribuindo para a preservação do legado artístico de Claudio Pastro e de sua importância para a comunidade paroquial.",
     ],
-    gallery: 8,
-    ba: [
-      "Vista geral da abside: antes e depois do restauro.",
-      "O Cordeiro Místico, com desprendimentos e fissuras, e o resultado final.",
-    ],
-    sort: 3,
+    team: [D, PA, S],
+    gallery: ["foto"],
+    ba: ["Vista geral da abside: antes e depois do restauro.", "O Cordeiro Místico, com desprendimentos e fissuras, e o resultado final."],
     featured: true,
   },
   {
-    slug: "inconfidentes-sao-geraldo-magela",
-    title: "Imagem de São Geraldo Magela — Inconfidentes",
-    category: "Restauro",
-    state: "MG",
-    city: "Inconfidentes",
-    location: "Inconfidentes · MG",
-    year: "2026",
-    summary:
-      "Conservação e restauro da imagem sacra de São Geraldo Magela, em gesso policromado: remoção das camadas de repintura e recuperação da policromia original.",
-    body: [
-      "A imagem de São Geraldo Magela (1726–1755), padroeiro das mães, gestantes e famílias, pertence ao acervo da paróquia que leva o seu nome, em Inconfidentes (MG), e é protegida como patrimônio histórico municipal. Confeccionada em gesso policromado, tem grande importância histórica, artística e devocional.",
-      "O estado geral era bom, sem comprometimento do suporte. Os danos principais eram a sujidade impregnada, pequenas perdas e deformações pontuais. Duas alterações pesavam sobre a leitura da peça: as sucessivas camadas de repintura, que descaracterizavam a composição original — especialmente no rosto —, e a base, que não era a original e concentrava fissuras causadas pelo uso da imagem em procissões.",
-      "O trabalho foi feito em ateliê, em Maria da Fé (MG), seguindo os princípios da mínima intervenção, compatibilidade de materiais e reversibilidade: documentação e mapeamento de danos, testes progressivos de limpeza, prospecções estratigráficas, limpeza (a seco, aquosa e química), decapagem gradual das repinturas, consolidação, nivelamento, enxertos e recomposições na base, reintegração cromática e proteção final.",
-      "O relatório traz também recomendações de conservação preventiva: limpeza apenas superficial com pincel macio ou pano seco, inspeções técnicas a cada três a cinco anos, proteção contra luz solar direta e umidade e, sobretudo, evitar o uso da imagem em procissões. Contratante: Prefeitura Municipal de Inconfidentes. Equipe: Paula Albuquerque e Diego Gonçalves.",
-    ],
-    gallery: 7,
-    ba: [],
-    sort: 4,
-  },
-  {
-    slug: "sertaozinho-prospeccao-nossa-senhora-aparecida",
-    title: "Prospecção, iluminação e decoração — Paróquia Nossa Senhora Aparecida",
-    category: "Projeto",
-    state: "SP",
-    city: "Sertãozinho",
-    location: "Sertãozinho · SP",
-    year: "2025",
-    summary:
-      "Sondagens revelaram a ambientação cromática original da igreja; para a Capela do Santíssimo, o estúdio desenvolveu ainda projetos de iluminação e de decoração.",
-    body: [
-      "A Paróquia Nossa Senhora Aparecida, da Arquidiocese de Ribeirão Preto, tem organização característica das igrejas católicas de influência eclética: planta longitudinal, composição simétrica, nave central ampla, corredores laterais, presbitério elevado e coro sobre a entrada. Colunas com capitéis ornamentados sustentam arcos plenos que conduzem o olhar ao altar.",
-      "O estudo, concluído em janeiro de 2026, fez sondagens pontuais em áreas estratégicas — paredes, teto, colunas e elementos decorativos — com registro fotográfico de todas as etapas e descrição das camadas de acabamento encontradas, para subsidiar o diagnóstico e um futuro projeto de decoração.",
-      "Os resultados mostram múltiplas camadas de pintura. Nos ornamentos (medalhões, molduras, cimalhas e capitéis), a cor original é um laranja claro; nas superfícies lisas (arcos, paredes e tetos das naves) predominam tons de azul. No altar de Nossa Senhora das Graças foi encontrada decoração original em laranja escuro e marrom avermelhado.",
-      "A conclusão é que o conjunto foi concebido com uma ambientação cromática mais intensa e variada do que a visível hoje: o tom neutro atual corresponde apenas à última manutenção. O relatório recomenda remover as sobrepinturas e elaborar um projeto de pintura e decoração que siga a estética inicial do espaço.",
-      "Para a Capela do Santíssimo Sacramento, o estúdio desenvolveu em paralelo dois estudos preliminares: um projeto luminotécnico, que organiza a luz geral e a luz de destaque sobre quadros, imagem sacra e sacrário, e um projeto de decoração com estamparias e paleta de cores, apresentado em moodboard.",
-    ],
-    gallery: 8,
-    ba: ["Capela do Santíssimo: o ambiente atual e a simulação da proposta de decoração com estamparias nas paredes."],
-    sections: [
-      {
-        title: "Projeto luminotécnico — Capela do Santíssimo",
-        body: [
-          "O estudo preliminar parte da planta existente da capela e propõe uma iluminação em dois níveis: luz geral difusa e luz de destaque. A proposta prevê:",
-          "- **Painel de LED circular** central (4000K) para a iluminação geral;\n- **Arandelas** (4000K) no lugar dos refletores atuais;\n- **Luminárias de parede** (2700K) para destacar os quadros;\n- **Spot de sobrepor** (2700K) sobre a imagem sacra;\n- **Fita de LED** (2700K) embutida no mobiliário do sacrário, em luz indireta.",
-          "As simulações mostram a capela com a nova luz, e uma planilha de modelos de luminárias especifica o fluxo luminoso e o facho de cada ponto.",
-        ],
-        images: [
-          ["lum-01.jpg", "Simulação: luz de destaque sobre o altar e o sacrário."],
-          ["lum-02.jpg", "Simulação: luminárias de parede sobre os quadros."],
-          ["lum-03.jpg", "Simulação: o conjunto de quadros e a parede lateral."],
-          ["lum-04.jpg", "Spot de destaque sobre a imagem sacra e os vitrais."],
-          ["lum-05.jpg", "Prancha do projeto: planta de iluminação proposta, com a legenda das luminárias."],
-        ],
-      },
-      {
-        title: "Vitrais da capela",
-        body: [
-          "Os vitrais da capela foram estudados em detalhe — o vitral direito, o esquerdo e os da porta — para que a nova iluminação respeite as suas cores e o seu desenho.",
-        ],
-        images: [
-          ["vit-01.jpg", "Os dois vitrais da parede lateral."],
-          ["vit-02.jpg", "Vitral direito, em detalhe."],
-          ["vit-03.jpg", "Vitral esquerdo, em detalhe."],
-        ],
-      },
-      {
-        title: "Projeto de decoração — Capela do Santíssimo",
-        body: [
-          "A proposta de decoração aplica estamparias e uma paleta de cores às paredes e ao teto da capela. O moodboard organiza, superfície por superfície — parede frontal, paredes laterais, parede posterior e teto —, as estampas escolhidas, a sua aplicação e a paleta de referência.",
-        ],
-        images: [
-          ["dec-01.jpg", "Parede frontal."],
-          ["dec-02.jpg", "Parede lateral direita."],
-          ["dec-03.jpg", "Parede lateral esquerda."],
-          ["dec-04.jpg", "Parede posterior."],
-          ["dec-05.jpg", "Teto: estamparias 01 e 02."],
-          ["dec-06.jpg", "Teto: estamparias 03 e 04."],
-        ],
-      },
-    ],
-    sort: 5,
-  },
-  {
-    slug: "sao-paulo-prospeccao-nossa-senhora-das-angustias",
-    title: "Prospecções estratigráficas — Capela do Santíssimo, N. Sra. das Angústias",
-    category: "Diagnóstico",
-    state: "SP",
-    city: "São Paulo",
-    location: "São Paulo · SP",
-    year: "2025",
-    summary:
-      "Sondagens na Capela do Santíssimo identificaram a cor original (azul claro), três camadas de pintura e um barrado em escaiola, a técnica que imita mármore.",
-    body: [
-      "A Capela do Santíssimo da Paróquia Nossa Senhora das Angústias, na Barra Funda, tem planta retangular e organização simétrica, com barrado de imitação de mármore. A parede frontal abriga o sacrário, instalado em uma abertura que originalmente era uma janela, depois vedada.",
-      "As prospecções estratigráficas buscaram identificar os tons originais e entender as camadas de acabamento aplicadas ao longo do tempo, para orientar um futuro projeto de conservação e restauro. Foram feitas sondagens em paredes e teto, em diferentes alturas, incluindo motivos decorativos e áreas de pintura lisa.",
-      "O resultado: três camadas de pintura — a primeira é a cor original, em azul claro; as duas seguintes são manutenções ou sobrepinturas. Os motivos decorativos hoje visíveis têm execução amadora e não pertencem ao conjunto original. A exceção é o barrado inferior, que conserva uma escaiola: técnica que imita mármore e outras pedras por camadas de pigmento sobre argamassa lisa, polidas e protegidas por verniz.",
-      "Equipe: Paula Albuquerque, Diego Gonçalves e Leticia de Carvalho Santos (auxiliar de restauro).",
-    ],
-    gallery: 7,
-    ba: [],
-    sort: 6,
-  },
-  {
-    slug: "charqueada-laudo-casarao-antonio-furlan",
-    title: "Laudo técnico — Casarão Antonio Furlan",
-    category: "Diagnóstico",
-    state: "SP",
-    city: "Charqueada",
-    location: "Charqueada · SP",
-    year: "2023",
-    summary:
-      "Laudo de estado de conservação e identificação de danos do casarão do fundador de Charqueada, com parecer favorável à recuperação e ao restauro.",
-    body: [
-      "O Casarão Antonio Furlan, a “Casa do Fundador”, marca a paisagem e a memória de Charqueada. Foi moradia de Antonio Furlan, considerado o fundador da cidade, e esteve ocupado até meados da década de 1980. Imponente, tem dois pavimentos — porão alto e casa principal, com cinco dormitórios e escritório —, planta retangular simétrica e platibanda escalonada com vasos e volutas.",
-      "Contratado pela Prefeitura Municipal, o laudo de setembro de 2023 analisou o porão, a casa principal, os trechos novos anexos e as fachadas, com mapeamento de danos e fichas de identificação. Os pontos mais graves foram a amarração metálica da estrutura, com deficiências substanciais, e a cobertura, sobretudo o escoamento das águas pluviais.",
-      "O parecer técnico é positivo à recuperação e ao restauro do casarão, desde que as ações recomendadas sejam executadas por profissionais qualificados, com supervisão especializada em conservação e restauro arquitetônico. Equipe: Paula Albuquerque e Eduardo Santos.",
-    ],
-    gallery: 8,
-    ba: [],
-    sort: 7,
-  },
-  {
-    slug: "sao-manuel-laudo-capela-casa-pia",
-    title: "Laudo técnico — Capela da Casa Pia São Vicente de Paulo",
-    category: "Diagnóstico",
-    state: "SP",
-    city: "São Manuel",
-    location: "São Manuel · SP",
-    year: "2026",
-    summary:
-      "Avaliação do entelhamento, do madeiramento, do forro de estuque e da pintura decorativa de uma capela inaugurada em 1906.",
-    body: [
-      "A Capela do Hospital da Casa Pia São Vicente de Paulo foi inaugurada em 19 de agosto de 1906 e incorporada, em 1931, ao novo edifício do hospital, mantendo a função religiosa. De características ecléticas, tem nave única, forro de estuque em abóbada de esquife sobre tela déployé, pintura decorativa em trompe-l’œil, em têmpera, com predominância de verdes, painéis parietais e presbitério em arco pleno com altar de mármore.",
-      "Em visita técnica de 6 de julho de 2026, a equipe montou uma torre de andaime, inspecionou o telhado, removeu telhas pontuais para ver o madeiramento e o extradorso do forro e analisou o interior, com registro fotográfico e mapeamento preliminar dos danos.",
-      "O entelhamento deixa passar luz e água: telhas deslocadas ou perdidas, falhas de vedação nos encontros com a platibanda, ausência de rufos e calhas corroídas e subdimensionadas, além de líquens. O madeiramento está em boas condições, com sujidade e focos pontuais de insetos xilófagos. No estuque há trincas, manchas de umidade e sinais de perda de aderência, que podem levar ao desprendimento de ornamentos.",
-      "Contratante: Irmandade da Casa Pia São Vicente de Paulo. Equipe: Paula Albuquerque, Diego Gonçalves, Eduardo Santos e Francisco Sérgio Pimentel.",
-    ],
-    gallery: 6,
-    ba: [],
-    sort: 8,
-  },
-  {
     slug: "itajuba-projeto-luminotecnico-sao-jose-operario",
-    title: "Projeto luminotécnico, de vitrais e de decoração — Igreja Matriz São José Operário",
-    category: "Projeto",
+    title: "Projeto de Decoração, Iluminação e Restauro dos Vitrais da Igreja Matriz",
+    client: "Paróquia São José Operário",
+    category: "Projeto · Diagnóstico",
     state: "MG",
     city: "Itajubá",
-    location: "Itajubá · MG",
     year: "2024–2025",
     summary:
-      "Três frentes de projeto para o interior da Igreja Matriz de São José Operário: nova iluminação, restauro dos vitrais e decoração com estamparias.",
+      "Projetos de decoração interna, iluminação e restauro dos vitrais da Igreja Matriz da Paróquia São José Operário, em Itajubá (MG), concebidos de forma complementar.",
     body: [
-      "Na Igreja Matriz da Paróquia São José Operário, em Itajubá (MG), o Estúdio Restaura desenvolveu três frentes de projeto para o interior do templo: a iluminação, os vitrais e a decoração. O ponto de partida foi a visita técnica de janeiro de 2024, com registro fotográfico, conversa com o pároco e levantamento das necessidades do espaço.",
-      "A igreja tem arcos ogivais que organizam a nave central, as naves laterais e o presbitério, forro de estuque e vitrais em tons de azul e roxo. É uma arquitetura que pede uma luz que desenhe os arcos e uma decoração que dialogue com os símbolos já presentes no templo.",
-      "Os projetos de iluminação e de restauro dos vitrais foram submetidos ao Conselho de Bens Culturais da Arquidiocese de Pouso Alegre, que deferiu o pedido da nova iluminação em outubro de 2024 e o da restauração dos vitrais em fevereiro de 2025.",
+      "O Estúdio Restaura desenvolveu os projetos de decoração interna, iluminação e conservação e restauro dos vitrais da Igreja Matriz da Paróquia São José Operário, em Itajubá/MG. O trabalho reuniu estudos técnicos e estéticos, análise das características arquitetônicas existentes, desenvolvimento de composições ornamentais, soluções luminotécnicas e diretrizes de conservação e restauro dos elementos integrados. Concebidos de forma complementar, os projetos buscam valorizar a identidade arquitetônica e artística da edificação, respeitando suas particularidades e reforçando a atmosfera de espiritualidade inerente ao espaço sacro.",
     ],
-    gallery: 6,
-    ba: [],
+    team: [D, PA, L],
+    gallery: [],
     sections: [
       {
-        title: "Projeto luminotécnico",
+        title: "Projeto de Iluminação",
         body: [
-          "A análise da iluminação existente mostrou luz geral suficiente em quantidade, mas feita de luminárias antigas e não originais: lâmpadas fluorescentes tubulares — várias queimadas —, pendentes e arandelas incorporados depois da concepção da igreja e refletores nos capitéis e nas capelas. O resultado era uma luz predominantemente fria, que não valorizava a arquitetura.",
-          "O projeto foi desenvolvido em estudo preliminar, com três propostas simuladas em modelo 3D às 12h e às 19h, e seguiu para projeto executivo, memorial descritivo, quantitativo de luminárias e relatório final. A proposta prevê:",
-          "- **Luz geral difusa** por luminárias circulares do tipo high bay LED no encontro dos arcos, no forro de estuque, com temperatura de cor neutra (4000K) e novos pontos de luz no presbitério;\n- **Luz quente de destaque** (2700/3000K) sobre as imagens sacras das capelas laterais e do altar-mor, com perfil LED flexível no arco que faz frente ao altar;\n- **Fita de LED nos capitéis**, que contorna cada peça, e novos pontos nas pilastras das naves laterais, formando dois corredores de luz;\n- **Painéis e perfis de LED de sobrepor** (4000K) no nártex, de pé-direito mais baixo;\n- **Uso da infraestrutura elétrica existente**, sem grandes modificações.",
+          "O Projeto Luminotécnico foi desenvolvido a partir da análise técnica da iluminação natural e artificial existente, considerando os aspectos funcionais, estéticos e litúrgicos da edificação. A proposta contempla a modernização do sistema de iluminação, a redistribuição dos pontos de luz e a indicação de luminárias, temperaturas de cor e efeitos luminosos. Através da combinação entre iluminação difusa e de destaque, o projeto busca evidenciar os elementos arquitetônicos, ornamentais e sacros, proporcionando conforto visual e valorizando as particularidades do ambiente religioso.",
         ],
         images: [
-          ["lum-01.jpg", "Estudo preliminar: a nave com a nova luz desenhando os arcos."],
-          ["lum-02.jpg", "Proposta do projeto executivo: luz geral homogênea e destaque quente no altar-mor."],
-          ["lum-03.jpg", "Simulação às 12h: luz natural e artificial combinadas."],
-          ["lum-04.jpg", "A mesma proposta às 19h, com a iluminação artificial conduzindo a leitura da arquitetura."],
-          ["lum-05.jpg", "Capela lateral: luz quente de destaque sobre as imagens sacras."],
-          ["lum-06.jpg", "Detalhe da luminária de embutir, integrada ao forro."],
+          ["lum-01.jpg", "Simulação da iluminação proposta."],
+          ["lum-02.jpg", "Simulação da iluminação proposta: nave e presbitério."],
+          ["lum-03.jpg", "Planta de forro e iluminação — proposta."],
+          ["lum-04.jpg", "Vista isométrica — nave lateral."],
+          ["lum-05.jpg", "Vista isométrica — capela lateral."],
         ],
       },
       {
-        title: "Restauro dos vitrais",
+        title: "Projeto de Restauro dos Vitrais",
         body: [
-          "O caderno de esquadrias — doze pranchas — cobre os vitrais das naves laterais, do nártex e do coro alto. Em azul e roxo predominantes, eles filtram a luz do sol e dão serenidade ao espaço.",
-          "O diagnóstico encontrou, nas naves laterais e no coro alto, muitas peças trocadas em intervenções anteriores sem cuidado com as cores e a divisão geométrica originais, além da falta de uma peça no vitral central do coro. Já os vitrais circulares, os das portas laterais e os do nártex estão em bom estado e pedem apenas higienização.",
-          "O projeto define os procedimentos: testes progressivos de limpeza, prospecção estratigráfica nas esquadrias de madeira pintadas para recuperar a primeira camada de tinta, catalogação das peças removidas, réplicas e reintegração por mão de obra especializada, e um plano de manutenção com inspeções quinzenais, mensais e semestrais, conforme a dificuldade de acesso a cada vitral.",
+          "O Projeto de Conservação e Restauro dos Vitrais contemplou a análise do estado de conservação, a identificação de intervenções anteriores inadequadas, a classificação das tipologias e o detalhamento gráfico das composições geométricas e cromáticas originais. Foram estabelecidos procedimentos específicos para a higienização, recuperação e reconstituição das peças de vidro, bem como para o tratamento das esquadrias metálicas e de madeira, complementados por diretrizes de conservação preventiva. A proposta visa recuperar a integridade material e estética do conjunto, preservando suas características originais e sua relação com a iluminação natural e a arquitetura do templo.",
         ],
         images: [
-          ["vit-01.jpg", "Caderno de esquadrias: planta e vistas das naves, do nártex e do coro alto."],
-          ["vit-02.jpg", "Vitral das naves laterais, com a tipologia das cores-padrão dos vidros."],
-          ["vit-03.jpg", "Vitrais circular e arqueado, acima das portas de acesso lateral."],
-          ["vit-04.jpg", "Os três vitrais do coro alto."],
+          ["vit-01.jpg", "Vitral tipo 1 — nave lateral."],
+          ["vit-02.jpg", "Vitrais tipos 2 e 3 — nave lateral."],
+          ["vit-03.jpg", "Vitral tipo 4 — nave lateral."],
+          ["vit-04.jpg", "Vitral tipo 5 — nave lateral."],
         ],
       },
       {
-        title: "Projeto de decoração",
+        title: "Projeto de Decoração",
         body: [
-          "O estudo preliminar de decoração propõe estamparias inspiradas nos símbolos já presentes na igreja, ambiente por ambiente: fundo do altar-mor, paredes e teto do presbitério, parede frontal do presbitério, tetos e paredes das naves central e laterais, capela lateral, coro e nártex.",
-          "As estampas e as cores foram organizadas em um moodboard, com cada estamparia, a sua aplicação em cada superfície e uma paleta de cores de referência. A apresentação ao pároco mostra cada ambiente com a sua proposta, e as aplicações foram testadas em modelo, com e sem a iluminação do projeto luminotécnico — luz e cor foram pensadas juntas.",
+          "O Projeto de Decoração contemplou a integralidade dos ambientes internos da Igreja Matriz, abrangendo paredes, colunas e tetos. O trabalho envolveu o desenvolvimento de composições ornamentais, a definição cromática das superfícies e a elaboração de estamparias e motivos artísticos em consonância com a linguagem arquitetônica da edificação. A proposta busca estabelecer uma unidade estética entre os ambientes, valorizando a volumetria, os elementos arquitetônicos e a simbologia do espaço litúrgico.",
         ],
         images: [
           ["dec-01.jpg", "Fundo do altar-mor."],
           ["dec-02.jpg", "Paredes do presbitério."],
           ["dec-03.jpg", "Teto do presbitério."],
-          ["dec-04.jpg", "Teto da nave central."],
-          ["dec-05.jpg", "Parede da nave lateral."],
-          ["dec-06.jpg", "Capela lateral."],
-          ["dec-07.jpg", "Paredes do coro e do nártex."],
-          ["dec-08.jpg", "Moodboard do presbitério: estamparias, aplicação e paleta de cores."],
-          ["dec-09.jpg", "Moodboard da nave central."],
+          ["dec-04.jpg", "Parede frontal do presbitério."],
+          ["dec-05.jpg", "Teto da nave central."],
+          ["dec-06.jpg", "Parede da nave lateral."],
+          ["dec-07.jpg", "Capela lateral."],
+          ["dec-08.jpg", "Teto da nave lateral."],
+          ["dec-09.jpg", "Paredes do coro e nártex."],
+          ["dec-10.jpg", "Teto do nártex."],
+        ],
+      },
+      {
+        title: "Situação existente",
+        images: [
+          ["hoje-01.jpg", "Situação existente na Igreja Matriz: a nave central."],
+          ["hoje-02.jpg", "Situação existente na Igreja Matriz: o altar-mor."],
+          ["hoje-03.jpg", "Situação existente na Igreja Matriz: a porta de entrada e o vitral."],
         ],
       },
     ],
-    sort: 10,
   },
   {
-    slug: "santa-rita-de-caldas-decoracao-santa-rita-de-cassia",
-    title: "Projeto de decoração — Paróquia Santa Rita de Cássia",
-    category: "Projeto",
-    state: "MG",
-    city: "Santa Rita de Caldas",
-    location: "Santa Rita de Caldas · MG",
-    year: "2025–2026",
+    slug: "sertaozinho-prospeccao-nossa-senhora-aparecida",
+    title: "Prospecções Estratigráficas e Análise Cromática da Igreja Matriz",
+    client: "Paróquia Nossa Senhora Aparecida",
+    category: "Diagnóstico · Execução",
+    state: "SP",
+    city: "Sertãozinho",
+    year: "2026",
     summary:
-      "Estudo preliminar de decoração com estamparias e paleta de cores para o santuário: do presbitério ao vestíbulo, passando pelas naves e pelas capelas.",
+      "Prospecções estratigráficas nas superfícies internas da Igreja Matriz Nossa Senhora Aparecida, em Sertãozinho (SP), reveladoras de uma decoração originalmente mais intensa.",
     body: [
-      "Em Santa Rita de Caldas (MG), o Estúdio Restaura desenvolveu o estudo preliminar de decoração do interior do santuário da Paróquia Santa Rita de Cássia: uma proposta de estamparias e de cores para o presbitério, a nave central, as naves laterais, o coro, o vestíbulo e as capelas do Santíssimo e de Monsenhor Alderigi.",
-      "O trabalho começou na visita técnica de agosto de 2025, com o registro do santuário como ele é hoje — colunas rosadas de aspecto marmorizado, vitrais coloridos, molduras e forros — e a consulta a fotografias históricas do templo, que serviram de referência.",
-      "A proposta foi organizada em um moodboard e em modelos de cada ambiente, e apresentada à paróquia em vídeos que percorrem o presbitério, a nave central, as naves laterais e as capelas.",
+      "O Estúdio Restaura realizou, em janeiro de 2026, prospecções estratigráficas nas superfícies internas da Igreja Matriz Nossa Senhora Aparecida, em Sertãozinho/SP. O trabalho contemplou investigações em paredes, tetos, colunas, capitéis e elementos ornamentais, por meio de sondagens pontuais e exploratórias, visando identificar as camadas pictóricas originais e compreender as transformações cromáticas ocorridas ao longo do tempo. As análises revelaram uma composição decorativa originalmente mais intensa e diversificada que a atualmente visível, com predominância de tonalidades azuladas nas superfícies arquitetônicas, cores quentes nos ornamentos e vestígios de pinturas decorativas e marmorização. Os resultados foram sistematizados em fichas de prospecção, registros fotográficos, mapeamentos e relatório técnico, constituindo uma importante base documental para orientar futuros projetos de decoração e conservação, valorizando a identidade histórica e artística do local.",
     ],
-    gallery: 0,
-    ba: [],
+    team: [PA, L],
+    gallery: ["foto"],
+  },
+  {
+    slug: "sertaozinho-capela-santissimo-decoracao-iluminacao",
+    title: "Projeto e Execução de Decoração Artística e Iluminação da Capela do Santíssimo",
+    client: "Paróquia Nossa Senhora Aparecida",
+    category: "Projeto · Execução",
+    state: "SP",
+    city: "Sertãozinho",
+    year: "2026",
+    summary:
+      "Projeto e execução de decoração artística em stencil e de iluminação decorativa na Capela do Santíssimo da Paróquia Nossa Senhora Aparecida, em Sertãozinho (SP).",
+    body: [
+      "Em setembro de 2026, o Estúdio Restaura realizou a execução do Projeto de Decoração Artística e Iluminação da Capela do Santíssimo da Paróquia Nossa Senhora Aparecida, em Sertãozinho/SP. O trabalho contemplou a definição cromática das superfícies e a execução de composições ornamentais, incorporando motivos decorativos e estamparias em stencil nas paredes e no teto, em consonância com a linguagem arquitetônica e a função litúrgica do ambiente. Complementarmente, foram desenvolvidas soluções luminotécnicas com iluminação decorativa, suave e acolhedora, buscando valorizar os elementos arquitetônicos e artísticos sem comprometer a atmosfera de recolhimento. A intervenção estabeleceu uma unidade estética entre decoração e iluminação, conferindo identidade ao espaço e reforçando seu caráter simbólico, contemplativo e religioso.",
+    ],
+    team: [D, PA, L],
+    gallery: [],
     sections: [
       {
-        title: "O santuário hoje",
-        body: ["Imagens da visita técnica: a nave e o presbitério, a fachada e os vitrais que o projeto de decoração precisa respeitar."],
+        title: "Projeto de iluminação",
         images: [
-          ["hoje-01.jpg", "A nave central, vista da entrada."],
-          ["hoje-02.jpg", "O coro e a entrada do santuário."],
-          ["hoje-03.jpg", "A fachada de duas torres."],
-          ["hoje-04.jpg", "Vitral da nave."],
-          ["hoje-05.jpg", "Vitral das espigas."],
-          ["hoje-06.jpg", "A nave lateral, com os vitrais e as molduras."],
+          ["lum-01.jpg", "Estudo de iluminação dos quadros."],
+          ["lum-02.jpg", "Estudo de iluminação dos quadros, segunda proposta."],
+          ["lum-03.jpg", "Estudo de iluminação do sacrário."],
+          ["lum-04.jpg", "Estudo de spots de iluminação."],
         ],
       },
       {
         title: "Projeto de decoração",
-        body: [
-          "O moodboard organiza, ambiente por ambiente, as estampas e a sua aplicação, com uma paleta de cores de referência. Cada superfície — parede, teto, barrado — recebe uma estamparia pensada para dialogar com a arquitetura existente e com as imagens e os símbolos do templo.",
-        ],
         images: [
-          ["dec-01.jpg", "Presbitério: estamparias e aplicação."],
-          ["dec-02.jpg", "Presbitério em perspectiva (modelo de estudo)."],
-          ["dec-03.jpg", "Presbitério: o teto e as suas estamparias."],
-          ["dec-04.jpg", "Nave central."],
-          ["dec-05.jpg", "Naves laterais."],
-          ["dec-06.jpg", "Coro."],
-          ["dec-07.jpg", "Capela do Santíssimo."],
-          ["dec-08.jpg", "Capela de Monsenhor Alderigi."],
+          ["dec-01.jpg", "Antes: a capela com as paredes lisas."],
+          ["dec-02.jpg", "Antes: vista do altar e da entrada."],
+          ["dec-03.jpg", "Em andamento: pintura das molduras do teto."],
+          ["dec-04.jpg", "Em andamento: execução das estampas."],
+          ["dec-05.jpg", "Em andamento: preparação das estampas em stencil."],
+          ["dec-06.jpg", "Resultado final: vista do altar e da nave."],
+          ["dec-07.jpg", "Resultado final: o altar e o piso."],
+          ["dec-08.jpg", "Resultado final: o teto e a iluminação."],
+          ["dec-09.jpg", "Resultado final: detalhe da sanca e do forro."],
         ],
       },
     ],
-    sort: 11,
+  },
+  {
+    slug: "camanducaia-marmorizacao-colunas-imaculada-conceicao",
+    title: "Execução de Pintura Artística das Colunas da Matriz",
+    client: "Paróquia Imaculada Conceição",
+    category: "Execução",
+    state: "MG",
+    city: "Camanducaia",
+    year: "2026",
+    summary:
+      "Marmorização dos fustes e acabamento em pátina de capitéis e bases das 18 colunas internas da Igreja Matriz Imaculada Conceição, em Camanducaia (MG).",
+    body: [
+      "Em fevereiro de 2026, o Estúdio Restaura realizou a execução de pinturas artísticas e decorativas nas 18 colunas internas da Igreja Matriz Imaculada Conceição, em Camanducaia/MG. O trabalho contemplou a aplicação da técnica de marmorização nos fustes das colunas, reproduzindo artisticamente as nuances cromáticas, os veios e as características visuais da pedra natural, além da execução de acabamentos em pátina nos capitéis e bases. A intervenção buscou valorizar os elementos arquitetônicos e ornamentais existentes, estabelecendo uma composição estética harmoniosa e conferindo maior expressividade e unidade visual ao conjunto, em consonância com a linguagem arquitetônica e o caráter sacro da edificação.",
+    ],
+    team: [D, PA],
+    gallery: ["foto"],
+    sections: [
+      {
+        title: "Antes e depois",
+        images: [
+          ["antes-1.jpg", "Antes: coluna sem a pintura, com o andaime montado."],
+          ["antes-2.jpg", "Antes: colunas lisas ao longo da nave."],
+          ["antes-3.jpg", "Antes: a nave com os andaimes em obra."],
+          ["depois-1.jpg", "Depois: fuste marmorizado."],
+          ["depois-2.jpg", "Depois: coluna marmorizada e capitel em pátina."],
+          ["depois-3.jpg", "Depois: detalhe dos veios da marmorização."],
+        ],
+      },
+    ],
+  },
+  {
+    slug: "botucatu-via-sacra-henrique-oswald",
+    title: "Conservação e Restauro das 14 Estações da Via Sacra de Henrique B. Oswald",
+    client: "Paróquia Sagrado Coração de Jesus",
+    category: "Restauro · Diagnóstico · Execução",
+    state: "SP",
+    city: "Botucatu",
+    year: "2026",
+    status: "Em andamento",
+    summary:
+      "Conservação e restauro das 14 pinturas sobre tela da Via Sacra de Henrique B. Oswald (1954), na Paróquia Sagrado Coração de Jesus, em Botucatu (SP).",
+    body: [
+      "Em 2026, deu-se início ao trabalho de conservação e restauro das 14 pinturas sobre tela que compõem a Via Sacra da Paróquia Sagrado Coração de Jesus, em Botucatu/SP, executadas em 1954 pelo artista Henrique B. Oswald. A intervenção contempla o tratamento dos suportes e das camadas pictóricas, incluindo higienização, consolidação, recuperação de áreas comprometidas, reintegração cromática e substituição dos chassis. O trabalho busca recuperar a integridade material e a leitura estética das obras, respeitando suas características técnicas e artísticas, contribuindo para a preservação desse conjunto de elevada relevância histórica, cultural e devocional para a comunidade da Paróquia.",
+    ],
+    team: [D, PA, C],
+    gallery: ["foto"],
+  },
+  {
+    slug: "inconfidentes-sao-geraldo-magela",
+    title: "Restauro da Imagem Sacra de São Geraldo Magela",
+    client: "Paróquia São Geraldo Magela",
+    category: "Restauro · Diagnóstico · Execução",
+    state: "MG",
+    city: "Inconfidentes",
+    year: "2026",
+    summary:
+      "Conservação e restauro da imagem de São Geraldo Magela, em gesso policromado e reconhecida como Patrimônio Histórico Municipal de Inconfidentes (MG).",
+    body: [
+      "Em 2026, o Estúdio Restaura realizou a conservação e o restauro da imagem sacra de São Geraldo Magela, pertencente ao acervo da paróquia de mesmo nome, em Inconfidentes/MG, e reconhecida como Patrimônio Histórico Municipal. Confeccionada em gesso policromado, a escultura apresentava sujidades impregnadas, pequenas perdas e sucessivas camadas de repintura que descaracterizavam sua composição original, além de fissuras na base. A intervenção contemplou documentação fotográfica, mapeamento de danos, testes progressivos de limpeza, prospecções estratigráficas e remoção criteriosa das repinturas, permitindo recuperar a policromia original da obra. Foram realizados ainda procedimentos de consolidação, tratamento de fissuras, nivelamento, reintegração cromática e proteção final. Fundamentado nos princípios da mínima intervenção, compatibilidade e reversibilidade dos materiais, o trabalho buscou restabelecer a integridade material e a leitura estética da imagem, preservando sua autenticidade histórica, artística e devocional para a comunidade.",
+    ],
+    team: [D, PA],
+    gallery: ["foto"],
+    ba: ["A imagem antes e depois do restauro.", "Detalhe das mãos: perdas da policromia e resultado final."],
+  },
+  {
+    slug: "sao-paulo-prospeccao-nossa-senhora-das-angustias",
+    title: "Prospecções Estratigráficas e Análise Cromática da Capela do Santíssimo",
+    client: "Paróquia Nossa Senhora das Angústias",
+    category: "Diagnóstico · Execução",
+    state: "SP",
+    city: "São Paulo",
+    year: "2025",
+    summary:
+      "Prospecções estratigráficas na Capela do Santíssimo da Paróquia Nossa Senhora das Angústias, em São Paulo, que revelaram a tonalidade azul-clara original das superfícies.",
+    body: [
+      "Em outubro de 2025, o Estúdio Restaura realizou prospecções estratigráficas na Capela do Santíssimo da Paróquia Nossa Senhora das Angústias, em São Paulo/SP. O trabalho contemplou investigações nas paredes, teto e elementos decorativos, por meio de sondagens pontuais e exploratórias, visando identificar as camadas pictóricas originais e compreender as transformações cromáticas ocorridas ao longo do tempo. As análises revelaram a predominância original da tonalidade azul-clara nas superfícies, posteriormente recoberta por sucessivas camadas de pintura, além de identificar a preservação da técnica de escaiola no barrado inferior e as particularidades artísticas da representação do Espírito Santo no teto. Os resultados foram sistematizados em levantamento métrico-arquitetônico, fichas de prospecção, registros fotográficos e relatório técnico, estabelecendo diretrizes para futuras intervenções de conservação e restauro e contribuindo para a recuperação da identidade estética e arquitetônica do ambiente.",
+    ],
+    team: [PA, L],
+    gallery: ["foto"],
+  },
+  {
+    slug: "santa-rita-de-caldas-decoracao-santa-rita-de-cassia",
+    title: "Projeto de Decoração Artística do Santuário",
+    client: "Paróquia Santa Rita de Cássia",
+    category: "Projeto",
+    state: "MG",
+    city: "Santa Rita de Caldas",
+    year: "2025–2026",
+    summary:
+      "Projeto de decoração artística do Santuário de Santa Rita de Cássia, em Santa Rita de Caldas (MG): composição cromática e estamparias em stencil para cada ambiente.",
+    body: [
+      "O Estúdio Restaura desenvolveu o Projeto de Decoração Artística do Santuário de Santa Rita de Cássia, em Santa Rita de Caldas/MG, contemplando o hall de entrada, coro, nave central e laterais, Presbitério, Capela do Santíssimo e Capela Monsenhor Alderigi. O trabalho envolveu a definição da composição cromática dos ambientes e o desenvolvimento de propostas ornamentais para paredes, tetos, colunas e elementos arquitetônicos, incorporando estamparias em stencil e motivos decorativos em consonância com a linguagem arquitetônica e a função litúrgica de cada espaço. A proposta buscou estabelecer uma unidade estética entre os diferentes ambientes, valorizando os elementos arquitetônicos e conferindo identidade artística ao conjunto, de modo a reforçar o caráter simbólico, contemplativo e religioso da edificação.",
+    ],
+    team: [D, PA, L],
+    gallery: [],
+    sections: [
+      {
+        title: "Projeto de decoração",
+        images: [
+          ["dec-01.jpg", "Presbitério: acesso à sacristia."],
+          ["dec-02.jpg", "Presbitério: teto."],
+          ["dec-03.jpg", "Presbitério: perspectiva."],
+          ["dec-04.jpg", "Nave central: teto."],
+          ["dec-05.jpg", "Nave lateral: parede."],
+          ["dec-06.jpg", "Teto: estudo de estamparias."],
+        ],
+      },
+      {
+        title: "Situação existente",
+        images: [
+          ["hoje-01.jpg", "Situação existente na igreja: a nave central."],
+          ["hoje-02.jpg", "Situação existente na igreja: vista geral até o presbitério."],
+          ["hoje-03.jpg", "Situação existente na igreja: o presbitério."],
+        ],
+      },
+    ],
+  },
+  {
+    slug: "paraisopolis-presbiterio-nicho-sao-miguel-arcanjo",
+    title: "Execução de Pinturas Artísticas no Presbitério e Nicho de São Miguel Arcanjo",
+    client: "Paróquia São José",
+    category: "Execução",
+    state: "MG",
+    city: "Paraisópolis",
+    year: "2024",
+    summary:
+      "Pinturas artísticas e decorativas em stencil no presbitério da Igreja Matriz da Paróquia São José, em Paraisópolis (MG), e pintura do nicho de São Miguel Arcanjo.",
+    body: [
+      "Em 2024, o Estúdio Restaura realizou a execução de pinturas artísticas e decorativas no presbitério da Igreja Matriz da Paróquia São José, em Paraisópolis/MG. O trabalho contemplou a ornamentação do teto e das paredes laterais da porção posterior do presbitério, por meio da aplicação de motivos decorativos e estamparias executadas com a técnica de stencil, em harmonia com as características arquitetônicas do templo. A intervenção abrangeu também a execução de uma pintura decorativa específica para o nicho que abriga a imagem de São Miguel Arcanjo, conferindo destaque ao elemento sacro. A composição artística buscou valorizar a arquitetura existente, estabelecer uma unidade estética entre as superfícies ornamentadas e reforçar o caráter simbólico e contemplativo do espaço litúrgico.",
+    ],
+    team: [D, PA],
+    gallery: [],
+    sections: [
+      {
+        title: "Presbitério",
+        images: [
+          ["pres-01.jpg", "Antes: o teto do presbitério."],
+          ["pres-02.jpg", "Antes: o altar-mor e o retábulo."],
+          ["pres-03.jpg", "Antes: parede lateral do presbitério."],
+          ["pres-04.jpg", "Durante: pintura do arco e do forro."],
+          ["pres-05.jpg", "Depois: o presbitério com as pinturas concluídas."],
+          ["pres-06.jpg", "Depois: parede lateral com a nova decoração."],
+        ],
+      },
+      {
+        title: "Nicho de São Miguel Arcanjo",
+        images: [
+          ["nicho-01.jpg", "O nicho com o fundo em céu já pintado."],
+          ["nicho-02.jpg", "Detalhe da faixa decorativa e do barrado marmorizado."],
+          ["nicho-03.jpg", "Detalhe da moldura em estampa."],
+          ["nicho-04.jpg", "O nicho concluído, em vista lateral."],
+          ["nicho-05.jpg", "O nicho concluído com a imagem de São Miguel Arcanjo."],
+          ["nicho-06.jpg", "O nicho concluído."],
+        ],
+      },
+    ],
+  },
+  {
+    slug: "itajuba-capela-santissimo-nossa-senhora-das-gracas",
+    title: "Execução de Pintura Artística na Capela do Santíssimo",
+    client: "Paróquia Nossa Senhora das Graças",
+    category: "Execução",
+    state: "MG",
+    city: "Itajubá",
+    year: "2024",
+    summary:
+      "Pinturas artísticas e decorativas na Capela do Santíssimo Sacramento da Paróquia Nossa Senhora das Graças, em Itajubá (MG), com iconografia eucarística.",
+    body: [
+      "O Estúdio Restaura realizou a execução de pinturas artísticas e decorativas na Capela do Santíssimo Sacramento da Paróquia Nossa Senhora das Graças, em Itajubá/MG. A composição ornamental foi desenvolvida em consonância com a função litúrgica do ambiente, incorporando elementos da iconografia cristã, como o Cordeiro de Deus, o pelicano e motivos fitomórficos, representados por ramos e ornamentos vegetais. A escolha dos elementos artísticos e sua disposição no espaço buscaram estabelecer uma relação entre a decoração, a arquitetura e a simbologia eucarística, conferindo identidade ao ambiente e favorecendo uma atmosfera de recolhimento, oração e contemplação.",
+    ],
+    team: [D, PA],
+    gallery: ["foto"],
+  },
+  {
+    slug: "itajuba-capela-sao-francisco-de-assis",
+    title: "Execução de Pintura Artística no Presbitério",
+    client: "Capela São Francisco de Assis",
+    category: "Execução",
+    state: "MG",
+    city: "Itajubá",
+    year: "2025",
+    summary:
+      "Pintura artística com efeito de mármore, pela técnica de marmorização, nas superfícies do presbitério da Capela São Francisco de Assis, em Itajubá (MG).",
+    body: [
+      "O Estúdio Restaura realizou a execução de pinturas artísticas com efeito de mármore em determinadas superfícies parietais do presbitério da Capela São Francisco de Assis, em Itajubá/MG. O trabalho empregou a técnica de marmorização, reproduzindo artisticamente as nuances cromáticas, os veios e as particularidades visuais da pedra natural. A intervenção buscou integrar o acabamento decorativo à linguagem arquitetônica da capela, conferindo nobreza às superfícies e valorizando estética e simbolicamente o espaço litúrgico.",
+    ],
+    team: [D, PA],
+    gallery: ["foto"],
+  },
+  {
+    slug: "sao-manuel-laudo-capela-casa-pia",
+    title: "Laudo Técnico de Conservação e Diagnóstico Arquitetônico",
+    client: "Capela do Hospital da Casa Pia São Vicente de Paulo",
+    category: "Diagnóstico",
+    state: "SP",
+    city: "São Manuel",
+    year: "2026",
+    summary:
+      "Laudo técnico de conservação da Capela do Hospital da Casa Pia São Vicente de Paulo, em São Manuel (SP): cobertura, forro de estuque e pinturas artísticas.",
+    body: [
+      "Em 2026, o Estúdio Restaura elaborou o Laudo Técnico de Conservação da Capela do Hospital da Casa Pia São Vicente de Paulo, em São Manuel/SP. O trabalho contemplou a avaliação das condições de conservação da edificação, com atenção especial ao sistema de cobertura, composto por telhas cerâmicas francesas e estrutura de madeira, ao forro de estuque em abóbada de esquife e às superfícies com pinturas artísticas e decorativas. A análise teve como objetivo identificar manifestações patológicas, compreender os fatores responsáveis pela deterioração dos materiais e estabelecer diretrizes técnicas para futuras intervenções de conservação e restauro, considerando as características construtivas, arquitetônicas e artísticas do espaço sacro.",
+    ],
+    team: [D, PA, E, F],
+    gallery: ["foto"],
+  },
+  {
+    slug: "charqueada-laudo-casarao-antonio-furlan",
+    title: "Laudo Técnico do Estado de Conservação do Casarão Antonio Furlan",
+    client: "Prefeitura Municipal de Charqueada",
+    category: "Diagnóstico",
+    state: "SP",
+    city: "Charqueada",
+    year: "2023",
+    summary:
+      "Laudo técnico de estado de conservação e identificação de danos do Casarão Antonio Furlan (1907), a Casa do Fundador de Charqueada (SP).",
+    body: [
+      "O Estúdio Restaura desenvolveu, para a Prefeitura Municipal de Charqueada (SP), o Laudo Técnico de Estado de Conservação e Identificação de Danos do Casarão Antonio Furlan, edificação histórica construída em 1907 e conhecida como Casa do Fundador. O trabalho contemplou vistoria técnica, levantamento das características construtivas e dos elementos arquitetônicos integrados, registro fotográfico, identificação e análise das manifestações patológicas e avaliação das condições de conservação do porão, da casa principal, dos acréscimos e das fachadas. Como resultado, foi elaborado um diagnóstico técnico com recomendações de intervenção, estabelecendo diretrizes para futuras ações de conservação e restauro. De grande relevância para a memória e a formação urbana de Charqueada, o casarão foi residência de Antonio Furlan, reconhecido como fundador do município, constituindo um importante testemunho material de sua história e desenvolvimento.",
+    ],
+    team: [D, PA, E],
+    gallery: ["foto"],
   },
 ];
 
+const base = (slug: string) => `/fotos/projetos/${slug}`;
+const dirOf = (slug: string) => path.join(process.cwd(), "public", "fotos", "projetos", slug);
+
+/** arquivos do projeto que começam com `prefix-` (ordenados) */
+function files(slug: string, prefix: string) {
+  const d = dirOf(slug);
+  if (!fs.existsSync(d)) return [];
+  return fs
+    .readdirSync(d)
+    .filter((f) => f.startsWith(prefix + "-") && /\.(jpe?g|png|webp)$/i.test(f))
+    .sort();
+}
+
 async function main() {
-  // --only=slug1,slug2 grava só esses (não sobrescreve edições feitas no CRM nos demais)
+  // --only=slug1,slug2 grava só esses
   const only = (process.argv.find((a) => a.startsWith("--only=")) ?? "").slice(7).split(",").filter(Boolean);
-  for (const p of projetos.filter((x) => !only.length || only.includes(x.slug))) {
+  const list = projetos.filter((x) => !only.length || only.includes(x.slug));
+  for (const p of list) {
+    const i = projetos.indexOf(p);
     const b = base(p.slug);
+    const nBa = files(p.slug, "antes").length;
+    const baCaps = p.ba ?? [];
     const data = {
       slug: p.slug,
       title: p.title,
+      client: p.client,
       category: p.category,
       state: p.state,
       city: p.city,
-      location: p.location,
+      location: `${p.city}-${p.state}`,
       year: p.year,
-      area: p.area ?? "",
+      area: "",
       summary: p.summary,
       body: p.body.join("\n\n"),
+      team: p.team,
+      status: p.status ?? "",
+      credit: p.credit ?? "",
       coverUrl: `${b}/capa.jpg`,
-      gallery: Array.from({ length: p.gallery }, (_, i) => `${b}/foto-${String(i + 1).padStart(2, "0")}.jpg`),
-      beforeAfter: p.ba.map((caption, i) => ({
-        before: `${b}/antes-${i + 1}.jpg`,
-        after: `${b}/depois-${i + 1}.jpg`,
-        caption,
+      gallery: p.gallery.flatMap((pre) => files(p.slug, pre)).map((f) => `${b}/${f}`),
+      // pares antes/depois: só os projetos com `ba` (nos demais, antes-N/depois-N entram em seções)
+      beforeAfter: (p.ba ? Array.from({ length: Math.min(nBa, baCaps.length) }, (_, k) => k) : []).map((k) => ({
+        before: `${b}/antes-${k + 1}.jpg`,
+        after: `${b}/depois-${k + 1}.jpg`,
+        caption: baCaps[k] ?? "",
       })),
       sections: (p.sections ?? []).map((s) => ({
         title: s.title,
-        body: s.body.join("\n\n"),
+        body: (s.body ?? []).join("\n\n"),
         images: s.images.map(([file, caption]) => ({ src: `${b}/${file}`, caption })),
       })),
       featured: Boolean(p.featured),
-      sort: p.sort,
+      sort: i + 1,
       updatedAt: new Date(),
     };
-    const ex = await db.select({ id: schema.projects.id }).from(schema.projects).where(eq(schema.projects.slug, p.slug)).limit(1);
-    // quem já está publicado continua publicado; só `--publish` publica os rascunhos
-    if (ex.length) {
-      const cur = await db.select({ published: schema.projects.published }).from(schema.projects).where(eq(schema.projects.id, ex[0].id));
-      await db.update(schema.projects).set({ ...data, published: publish || cur[0].published }).where(eq(schema.projects.id, ex[0].id));
-    } else await db.insert(schema.projects).values({ ...data, published: publish });
-    console.log(`✓ ${p.slug}`);
+    const ex = await db.select({ id: schema.projects.id, published: schema.projects.published }).from(schema.projects).where(eq(schema.projects.slug, p.slug)).limit(1);
+    if (ex.length) await db.update(schema.projects).set({ ...data, published: publish || ex[0].published }).where(eq(schema.projects.id, ex[0].id));
+    else await db.insert(schema.projects).values({ ...data, published: publish });
+    console.log(`✓ ${p.slug} (${data.gallery.length} fotos, ${data.beforeAfter.length} pares, ${data.sections.length} seções)`);
   }
 }
 

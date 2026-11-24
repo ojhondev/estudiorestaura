@@ -307,7 +307,7 @@ export const nav: {
   {
     href: "/projetos",
     label: "Projetos",
-    desc: "O acervo de restauros, conservações e obras contemporâneas.",
+    desc: "O acervo de restauros, projetos, diagnósticos e laudos técnicos.",
   },
   {
     href: "/servicos",

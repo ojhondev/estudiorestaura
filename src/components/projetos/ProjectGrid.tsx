@@ -12,17 +12,14 @@ type Project = {
   year: string;
   state?: string;
   coverUrl?: string | null;
+  client?: string;
+  status?: string;
 };
 
-const FILTERS = [
-  "Todos",
-  "Restauro",
-  "Conservação",
-  "Diagnóstico",
-  "Projeto",
-  "Arquitetura",
-  "Interiores",
-] as const;
+const FILTERS = ["Todos", "Restauro", "Diagnóstico", "Projeto", "Execução"] as const;
+
+/** "Restauro · Execução" → ["Restauro", "Execução"]: o projeto aparece em cada aba a que pertence */
+const tags = (category: string) => category.split(/ *[·–-] */).map((t) => t.trim());
 
 export function ProjectGrid({ projects, uf = "" }: { projects: Project[]; uf?: string }) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Todos");
@@ -31,7 +28,7 @@ export function ProjectGrid({ projects, uf = "" }: { projects: Project[]; uf?: s
     () =>
       projects
         .filter((p) => !uf || p.state === uf)
-        .filter((p) => filter === "Todos" || p.category === filter),
+        .filter((p) => filter === "Todos" || tags(p.category).includes(filter)),
     [filter, projects, uf],
   );
 
@@ -74,6 +71,7 @@ export function ProjectGrid({ projects, uf = "" }: { projects: Project[]; uf?: s
             </div>
             <p className="mt-1 text-[13px] text-pewter">
               {p.category} · {p.location}
+              {p.status ? <span className="ml-2 rounded-full bg-ember/10 px-2 py-0.5 text-[11px] text-ember">{p.status}</span> : null}
             </p>
           </Link>
         ))}

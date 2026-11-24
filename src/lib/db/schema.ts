@@ -35,6 +35,14 @@ export const projects = pgTable("projects", {
     .$type<{ title: string; body: string; images: { src: string; caption: string }[] }[]>()
     .notNull()
     .default([]),
+  /** instituição contratante (ex.: "Paróquia São José Operário") — aparece acima do título */
+  client: text("client").notNull().default(""),
+  /** equipe: "Nome — Função", um por item */
+  team: jsonb("team").$type<string[]>().notNull().default([]),
+  /** ex.: "Em andamento" */
+  status: text("status").notNull().default(""),
+  /** crédito das fotos (ex.: "Cauê Colodro") */
+  credit: text("credit").notNull().default(""),
   published: boolean("published").notNull().default(true),
   featured: boolean("featured").notNull().default(false),
   sort: integer("sort").notNull().default(0),

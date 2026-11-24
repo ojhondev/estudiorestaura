@@ -34,6 +34,14 @@ export type Project = {
   beforeAfter: { before: string; after: string; caption: string }[];
   /** blocos temáticos com texto e imagens legendadas (luminotécnico, vitrais, decoração…) */
   sections: { title: string; body: string[]; images: { src: string; caption: string }[] }[];
+  /** instituição contratante (kicker acima do título) */
+  client: string;
+  /** equipe: "Nome — Função" */
+  team: string[];
+  /** ex.: "Em andamento" */
+  status: string;
+  /** crédito das fotos */
+  credit: string;
   published: boolean;
 };
 
@@ -78,6 +86,10 @@ const seedProjects = (): Project[] =>
     city: "",
     beforeAfter: [],
     sections: [],
+    client: "",
+    team: [],
+    status: "",
+    credit: "",
     published: true,
   }));
 
@@ -99,6 +111,10 @@ const toProject = (r: ProjectRow): Project => ({
   city: r.city ?? "",
   beforeAfter: r.beforeAfter ?? [],
   sections: (r.sections ?? []).map((s) => ({ title: s.title, body: splitParas(s.body ?? ""), images: s.images ?? [] })),
+  client: r.client ?? "",
+  team: r.team ?? [],
+  status: r.status ?? "",
+  credit: r.credit ?? "",
   published: r.published,
 });
 

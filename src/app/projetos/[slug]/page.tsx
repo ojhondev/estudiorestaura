@@ -53,12 +53,15 @@ export default async function ProjetoPage({
   // capa em tela cheia só se tiver resolução para isso; senão, hero dividido (texto + foto)
   const fullBleed = !project.coverUrl || !cd || (cd.w >= 1500 && cd.w / cd.h >= 1.25);
 
-  const meta = [
+  // ficha técnica: sempre Local / Ano / Categoria / Equipe
+  const meta: [string, string | string[]][] = [
     ["Local", project.location || [project.city, project.state].filter(Boolean).join(" · ")],
     ["Ano", project.year],
     ["Categoria", project.category],
-    ["Área", project.area],
-  ].filter(([, v]) => v);
+    ["Equipe", project.team],
+  ];
+  const lede = project.description[0] ?? project.summary;
+  const rest = project.description.slice(1);
 
   return (
     <article>
@@ -87,9 +90,10 @@ export default async function ProjetoPage({
               </span>
               Projetos
             </Link>
+            {project.client && <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.18em] text-paper/80">{project.client}</p>}
             <h1
               data-reveal
-              className="display mt-5 max-w-5xl text-[clamp(2.25rem,8vw,6rem)]"
+              className="display mt-3 max-w-5xl text-[clamp(2.25rem,8vw,6rem)]"
             >
               {project.title}
             </h1>
@@ -105,7 +109,8 @@ export default async function ProjetoPage({
                 </span>
                 Projetos
               </Link>
-              <h1 data-reveal className="display mt-5 max-w-3xl text-[clamp(2.25rem,6vw,4.75rem)]">
+              {project.client && <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.18em] text-paper/80">{project.client}</p>}
+              <h1 data-reveal className="display mt-3 max-w-3xl text-[clamp(2.25rem,6vw,4.75rem)]">
                 {project.title}
               </h1>
             </div>
@@ -128,22 +133,49 @@ export default async function ProjetoPage({
 
       <div className="shell grid gap-10 py-[clamp(3rem,7vw,5rem)] md:grid-cols-[1fr_1.4fr] md:gap-16">
         <dl className="grid grid-cols-2 gap-6 self-start md:grid-cols-1">
-          {meta.map(([k, v]) => (
-            <div key={k} className="border-t border-mist pt-3">
-              <dt className="label">{k}</dt>
-              <dd className="mt-1 text-[15px]">{v}</dd>
+          {meta
+            .filter(([, v]) => (Array.isArray(v) ? v.length : v))
+            .map(([k, v]) => (
+              <div key={k} className={`border-t border-mist pt-3 ${k === "Equipe" ? "col-span-2 md:col-span-1" : ""}`}>
+                <dt className="label">{k}</dt>
+                {Array.isArray(v) ? (
+                  <dd className="mt-1 space-y-1.5 text-[14.5px] leading-snug">
+                    {v.map((m) => {
+                      const [nome, funcao] = m.split(" — ");
+                      return (
+                        <p key={m}>
+                          {nome}
+                          {funcao && <span className="block text-[12.5px] text-smoke">{funcao}</span>}
+                        </p>
+                      );
+                    })}
+                  </dd>
+                ) : (
+                  <dd className="mt-1 text-[15px]">
+                    {v}
+                    {k === "Ano" && project.status ? (
+                      <span className="ml-2 rounded-full bg-ember/10 px-2.5 py-0.5 text-[12px] font-medium text-ember">{project.status}</span>
+                    ) : null}
+                  </dd>
+                )}
+              </div>
+            ))}
+          {project.credit && (
+            <div className="col-span-2 border-t border-mist pt-3 md:col-span-1">
+              <dt className="label">Fotografia</dt>
+              <dd className="mt-1 text-[14.5px]">{project.credit}</dd>
             </div>
-          ))}
+          )}
         </dl>
         <div>
           <p
             data-reveal
             className="lora text-[clamp(1.05rem,1.6vw,1.25rem)] leading-[1.6] text-pewter"
           >
-            {project.summary}
+            {lede}
           </p>
           <div className="mt-8 space-y-5 text-[15px] leading-[1.65] text-ink/80">
-            {project.description.map((p, i) => (
+            {rest.map((p, i) => (
               <p key={i} data-reveal>
                 {p}
               </p>
