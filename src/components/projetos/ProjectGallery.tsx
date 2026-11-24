@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { ImageBox } from "@/components/ImageBox";
 import { Arrow } from "@/components/ui";
@@ -91,9 +92,10 @@ export function ProjectGallery({
         </div>
       </div>
 
-      {open !== null && (
+      {/* no <body>: dentro da página, a barra de menu fixa ficava por cima do cabeçalho (e do botão de fechar) */}
+      {open !== null && typeof document !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-[80] flex flex-col bg-midnight/97 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex flex-col bg-midnight/97 backdrop-blur-sm"
           onClick={() => setOpen(null)}
         >
           <div className="shell flex items-center justify-between py-5 text-paper">
@@ -102,24 +104,28 @@ export function ProjectGallery({
             </span>
             <button
               type="button"
-              onClick={() => setOpen(null)}
-              className="text-[12px] uppercase tracking-[0.22em] hover:text-ember"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(null);
+              }}
+              aria-label="Fechar imagem"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/10 text-paper transition-colors hover:border-white/70 hover:bg-white/20"
             >
-              Fechar
+              <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+                <path d="M4 4l12 12M16 4 4 16" />
+              </svg>
             </button>
           </div>
 
-          <div
-            className="relative flex flex-1 items-center justify-center px-4 pb-16"
-            onClick={(e) => e.stopPropagation()}
-          >
+          {/* clicar fora da foto também fecha; só a foto, a legenda e as setas seguram o clique */}
+          <div className="relative flex flex-1 items-center justify-center px-4 pb-16">
             {items.map((_, i) => {
               const d = dim(i);
               return (
                 <div
                   key={i}
                   className="absolute inset-x-4 inset-y-0 flex flex-col items-center justify-center gap-3 transition-opacity duration-500"
-                  style={{ opacity: i === open ? 1 : 0, pointerEvents: i === open ? "auto" : "none" }}
+                  style={{ opacity: i === open ? 1 : 0, pointerEvents: "none" }}
                 >
                   {images[i] ? (
                     // só carrega a foto ativa e as vizinhas; a ampliação nunca passa de ~1,6x o original
@@ -131,7 +137,8 @@ export function ProjectGallery({
                         height={d.h}
                         sizes="100vw"
                         className="h-auto max-h-[calc(100vh-14rem)] w-auto max-w-full rounded-[4px] object-contain"
-                        style={{ maxWidth: Math.round(d.w * 1.6) }}
+                        style={{ maxWidth: Math.round(d.w * 1.6), pointerEvents: i === open ? "auto" : "none" }}
+                        onClick={(e) => e.stopPropagation()}
                       />
                     ) : null
                   ) : (
@@ -139,14 +146,25 @@ export function ProjectGallery({
                       <ImageBox ratio="16 / 10" variant="bleed" className="bg-iron" label={`${title} — imagem ${i + 1}`} />
                     </div>
                   )}
-                  {captions[i] && <p className="max-w-3xl text-center text-[13.5px] leading-snug text-paper/80">{captions[i]}</p>}
+                  {captions[i] && (
+                    <p
+                      className="max-w-3xl text-center text-[13.5px] leading-snug text-paper/80"
+                      style={{ pointerEvents: i === open ? "auto" : "none" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {captions[i]}
+                    </p>
+                  )}
                 </div>
               );
             })}
 
             <button
               type="button"
-              onClick={() => setOpen((i) => ((i ?? 0) - 1 + count) % count)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen((i) => ((i ?? 0) - 1 + count) % count);
+              }}
               aria-label="Anterior"
               className="absolute left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-paper transition-colors hover:border-white/60"
             >
@@ -154,14 +172,18 @@ export function ProjectGallery({
             </button>
             <button
               type="button"
-              onClick={() => setOpen((i) => ((i ?? 0) + 1) % count)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen((i) => ((i ?? 0) + 1) % count);
+              }}
               aria-label="Próxima"
               className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-paper transition-colors hover:border-white/60"
             >
               <Arrow className="h-4 w-4" />
             </button>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
