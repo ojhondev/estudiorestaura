@@ -10,6 +10,7 @@ import { AdminGate } from "@/components/AdminGate";
 import { QuotePopup } from "@/components/QuotePopup";
 import { BackToTop } from "@/components/BackToTop";
 import { ImageGuard } from "@/components/ImageGuard";
+import { SiteAnalytics } from "@/components/SiteAnalytics";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ImageGuard />
         </AdminGate>
         <Reveal />
+        <SiteAnalytics />
       </body>
     </html>
   );
