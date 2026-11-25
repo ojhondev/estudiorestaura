@@ -231,6 +231,35 @@ body {
   clip-path: inset(-30% 0 -30% 0);
 }
 
+/* Elementos da primeira dobra aparecem por CSS puro, sem esperar o JavaScript carregar
+   (o texto principal era o maior elemento visível e só surgia depois da hidratação). */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes reveal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reveal-clip {
+  from { opacity: 1; clip-path: inset(0 0 110% 0); }
+  to { opacity: 1; clip-path: inset(-30% 0 -30% 0); }
+}
+.hero-sticky [data-reveal]:not(.in),
+.page-enter > section:first-child [data-reveal]:not(.in) {
+  animation: reveal-up 1s var(--ease) both;
+}
+.hero-sticky [data-reveal="fade"]:not(.in),
+.page-enter > section:first-child [data-reveal="fade"]:not(.in) {
+  animation-name: reveal-fade;
+}
+.hero-sticky [data-reveal="clip"]:not(.in),
+.page-enter > section:first-child [data-reveal="clip"]:not(.in) {
+  animation-name: reveal-clip;
+}
+.hero-sticky [data-reveal-delay="0.15"]:not(.in) { animation-delay: 0.15s; }
+.hero-sticky [data-reveal-delay="0.3"]:not(.in) { animation-delay: 0.3s; }
+
 /* Reduzir movimento: sem deslocamento, só um fade curto */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
