@@ -10,6 +10,8 @@ import { Arrow } from "@/components/ui";
 import { getProject, getProjects } from "@/lib/cms";
 import { imageDims } from "@/lib/imgdims";
 import { parseBlocks, RichBody } from "@/lib/richtext";
+import { JsonLd } from "@/components/JsonLd";
+import { absoluteUrl, breadcrumbLd, SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -70,8 +72,37 @@ export default async function ProjetoPage({
   const lede = project.description[0] ?? project.summary;
   const rest = project.description.slice(1);
 
+  const altBase = [project.title, project.client, project.location].filter(Boolean).join(" — ");
+  const allImages = [project.coverUrl, ...project.galleryUrls].filter((u): u is string => !!u).slice(0, 12);
+  const projectLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.summary,
+    url: `${SITE_URL}/projetos/${project.slug}`,
+    inLanguage: "pt-BR",
+    dateCreated: project.year || undefined,
+    genre: project.category,
+    locationCreated: project.city
+      ? { "@type": "Place", name: project.city, address: { "@type": "PostalAddress", addressLocality: project.city, addressRegion: project.state, addressCountry: "BR" } }
+      : undefined,
+    image: allImages.map(absoluteUrl),
+    creator: { "@id": `${SITE_URL}/#organization` },
+    contributor: project.team.map((m) => ({ "@type": "Person", name: m.split(" — ")[0], jobTitle: m.split(" — ")[1] })),
+    ...(project.credit ? { copyrightHolder: { "@id": `${SITE_URL}/#organization` }, creditText: project.credit } : {}),
+  };
+
   return (
     <article>
+      <JsonLd
+        data={[
+          projectLd,
+          breadcrumbLd([
+            ["Projetos", "/projetos"],
+            [project.title, `/projetos/${project.slug}`],
+          ]),
+        ]}
+      />
       {!project.published && (
         <div className="fixed inset-x-0 top-0 z-[90] bg-ember px-4 py-2 text-center text-[12px] font-medium uppercase tracking-[0.16em] text-paper">
           Rascunho — só você (logado) está vendo esta página
@@ -81,7 +112,7 @@ export default async function ProjetoPage({
         <section className="bleed relative flex min-h-[78vh] items-end overflow-hidden">
           <ImageBox
             src={project.coverUrl}
-            alt={project.title}
+            alt={altBase}
             fill
             variant="bleed"
             label="Espaço para imagem — projeto"
@@ -125,7 +156,7 @@ export default async function ProjetoPage({
               <div className="mx-auto w-full" style={{ maxWidth: Math.min(Math.round(cd.w * 1.3), 760) }}>
                 <Image
                   src={project.coverUrl}
-                  alt={project.title}
+                  alt={altBase}
                   width={cd.w}
                   height={cd.h}
                   priority
@@ -227,7 +258,7 @@ export default async function ProjetoPage({
         <ProjectGallery
           count={project.gallery}
           images={project.galleryUrls}
-          title={project.title}
+          title={altBase}
           dims={dims}
         />
       )}

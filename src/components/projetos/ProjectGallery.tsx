@@ -72,7 +72,7 @@ export function ProjectGallery({
                   {images[i] ? (
                     <Image
                       src={images[i]}
-                      alt={`${title} — imagem ${i + 1}`}
+                      alt={captions[i] ? `${title}: ${captions[i]}` : `${title} — imagem ${i + 1}`}
                       width={d.w}
                       height={d.h}
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -132,7 +132,7 @@ export function ProjectGallery({
                     Math.abs(i - open) <= 1 || count <= 3 ? (
                       <Image
                         src={images[i]}
-                        alt={`${title} — imagem ${i + 1}`}
+                        alt={captions[i] ? `${title}: ${captions[i]}` : `${title} — imagem ${i + 1}`}
                         width={d.w}
                         height={d.h}
                         sizes="100vw"

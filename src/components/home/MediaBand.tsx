@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type MediaBandData = {
   videoUrl?: string;
@@ -12,6 +12,23 @@ export type MediaBandData = {
 export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData) {
   // `hover` = mouse sobre o vídeo / toque → o texto some e o vídeo fica livre.
   const [hover, setHover] = useState(false);
+  // O vídeo (vários MB) só começa a baixar quando a faixa chega perto da tela e pausa ao sair dela.
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || !videoUrl) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          if (!v.getAttribute("src")) v.src = videoUrl;
+          v.play().catch(() => {});
+        } else v.pause();
+      },
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, [videoUrl]);
 
   return (
     <div
@@ -24,13 +41,12 @@ export function MediaBand({ videoUrl, posterUrl, title, caption }: MediaBandData
       {videoUrl ? (
         <video
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.03]"
-          src={videoUrl}
+          ref={ref}
           poster={posterUrl || undefined}
-          autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
         />
       ) : (
         <span className="absolute bottom-5 left-6 text-[12px] uppercase tracking-[0.18em] text-pewter">

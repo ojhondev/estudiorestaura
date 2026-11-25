@@ -43,6 +43,8 @@ export type Project = {
   /** crédito das fotos */
   credit: string;
   published: boolean;
+  /** última edição (ISO) — usada no sitemap */
+  updatedAt?: string;
 };
 
 export type Post = {
@@ -116,6 +118,7 @@ const toProject = (r: ProjectRow): Project => ({
   status: r.status ?? "",
   credit: r.credit ?? "",
   published: r.published,
+  updatedAt: r.updatedAt?.toISOString(),
 });
 
 /** Projetos publicados. Os de exemplo só aparecem se o banco não estiver acessível. */

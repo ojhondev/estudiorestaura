@@ -11,6 +11,8 @@ import { QuotePopup } from "@/components/QuotePopup";
 import { BackToTop } from "@/components/BackToTop";
 import { ImageGuard } from "@/components/ImageGuard";
 import { SiteAnalytics } from "@/components/SiteAnalytics";
+import { JsonLd } from "@/components/JsonLd";
+import { organizationLd, websiteLd } from "@/lib/seo";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -39,6 +41,7 @@ const hand = Caveat({
   subsets: ["latin"],
   weight: ["500", "600"],
   display: "swap",
+  preload: false, // só aparece na seção "O escritório", bem abaixo da dobra
 });
 
 export const metadata: Metadata = {
@@ -49,6 +52,7 @@ export const metadata: Metadata = {
   },
   description:
     "Estúdio Restaura é um escritório especializado em arquitetura, conservação e restauro de patrimônio histórico e cultural.",
+  alternates: { canonical: "./" },
   openGraph: {
     title: "Estúdio Restaura",
     description:
@@ -71,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
+        <JsonLd data={[organizationLd, websiteLd]} />
         <SmoothScroll />
         <AdminGate>
           <SiteNav />

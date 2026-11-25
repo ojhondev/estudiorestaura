@@ -2,14 +2,17 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ImageBox } from "@/components/ImageBox";
 import { TextArrow } from "@/components/ui";
-import { services } from "@/lib/content";
+import { servicePages } from "@/lib/services";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbLd } from "@/lib/seo";
+import Link from "next/link";
 import { getSectionImages } from "@/lib/cms";
-import { SERVICOS_CTA_FOTO, SERVICOS_FOTOS } from "@/lib/photos";
+import { SERVICOS_CTA_FOTO } from "@/lib/photos";
 
 export const metadata: Metadata = {
   title: "Serviços",
   description:
-    "Intervenção arquitetônica, conservação preventiva, restauro de bens integrados, laudos técnicos, projetos de arquitetura e consultoria de patrimônio.",
+    "Restauro de igrejas e edifícios históricos, conservação preventiva, pintura mural e arte sacra, laudos técnicos, prospecção estratigráfica, decoração e iluminação, projetos de arquitetura e consultoria de patrimônio.",
 };
 
 export const dynamic = "force-dynamic";
@@ -18,6 +21,7 @@ export default async function ServicosPage() {
   const sections = await getSectionImages();
   return (
     <>
+      <JsonLd data={breadcrumbLd([["Serviços", "/servicos"]])} />
       <PageHero
         slot="servicos"
         label="O que fazemos"
@@ -28,18 +32,22 @@ export default async function ServicosPage() {
       />
 
       <div className="shell py-[clamp(3rem,7vw,5rem)]">
-        {services.map((s, i) => (
+        {servicePages.map((s, i) => (
           <article
-            key={s.number}
+            key={s.slug}
             data-reveal
             className="grid gap-8 border-t border-mist py-14 md:grid-cols-[3rem_1fr_1fr] md:gap-12"
           >
             <span className="text-[13px] text-ember">{s.number}</span>
 
             <div className="md:pr-8">
-              <h2 className="h text-[clamp(1.5rem,3vw,2rem)]">{s.title}</h2>
+              <h2 className="h text-[clamp(1.5rem,3vw,2rem)]">
+                <Link href={`/servicos/${s.slug}`} className="hover:text-ember">
+                  {s.title}
+                </Link>
+              </h2>
               <p className="mt-4 max-w-md text-[15px] text-pewter">
-                {s.description}
+                {s.summary}
               </p>
               <ul className="mt-5 space-y-2 text-[14px] text-pewter">
                 {s.bullets.map((b) => (
@@ -49,10 +57,13 @@ export default async function ServicosPage() {
                   </li>
                 ))}
               </ul>
+              <TextArrow href={`/servicos/${s.slug}`} className="mt-6 text-[14px]">
+                Saiba mais
+              </TextArrow>
             </div>
 
             <div className={i % 2 === 1 ? "md:pt-8" : ""}>
-              <ImageBox src={SERVICOS_FOTOS[i]} alt={s.title} ratio="4 / 3" sizes="(min-width: 768px) 40vw, 100vw" />
+              <ImageBox src={s.photo} alt={s.h1} ratio="4 / 3" sizes="(min-width: 768px) 40vw, 100vw" />
             </div>
           </article>
         ))}

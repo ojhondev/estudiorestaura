@@ -23,6 +23,7 @@ export function Hero({
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight/92 via-midnight/35 to-midnight/60"
       />
 
+      <h1 className="sr-only">Estúdio Restaura: restauro, conservação e projetos de patrimônio histórico e arte sacra</h1>
       <div className="relative shell grid flex-1 grid-rows-[auto_1fr_auto] pt-[clamp(6rem,15vh,8.5rem)] pb-[clamp(2.5rem,7vh,4rem)]">
         <p
           data-reveal

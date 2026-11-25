@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getJobs, getPosts, getProjects } from "@/lib/cms";
+import { servicePages } from "@/lib/services";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +11,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const fixed = ["", "/projetos", "/servicos", "/sobre", "/contato", "/blog", "/trabalhe-conosco", "/banco-de-talentos", "/privacidade"];
   return [
     ...fixed.map((p) => ({ url: `${BASE}${p}`, changeFrequency: "monthly" as const })),
-    ...projects.map((p) => ({ url: `${BASE}/projetos/${p.slug}`, changeFrequency: "yearly" as const })),
-    ...posts.map((p) => ({ url: `${BASE}/blog/${p.slug}`, changeFrequency: "yearly" as const })),
+    ...servicePages.map((s) => ({ url: `${BASE}/servicos/${s.slug}`, changeFrequency: "monthly" as const })),
+    ...projects.map((p) => ({ url: `${BASE}/projetos/${p.slug}`, changeFrequency: "yearly" as const, lastModified: p.updatedAt })),
+    ...posts.map((p) => ({ url: `${BASE}/blog/${p.slug}`, changeFrequency: "yearly" as const, lastModified: p.publishedAt })),
     ...jobs.map((j) => ({ url: `${BASE}/vagas/${j.slug}`, changeFrequency: "monthly" as const })),
   ];
 }

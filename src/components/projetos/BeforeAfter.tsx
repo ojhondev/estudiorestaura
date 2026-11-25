@@ -65,7 +65,7 @@ function Compare({ pair, ratio }: { pair: Pair; ratio: number }) {
       >
         <Image
           src={pair.after}
-          alt="Depois"
+          alt={pair.caption ? `Depois — ${pair.caption}` : "Depois"}
           fill
           draggable={false}
           sizes="(min-width: 1024px) 50vw, 100vw"
@@ -74,7 +74,7 @@ function Compare({ pair, ratio }: { pair: Pair; ratio: number }) {
         <div className="pointer-events-none absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
           <Image
             src={pair.before}
-            alt="Antes"
+            alt={pair.caption ? `Antes — ${pair.caption}` : "Antes"}
             fill
             draggable={false}
             sizes="(min-width: 1024px) 50vw, 100vw"
