@@ -54,7 +54,10 @@ export const metadata: Metadata = {
       "Arquitetura, conservação e restauro de patrimônio histórico e cultural.",
     type: "website",
     locale: "pt_BR",
+    siteName: "Estúdio Restaura",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Estúdio Restaura" }],
   },
+  twitter: { card: "summary_large_image", images: ["/og.jpg"] },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
