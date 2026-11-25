@@ -74,6 +74,8 @@ const projetos: P[] = [
       "Áreas douradas: antes e depois da recomposição.",
       "Fissuras e lacunas: antes e depois do nivelamento e da reintegração cromática.",
       "Base do painel: antes e depois do tratamento da superfície.",
+      "Querubim: antes e depois da reintegração das lacunas.",
+      "Querubim, vista geral: antes e depois da reintegração.",
     ],
     featured: true,
   },
