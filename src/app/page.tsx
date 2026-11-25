@@ -28,7 +28,8 @@ export default async function HomePage() {
     (byState[p.state] ??= []).push({ slug: p.slug, title: p.title, category: p.category, coverUrl: p.coverUrl });
   }
 
-  const feed = projects.slice(0, 4).map((p) => ({
+  // destaques primeiro (o acervo segue em ordem cronológica, mas a home mostra os mais fortes)
+  const feed = [...projects.filter((p) => p.featured), ...projects.filter((p) => !p.featured)].slice(0, 4).map((p) => ({
     slug: p.slug,
     title: p.title,
     category: p.category,

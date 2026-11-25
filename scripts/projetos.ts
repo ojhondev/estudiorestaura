@@ -56,6 +56,7 @@ type P = {
 const projetos: P[] = [
   {
     slug: "jatai-conjunto-mural-claudio-pastro-catedral",
+    credit: "Daniel Cortes Beretta; e acervo Estúdio Restaura",
     title: "Restauro do Conjunto Mural de Claudio Pastro",
     client: "Catedral Divino Espírito Santo",
     category: "Restauro · Diagnóstico · Execução",
@@ -78,6 +79,7 @@ const projetos: P[] = [
   },
   {
     slug: "sesc-santo-andre-mural-sacilotto",
+    credit: "Cauê Colodro; e acervo Estúdio Restaura",
     title: "Restauro do Mural de Luiz Sacilotto",
     client: "SESC Santo André",
     category: "Restauro · Execução",
@@ -95,11 +97,11 @@ const projetos: P[] = [
       "Base do painel: perda da argamassa antes e depois do nivelamento e da reintegração cromática.",
       "Remate superior: o trecho perdido e a recomposição da superfície.",
     ],
-    credit: "Cauê Colodro (vistas gerais do mural); demais fotos: equipe do Estúdio Restaura",
     featured: true,
   },
   {
     slug: "botucatu-painel-mural-sagrado-coracao",
+    credit: "Isabela Innocenti; e acervo Estúdio Restaura",
     title: "Restauro do Mural de Henrique B. Oswald",
     client: "Paróquia Sagrado Coração de Jesus",
     category: "Restauro · Diagnóstico · Execução",
@@ -125,6 +127,7 @@ const projetos: P[] = [
   },
   {
     slug: "maria-da-fe-pinturas-nossa-senhora-de-lourdes",
+    credit: "Giovana Souza; e acervo Estúdio Restaura",
     title: "Restauro das Pinturas Artísticas e Elementos Ornamentais da Igreja Matriz",
     client: "Paróquia Nossa Senhora de Lourdes",
     category: "Restauro · Execução",
@@ -138,10 +141,20 @@ const projetos: P[] = [
     ],
     team: [D, PA],
     gallery: ["foto"],
-    ba: ["Capela do Santíssimo: antes e depois do restauro.", "Capela de Nossa Senhora do Rosário: antes e depois do restauro."],
+    ba: [
+      "Capela do Santíssimo: antes e depois do restauro.",
+      "Capela de Nossa Senhora do Rosário: antes e depois do restauro.",
+      "Friso do forro: antes e depois da limpeza e da reintegração.",
+      "Cúpula: antes e depois do restauro.",
+      "Coluna: antes e depois da recomposição da marmorização.",
+      "Coluna: antes e depois da reintegração.",
+      "Degraus do altar: antes e depois.",
+      "Anjo tocheiro: antes e depois do restauro.",
+    ],
   },
   {
     slug: "slg-mural-claudio-pastro-sao-paulo",
+    credit: "Taíse Cortês; e acervo Estúdio Restaura",
     title: "Restauro Pontual do Mural de Claudio Pastro e Marcio Motta",
     client: "Paróquia São Luiz Gonzaga",
     category: "Restauro · Execução",
@@ -160,6 +173,7 @@ const projetos: P[] = [
   },
   {
     slug: "itajuba-projeto-luminotecnico-sao-jose-operario",
+    credit: "Acervo Estúdio Restaura",
     title: "Projeto de Decoração, Iluminação e Restauro dos Vitrais da Igreja Matriz",
     client: "Paróquia São José Operário",
     category: "Projeto · Diagnóstico",
@@ -180,11 +194,11 @@ const projetos: P[] = [
           "O Projeto Luminotécnico foi desenvolvido a partir da análise técnica da iluminação natural e artificial existente, considerando os aspectos funcionais, estéticos e litúrgicos da edificação. A proposta contempla a modernização do sistema de iluminação, a redistribuição dos pontos de luz e a indicação de luminárias, temperaturas de cor e efeitos luminosos. Através da combinação entre iluminação difusa e de destaque, o projeto busca evidenciar os elementos arquitetônicos, ornamentais e sacros, proporcionando conforto visual e valorizando as particularidades do ambiente religioso.",
         ],
         images: [
-          ["lum-01.jpg", "Simulação da iluminação proposta."],
-          ["lum-02.jpg", "Simulação da iluminação proposta: nave e presbitério."],
-          ["lum-03.jpg", "Planta de forro e iluminação — proposta."],
-          ["lum-04.jpg", "Vista isométrica — nave lateral."],
-          ["lum-05.jpg", "Vista isométrica — capela lateral."],
+          ["lum-01.jpg", "Simulação da iluminação vista da nave para o Presbitério."],
+          ["lum-02.jpg", "Simulação da iluminação vista do Presbitério para a nave."],
+          ["lum-03.jpg", "Planta de forro e iluminação."],
+          ["lum-04.jpg", "Vista isométrica da nave lateral."],
+          ["lum-05.jpg", "Vista isométrica da capela lateral."],
         ],
       },
       {
@@ -193,10 +207,10 @@ const projetos: P[] = [
           "O Projeto de Conservação e Restauro dos Vitrais contemplou a análise do estado de conservação, a identificação de intervenções anteriores inadequadas, a classificação das tipologias e o detalhamento gráfico das composições geométricas e cromáticas originais. Foram estabelecidos procedimentos específicos para a higienização, recuperação e reconstituição das peças de vidro, bem como para o tratamento das esquadrias metálicas e de madeira, complementados por diretrizes de conservação preventiva. A proposta visa recuperar a integridade material e estética do conjunto, preservando suas características originais e sua relação com a iluminação natural e a arquitetura do templo.",
         ],
         images: [
-          ["vit-01.jpg", "Vitral tipo 1 — nave lateral."],
-          ["vit-02.jpg", "Vitrais tipos 2 e 3 — nave lateral."],
-          ["vit-03.jpg", "Vitral tipo 4 — nave lateral."],
-          ["vit-04.jpg", "Vitral tipo 5 — nave lateral."],
+          ["vit-01.jpg", "Tipologia 1"],
+          ["vit-02.jpg", "Tipologias 2 e 3"],
+          ["vit-03.jpg", "Tipologia 4"],
+          ["vit-04.jpg", "Tipologia 5"],
         ],
       },
       {
@@ -220,15 +234,16 @@ const projetos: P[] = [
       {
         title: "Situação existente",
         images: [
-          ["hoje-01.jpg", "Situação existente na Igreja Matriz: a nave central."],
-          ["hoje-02.jpg", "Situação existente na Igreja Matriz: o altar-mor."],
-          ["hoje-03.jpg", "Situação existente na Igreja Matriz: a porta de entrada e o vitral."],
+          ["hoje-01.jpg", ""],
+          ["hoje-02.jpg", ""],
+          ["hoje-03.jpg", ""],
         ],
       },
     ],
   },
   {
     slug: "sertaozinho-prospeccao-nossa-senhora-aparecida",
+    credit: "Acervo Estúdio Restaura",
     title: "Prospecções Estratigráficas e Análise Cromática da Igreja Matriz",
     client: "Paróquia Nossa Senhora Aparecida",
     category: "Diagnóstico · Execução",
@@ -245,6 +260,7 @@ const projetos: P[] = [
   },
   {
     slug: "sertaozinho-capela-santissimo-decoracao-iluminacao",
+    credit: "Acervo Estúdio Restaura",
     title: "Projeto e Execução de Decoração Artística e Iluminação da Capela do Santíssimo",
     client: "Paróquia Nossa Senhora Aparecida",
     category: "Projeto · Execução",
@@ -256,36 +272,13 @@ const projetos: P[] = [
     body: [
       "Em setembro de 2026, o Estúdio Restaura realizou a execução do Projeto de Decoração Artística e Iluminação da Capela do Santíssimo da Paróquia Nossa Senhora Aparecida, em Sertãozinho/SP. O trabalho contemplou a definição cromática das superfícies e a execução de composições ornamentais, incorporando motivos decorativos e estamparias em stencil nas paredes e no teto, em consonância com a linguagem arquitetônica e a função litúrgica do ambiente. Complementarmente, foram desenvolvidas soluções luminotécnicas com iluminação decorativa, suave e acolhedora, buscando valorizar os elementos arquitetônicos e artísticos sem comprometer a atmosfera de recolhimento. A intervenção estabeleceu uma unidade estética entre decoração e iluminação, conferindo identidade ao espaço e reforçando seu caráter simbólico, contemplativo e religioso.",
     ],
-    team: [D, PA, L],
-    gallery: [],
-    sections: [
-      {
-        title: "Projeto de iluminação",
-        images: [
-          ["lum-01.jpg", "Estudo de iluminação dos quadros."],
-          ["lum-02.jpg", "Estudo de iluminação dos quadros, segunda proposta."],
-          ["lum-03.jpg", "Estudo de iluminação do sacrário."],
-          ["lum-04.jpg", "Estudo de spots de iluminação."],
-        ],
-      },
-      {
-        title: "Projeto de decoração",
-        images: [
-          ["dec-01.jpg", "Antes: a capela com as paredes lisas."],
-          ["dec-02.jpg", "Antes: vista do altar e da entrada."],
-          ["dec-03.jpg", "Em andamento: pintura das molduras do teto."],
-          ["dec-04.jpg", "Em andamento: execução das estampas."],
-          ["dec-05.jpg", "Em andamento: preparação das estampas em stencil."],
-          ["dec-06.jpg", "Resultado final: vista do altar e da nave."],
-          ["dec-07.jpg", "Resultado final: o altar e o piso."],
-          ["dec-08.jpg", "Resultado final: o teto e a iluminação."],
-          ["dec-09.jpg", "Resultado final: detalhe da sanca e do forro."],
-        ],
-      },
-    ],
+    team: [D, PA, E, L],
+    gallery: ["foto"],
+    ba: ["A capela antes e depois da decoração.", "O teto: antes e depois da decoração."],
   },
   {
     slug: "camanducaia-marmorizacao-colunas-imaculada-conceicao",
+    credit: "Natália Nascimento; e acervo Estúdio Restaura",
     title: "Execução de Pintura Artística das Colunas da Matriz",
     client: "Paróquia Imaculada Conceição",
     category: "Execução",
@@ -299,22 +292,15 @@ const projetos: P[] = [
     ],
     team: [D, PA],
     gallery: ["foto"],
-    sections: [
-      {
-        title: "Antes e depois",
-        images: [
-          ["antes-1.jpg", "Antes: coluna sem a pintura, com o andaime montado."],
-          ["antes-2.jpg", "Antes: colunas lisas ao longo da nave."],
-          ["antes-3.jpg", "Antes: a nave com os andaimes em obra."],
-          ["depois-1.jpg", "Depois: fuste marmorizado."],
-          ["depois-2.jpg", "Depois: coluna marmorizada e capitel em pátina."],
-          ["depois-3.jpg", "Depois: detalhe dos veios da marmorização."],
-        ],
-      },
+    ba: [
+      "Nave: antes e depois da pintura das colunas.",
+      "Coro e colunas: antes e depois.",
+      "Capitel e base: antes e depois do acabamento em pátina.",
     ],
   },
   {
     slug: "botucatu-via-sacra-henrique-oswald",
+    credit: "Acervo Estúdio Restaura",
     title: "Conservação e Restauro das 14 Estações da Via Sacra de Henrique B. Oswald",
     client: "Paróquia Sagrado Coração de Jesus",
     category: "Restauro · Diagnóstico · Execução",
@@ -329,9 +315,11 @@ const projetos: P[] = [
     ],
     team: [D, PA, C],
     gallery: ["foto"],
+    ba: ["Detalhe do rosto: antes e depois da limpeza.", "Detalhe da camada pictórica: antes e depois da limpeza."],
   },
   {
     slug: "inconfidentes-sao-geraldo-magela",
+    credit: "Acervo Estúdio Restaura",
     title: "Restauro da Imagem Sacra de São Geraldo Magela",
     client: "Paróquia São Geraldo Magela",
     category: "Restauro · Diagnóstico · Execução",
@@ -345,10 +333,11 @@ const projetos: P[] = [
     ],
     team: [D, PA],
     gallery: ["foto"],
-    ba: ["A imagem antes e depois do restauro.", "Detalhe das mãos: perdas da policromia e resultado final."],
+    ba: ["Busto e mãos: antes e depois do restauro.", "Mão: perdas da policromia e resultado final."],
   },
   {
     slug: "sao-paulo-prospeccao-nossa-senhora-das-angustias",
+    credit: "Acervo Estúdio Restaura",
     title: "Prospecções Estratigráficas e Análise Cromática da Capela do Santíssimo",
     client: "Paróquia Nossa Senhora das Angústias",
     category: "Diagnóstico · Execução",
@@ -365,6 +354,7 @@ const projetos: P[] = [
   },
   {
     slug: "santa-rita-de-caldas-decoracao-santa-rita-de-cassia",
+    credit: "Acervo Estúdio Restaura",
     title: "Projeto de Decoração Artística do Santuário",
     client: "Paróquia Santa Rita de Cássia",
     category: "Projeto",
@@ -393,15 +383,16 @@ const projetos: P[] = [
       {
         title: "Situação existente",
         images: [
-          ["hoje-01.jpg", "Situação existente na igreja: a nave central."],
-          ["hoje-02.jpg", "Situação existente na igreja: vista geral até o presbitério."],
-          ["hoje-03.jpg", "Situação existente na igreja: o presbitério."],
+          ["hoje-01.jpg", "Situação existente: nave central."],
+          ["hoje-02.jpg", "Situação existente: presbitério."],
+          ["hoje-03.jpg", "Situação existente: vista da nave central ao coro."],
         ],
       },
     ],
   },
   {
     slug: "paraisopolis-presbiterio-nicho-sao-miguel-arcanjo",
+    credit: "Acervo Estúdio Restaura",
     title: "Execução de Pinturas Artísticas no Presbitério e Nicho de São Miguel Arcanjo",
     client: "Paróquia São José",
     category: "Execução",
@@ -414,34 +405,23 @@ const projetos: P[] = [
       "Em 2024, o Estúdio Restaura realizou a execução de pinturas artísticas e decorativas no presbitério da Igreja Matriz da Paróquia São José, em Paraisópolis/MG. O trabalho contemplou a ornamentação do teto e das paredes laterais da porção posterior do presbitério, por meio da aplicação de motivos decorativos e estamparias executadas com a técnica de stencil, em harmonia com as características arquitetônicas do templo. A intervenção abrangeu também a execução de uma pintura decorativa específica para o nicho que abriga a imagem de São Miguel Arcanjo, conferindo destaque ao elemento sacro. A composição artística buscou valorizar a arquitetura existente, estabelecer uma unidade estética entre as superfícies ornamentadas e reforçar o caráter simbólico e contemplativo do espaço litúrgico.",
     ],
     team: [D, PA],
-    gallery: [],
+    gallery: ["foto"],
+    ba: ["Presbitério: parede lateral antes e depois da pintura."],
     sections: [
-      {
-        title: "Presbitério",
-        images: [
-          ["pres-01.jpg", "Antes: o teto do presbitério."],
-          ["pres-02.jpg", "Antes: o altar-mor e o retábulo."],
-          ["pres-03.jpg", "Antes: parede lateral do presbitério."],
-          ["pres-04.jpg", "Durante: pintura do arco e do forro."],
-          ["pres-05.jpg", "Depois: o presbitério com as pinturas concluídas."],
-          ["pres-06.jpg", "Depois: parede lateral com a nova decoração."],
-        ],
-      },
       {
         title: "Nicho de São Miguel Arcanjo",
         images: [
-          ["nicho-01.jpg", "O nicho com o fundo em céu já pintado."],
-          ["nicho-02.jpg", "Detalhe da faixa decorativa e do barrado marmorizado."],
-          ["nicho-03.jpg", "Detalhe da moldura em estampa."],
-          ["nicho-04.jpg", "O nicho concluído, em vista lateral."],
-          ["nicho-05.jpg", "O nicho concluído com a imagem de São Miguel Arcanjo."],
-          ["nicho-06.jpg", "O nicho concluído."],
+          ["nicho-01.jpg", ""],
+          ["nicho-02.jpg", ""],
+          ["nicho-03.jpg", ""],
+          ["nicho-04.jpg", ""],
         ],
       },
     ],
   },
   {
     slug: "itajuba-capela-santissimo-nossa-senhora-das-gracas",
+    credit: "Acervo Estúdio Restaura",
     title: "Execução de Pintura Artística na Capela do Santíssimo",
     client: "Paróquia Nossa Senhora das Graças",
     category: "Execução",
@@ -458,6 +438,7 @@ const projetos: P[] = [
   },
   {
     slug: "itajuba-capela-sao-francisco-de-assis",
+    credit: "Acervo Estúdio Restaura",
     title: "Execução de Pintura Artística no Presbitério",
     client: "Capela São Francisco de Assis",
     category: "Execução",
@@ -474,6 +455,7 @@ const projetos: P[] = [
   },
   {
     slug: "sao-manuel-laudo-capela-casa-pia",
+    credit: "Acervo Estúdio Restaura",
     title: "Laudo Técnico de Conservação e Diagnóstico Arquitetônico",
     client: "Capela do Hospital da Casa Pia São Vicente de Paulo",
     category: "Diagnóstico",
@@ -490,6 +472,7 @@ const projetos: P[] = [
   },
   {
     slug: "charqueada-laudo-casarao-antonio-furlan",
+    credit: "Acervo Estúdio Restaura",
     title: "Laudo Técnico do Estado de Conservação do Casarão Antonio Furlan",
     client: "Prefeitura Municipal de Charqueada",
     category: "Diagnóstico",
@@ -505,6 +488,29 @@ const projetos: P[] = [
     gallery: ["foto"],
   },
 ];
+
+/** ordem cronológica pela data de contratação (código da pasta do projeto) */
+const ORDER = [
+  "charqueada-laudo-casarao-antonio-furlan", // 2306.01
+  "itajuba-projeto-luminotecnico-sao-jose-operario", // 2402.02
+  "maria-da-fe-pinturas-nossa-senhora-de-lourdes", // 2403.01
+  "paraisopolis-presbiterio-nicho-sao-miguel-arcanjo", // 2408.01
+  "itajuba-capela-santissimo-nossa-senhora-das-gracas", // 2409.02
+  "sesc-santo-andre-mural-sacilotto", // 2502.01
+  "itajuba-capela-sao-francisco-de-assis", // 2503.02
+  "slg-mural-claudio-pastro-sao-paulo", // 2505.01
+  "jatai-conjunto-mural-claudio-pastro-catedral", // 2508.02
+  "sertaozinho-prospeccao-nossa-senhora-aparecida", // 2508.03
+  "santa-rita-de-caldas-decoracao-santa-rita-de-cassia", // 2508.05
+  "camanducaia-marmorizacao-colunas-imaculada-conceicao", // 2509.01
+  "sao-paulo-prospeccao-nossa-senhora-das-angustias", // 2509.04
+  "botucatu-painel-mural-sagrado-coracao", // 2512.01
+  "inconfidentes-sao-geraldo-magela", // 2603.01
+  "sertaozinho-capela-santissimo-decoracao-iluminacao", // 2604.03
+  "botucatu-via-sacra-henrique-oswald", // 2606.02
+  "sao-manuel-laudo-capela-casa-pia", // 2607.02
+];
+projetos.sort((a, b) => ORDER.indexOf(a.slug) - ORDER.indexOf(b.slug));
 
 const base = (slug: string) => `/fotos/projetos/${slug}`;
 const dirOf = (slug: string) => path.join(process.cwd(), "public", "fotos", "projetos", slug);
