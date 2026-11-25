@@ -39,7 +39,10 @@ export default async function ServicoPage({ params }: { params: Promise<{ slug: 
   if (!s) notFound();
 
   const [projects, posts] = await Promise.all([getProjects(), getPosts()]);
-  const matched = projects.filter((p) => s.projectMatch.test(`${p.title} ${p.category} ${p.client}`));
+  // os projetos em destaque (maior reconhecimento) vêm primeiro
+  const matched = projects
+    .filter((p) => s.projectMatch.test(`${p.title} ${p.category} ${p.client}`))
+    .sort((x, y) => Number(y.featured) - Number(x.featured));
   const related = [...matched, ...projects.filter((p) => p.featured && !matched.includes(p))].slice(0, 3);
   const relatedPosts = s.posts.map((ps) => posts.find((p) => p.slug === ps)).filter((p) => !!p).slice(0, 4);
   const others = servicePages.filter((x) => x.slug !== s.slug);

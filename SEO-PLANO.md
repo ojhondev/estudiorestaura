@@ -30,7 +30,11 @@ Falhas encontradas:
 8. Sem Perfil da Empresa no Google (se existir, não está ligado ao site).
 9. Quase nenhum link de outros sites para o nosso (backlinks).
 
-## Fase 1 — Técnico (eu implemento, 1 a 2 dias)
+## Fase 1 — Técnico (CONCLUÍDA em 25/11/2026, exceto onde indicado)
+
+Feito: h1 na home, canonical em todas as páginas, dados estruturados (Organization, WebSite, BreadcrumbList, CreativeWork nos projetos, Service e FAQPage nos serviços), 8 páginas de serviço, texto alternativo descritivo, sitemap com 65 páginas e lastmod, vídeo da home carregando só quando aparece (peso da home de 7,3 MB para 1,9 MB), primeira dobra por CSS.
+Pendente: LocalBusiness com endereço (aguarda dados do estúdio), páginas de projeto estáticas (ISR; conflita com a pré-visualização de rascunhos do admin), mais redução de JavaScript na home (nota mobile ainda 50 a 60), breadcrumbs visíveis.
+
 
 1. `<h1>` na home com a frase principal do estúdio e a palavra-chave ("restauro e conservação de patrimônio histórico").
 2. `canonical` em todas as páginas.
